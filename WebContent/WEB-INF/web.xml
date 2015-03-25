@@ -105,22 +105,19 @@
 	<!-- 防止多人登陆 ,控制一个用户只能登录一次，不能在其他地方重新登录 -->
 	<listener>
 		<listener-class>
-			org.springframework.security.web.session.HttpSessionEventPublisher
-		</listener-class>
+			org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
 
 	<!-- Spring 刷新Introspector防止内存泄露 -->
 	<listener>
 		<listener-class>
-			org.springframework.web.util.IntrospectorCleanupListener
-		</listener-class>
+			org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
 
 	<!-- spring session 安全 -->
 	<listener>
 		<listener-class>
-			org.springframework.security.web.session.HttpSessionEventPublisher
-		</listener-class>
+			org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener>
 
 	<!-- session超时定义,单位为分钟 -->
