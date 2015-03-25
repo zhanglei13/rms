@@ -28,7 +28,7 @@ public class HibernateBaseDaoImpl implements IHibernateBaseDao {
 	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
 		this.hibernateTemplate = hibernateTemplate;
 	}
-
+	
 	@Override
 	public boolean update(Object entity) {
 		// TODO Auto-generated method stub
