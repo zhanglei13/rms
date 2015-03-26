@@ -14,7 +14,7 @@ import com.lenovo.rms.common.dao.IHibernateBaseDao;
 import com.lenovo.rms.common.util.PageView;
 
 @Repository("hibernateBaseDao")
-public class HibernateBaseDaoImpl implements IHibernateBaseDao {
+public class HibernateBaseDaoImpl {//implements IHibernateBaseDao {
 
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
@@ -29,40 +29,4 @@ public class HibernateBaseDaoImpl implements IHibernateBaseDao {
 		this.hibernateTemplate = hibernateTemplate;
 	}
 	
-	@Override
-	public boolean update(Object entity) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean save(Object entity) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete(Object entity) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean saveOrUpdate(Object entity) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void deleteAll(Collection<?> entities) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public <T> T get(Class<T> entityClass, Serializable id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
