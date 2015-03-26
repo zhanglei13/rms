@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lenovo.rms.common.util.Constants;
 
@@ -17,20 +16,19 @@ public class BaseController {
 	private static Logger logger = Logger.getLogger(BaseController.class);
 
 	@RequestMapping("/login")
-	@ResponseBody
 	public String login(HttpSession session, Model model) {
-		String info="用户名或密码错误";
+		String info="Login failed";
 		boolean flag=false;
 		String url="/tologin";
 //		if(user.getAccount().isEmpty()||user.getPassword().isEmpty()){
 //			info="用户名和密码不能为空";
 //		}
 //		else {
-			if(true){
-				info="登入成功";
-				flag=true;
-				url="redirect:/index";
-			}
+//			if(true){
+//				info="登入成功";
+//				flag=true;
+//				url="redirect:/index";
+//			}
 //		}
 		model.addAttribute("info",info);
 		model.addAttribute("flag", flag);
@@ -46,7 +44,6 @@ public class BaseController {
 	 */
 	@RequestMapping(value = "/to500", produces = "text/html;charset=UTF-8")
 	public String to500() {
-
 		return "/error/500";
 	}
 
@@ -59,7 +56,6 @@ public class BaseController {
 	 */
 	@RequestMapping(value = "/to404", produces = "text/html;charset=UTF-8")
 	public String to404() {
-
 		return "/error/404";
 	}
 
