@@ -68,6 +68,20 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
 	
 	public T getSql(final String sql);
 	
+	public List<T> findHql(final String hql);
+	
+
+	
+	/** 
+	* @author: Eric
+	* @Title: findSql 
+	* @Description: 这里用一句话描述这个方法的作用) 
+	* @param: sql
+	* @return: 设定文件 
+	* @return List<T>    返回类型 
+	*/
+	public List<T> findSql(final String sql);
+	
 	/**
 	 * 获取全部对象,带排序字段与升降序参
 	 * @param entityClass	 要获得类型的class
