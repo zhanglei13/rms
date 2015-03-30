@@ -21,7 +21,8 @@ import com.lenovo.rms.common.util.Page;
 * @version V1.0   
 */
 public interface IHibernateBaseDao<T, PK extends Serializable> { 
-  
+    
+    //---------------------------以下是获取对象的接口------------------------
     /**   
     * 根据ID获取对象
     * @date 2015年3月28日 下午3:15:03   
@@ -31,7 +32,6 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
     */
     T get(final PK id);
     
-
     /**   
     * 根据对象类型和ID获取对象
     * @date 2015年3月28日 下午3:17:52   
@@ -42,122 +42,179 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
     */
     <X> X get(Class<X> clazz, final PK id);
     
-    /**
-     * 根据id获得对象
-     * 
-     * @param id
-     *            主键ID
-     */
+    /**   
+    * 根据ID获取对象   
+    * @date 2015年3月30日 下午6:52:42   
+    * @author Eric   
+    * @param id 要获取对象的ID
+    * @return T 获取的对象  
+    */
     T load(final PK id);
     
-    /**
-     * 根据id获得对象
-     * 
-     * @param id
-     *            主键ID
+    /**   
+     * 根据对象类型和ID获取对象
+     * @date 2015年3月28日 下午3:17:52   
+     * @author Eric   
+     * @param clazz 要获取的对象类型
+     * @param id    要获取的对象Id
+     * @return X    获取的对象
      */
     <X> X load(Class<X> clazz, final PK id);
     
-    
-    /**
-     * 删除对象
-     * 
-     * @param entity
-     *            实体类
-     */
+    //---------------------------以上是获取对象的接口------------------------
+   
+    //---------------------------以下是删除对象的接口------------------------
+    /**   
+    * 删除一个实体对象
+    * @date 2015年3月30日 下午6:54:26   
+    * @author Eric   
+    * @param   entity 要删除的实体对象
+    * @return  void  
+    */
     void delete(final T entity) ;
-    //批量删除都是for循环删除的，效率较低
-    //考虑到可以连表删除，不做修改
-    //如果考虑，性能问题，则batchExecute*  方法组装修改
-    /**
-     * 根据实体类与ID组批量删除对象
-     * 
-     * @param clazz
-     * @param ids
-     */
-    void deleteAll(final Collection<T> entities) ;
+  
+    /**   
+    * 批量删除集合中的对象
+    * @date 2015年3月30日 下午6:55:55   
+    * @author Eric   
+    * @param entities 待删除的对象集合
+    * @return void  
+    */
+    void deleteAll(final Collection<T> entities);
 
-    /**
-     * 根据ID删除对象
-     * 
-     * @param id
-     *            主键ID
-     */
-    void deleteById(final PK id) ;
+    /**   
+    * 根据ID删除对象 
+    * @date 2015年3月30日 下午6:57:10   
+    * @author Eric   
+    * @param  id 待删除对象的ID
+    * @return void  
+    */
+    void deleteById(final PK id);
 
-    /**
-     * 根据实体类与ID组批量删除对象
-     * 
-     * @param clazz
-     * @param ids
-     */
+    /**   
+    * 根据ID批量删除对象
+    * @date 2015年3月30日 下午6:58:17   
+    * @author Eric   
+    * @param ids 待删除对象的ID
+    * @return void  
+    */
     void deleteByIds(final PK [] ids) ;
 
-    /**
-     * 根据条件删除数据
-     * @param clazz
-     * @param obj 条件
-     */
-    void deleteByExample(final Class<?> clazz, Object example) ;
-    /**
-     * @Description: 新增一个实体记录
-     * @param 实体
-     */
+    /**   
+    * 根据条件删除数据
+    * @date 2015年3月30日 下午6:59:44   
+    * @author Eric   
+    * @param clazz 待删除的数据类型
+    * @param example 删除的条件
+    * @return void  
+    */
+    void deleteByExample(final Class<?> clazz, Object example);
+    //---------------------------以上是删除对象的接口------------------------
+    
+    //---------------------------以下是新增或更新对象的接口------------------------
+    /**   
+    * 新增一个实体记录
+    * @date 2015年3月30日 下午7:03:51   
+    * @author Eric   
+    * @param entity 待添加的实体
+    * @return void  
+    */
     void save(T entity) ;
-    /**
-     * @Description: 批量添加个实体记录
-     * @param 实体
-     */
+  
+    /**   
+    * 批量添加实体记录
+    * @date 2015年3月30日 下午7:04:40   
+    * @author Eric   
+    * @param entities 待添加的记录集合
+    * @return void  
+    */
     void saveAll(Collection<T> entities) ;
-    /**
-     * @Description: 新增或更新一个实体记录
-     * @param 实体
-     */
+    
+    /**   
+    * 新增或更新一个实体记录
+    * @date 2015年3月30日 下午7:05:25   
+    * @author Eric   
+    * @param entity 待新增或更新的实体
+    * @return void  
+    */
     void saveOrUpdate(final T entity) ;
     
+    /**   
+    * 批量新增或更新实体 
+    * @date 2015年3月30日 下午7:05:59   
+    * @author Eric   
+    * @param entities 待新增或更新的实体
+    * @return void  
+    */
     void saveOrUpdateAll(final Collection<T> entities) ;
     
-    /**
-     * @Description: 持久化一个实体记录
-     * @param 实体
-     */
+    /**   
+    * 持久化一个实体记录
+    * @date 2015年3月30日 下午7:07:05   
+    * @author Eric   
+    * @param entity 待持久化的实体
+    * @return void  
+    */
     void persist(T entity) ;
 
-    /**
-     * @Description: 更新实体
-     * @param entity
-     *            参数
-     */
+    /**   
+    * 更新一个实体记录
+    * @date 2015年3月30日 下午7:07:43   
+    * @author Eric   
+    * @param entity 待更新的实体
+    * @return void  
+    */
     void update(T entity) ;
 
-    /**
-     * @Description: 批量更新实体
-     * @param list
-     *            参数
-     */
+    /**   
+    * 批量更新实体记录
+    * @date 2015年3月30日 下午7:09:28   
+    * @author Eric   
+    * @param entities 待更新的实体记录
+    * @return void  
+    */
     void updateAll(Collection<T> entities) ;
-
-    /**
-     * 清除缓存，执行SQL
-     */
+    //---------------------------以上是新增或更新对象的接口------------------------
+    //---------------------------以下是清理操作接口------------------------------
+    /**   
+    * 强制进行从内存到数据库的同步
+    * @date 2015年3月30日 下午7:09:59   
+    * @author Eric   
+    * @return void  
+    */
     void flush() ;
-
-    /**
-      * 
-      */
+    
+    /**   
+    * 清除Session缓存，执行SQL
+    * @date 2015年3月30日 下午7:11:37   
+    * @author  Eric   
+    * @reuturn void  
+    */
     void clear() ;
     /**
      * 执行HQL进行批量修改/删除操作.
      * @param hql
      * @return 更新记录数.
      */
+    //---------------------------以上是清理操作接口-------------------------------
+    //---------------------------以下是批量操作接口-------------------------------
+    /**   
+    * 执行HQL语句进行批量修改/删除操作
+    * @date 2015年3月30日 下午7:14:50   
+    * @author Eric   
+    * @param hql  待执行的HQL语句
+    * @return int 更新记录数
+    */
     int batchExecuteHql(final String hql) ;
-    /**
-     * 执行HQL进行批量修改/删除操作.
-     * @param hql
-     * @param params    参数
-     * @return 更新记录数.
-     */
+    
+    /**   
+    * 执行HQL进行批量修改/删除操作.
+    * @date 2015年3月30日 下午7:16:02   
+    * @author Eric   
+    * @param hql 待执行的HQL语句
+    * @param params 参数
+    * @return int 更新记录数  
+    */
     int batchExecuteHql(final String hql, final Object params);
     
     /**
@@ -165,8 +222,23 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
      * @param sql
      * @return 更新记录数.
      */
+    /**   
+    * 执行sql进行批量修改/删除操作
+    * @date 2015年3月30日 下午7:16:55   
+    * @author Eric   
+    * @param sql 待执行的sql语句
+    * @return int 更新记录数  
+    */
     int batchExecuteSql(final String sql) ;
     
+    /**   
+     * 执行QL进行批量修改/删除操作.
+     * @date 2015年3月30日 下午7:16:02   
+     * @author Eric   
+     * @param sql 待执行的QL语句
+     * @param params 参数
+     * @return int 更新记录数  
+     */
     int batchExecuteSql(final String sql, final Object param);
     
     /**
@@ -178,8 +250,22 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
      * @param session
      * @return
      */
+    /**   
+    * 获取HQL查询(Query)对象
+    * @date 2015年3月30日 下午7:18:47   
+    * @author Eric   
+    * @param queryString 查询语句
+    * @param pageIndex   分页索引
+    * @param pageSize    分页大小
+    * @param param       查询参数
+    * @param type        类型
+    * @param session     
+    * @param entity      
+    * @return
+    * Query  
+    */
     Query getQuery(final String queryString,
-            final int pageIndex, final int pageSize, final Object obj,
+            final int pageIndex, final int pageSize, final Object param,
             final int type, Session session, Class<?> entity);
     
     /** 
