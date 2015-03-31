@@ -4,9 +4,11 @@
 <head>
 <%@include file="common/header.jsp" %>
 <title>Login - RMS Admin</title>
-<META HTTP-EQUIV="REFRESH" CONTENT="0.01; URL=login.jsp?flag=${flag}&info=${info}"> 
+<script type="text/javascript">
+       window.location.href="login.jsp?flag=${flag}&info=${info}"; 
+</script>
+</head>
 <body>
 <%@include file="common/importJs.jsp" %> 
 </body>
-</head>
 </html>
