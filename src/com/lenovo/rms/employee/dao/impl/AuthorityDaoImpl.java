@@ -19,18 +19,11 @@ public class AuthorityDaoImpl extends HibernateBaseDaoImpl implements IAuthority
 
     @Override
     public List<AuthorityRole> getAuthorityRoles(Employee employee) {
-        /*String hql="select r from AuthorityRole r, AuthorityGroupRoleRef roleRef, AuthorityEmployeeGroupRef groupRef where groupRef.itCode=:itCode and groupRef.groupCode=roleRef.groupCode and roleRef.roleCode=r.roleCode";
+        String hql="select r from AuthorityRole r, AuthorityGroupRoleRef roleRef, AuthorityEmployeeGroupRef groupRef where groupRef.itCode=:itCode and groupRef.groupCode=roleRef.groupCode and roleRef.roleCode=r.roleCode";
         Map<String,String> params = new HashMap<String,String>();
         params.put("itCode", employee.getItCode());
         @SuppressWarnings("unchecked")
         List<AuthorityRole> roles= findHql(hql,params);
-        return roles;*/
-        List<AuthorityGroup> groups = getAuthorityGroups(employee);
-        List<AuthorityRole> roles=new ArrayList<AuthorityRole>();
-        for(AuthorityGroup group :groups){
-            System.out.println(group.getGroupCode());
-            roles.addAll(getAuthorityRoles(group));
-        }
         return roles;
     }
 
@@ -66,7 +59,7 @@ public class AuthorityDaoImpl extends HibernateBaseDaoImpl implements IAuthority
         }*/
         List<AuthorityRole> roles = dao.getAuthorityRoles(employee);
         for(AuthorityRole role:roles){
-            System.out.println(role.getId());
+            System.out.println(role.getRoleName());
         }
         System.out.println("end");
  
