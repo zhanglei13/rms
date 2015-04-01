@@ -189,132 +189,29 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
     */
     void refresh(T entity);
 
-    //-------------------------------------------------------------------------------------------------
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @param page
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHqlListPage(java.lang.String, com.lenovo.rms.common.util.Page) 
-     */
+    //------------------------------以下是通过HQL操作------------------------------------------------
+    
+    /**   
+    * 使用HQL查找对象，带分页
+    * @date 2015年4月1日 下午8:37:31   
+    * @author Eric   
+    * @param hql hql语句
+    * @param page 分页信息
+    * @return ListPage<T>  分页结果
+    */
     ListPage<T> findHqlListPage(String hql, Page page);
 
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @param page
-     * @param obj
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHqlListPage(java.lang.String, com.lenovo.rms.common.util.Page, java.lang.Object) 
-     */
     ListPage<T> findHqlListPage(String hql, Page page, Object obj);
 
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHql(java.lang.String) 
-     */
     List<T> findHql(String hql);
 
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @param obj
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHql(java.lang.String, java.lang.Object) 
-     */
     List<T> findHql(String hql, Object obj);
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @param pageIndex
-     * @param pageSize
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHql(java.lang.String, int, int) 
-     */
+
     List<T> findHql(String hql, int pageIndex, int pageSize);
 
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @param page
-     * @param obj
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHql(java.lang.String, com.lenovo.rms.common.util.Page, java.lang.Object) 
-     */
     List<T> findHql(String hql, Page page, Object obj);
 
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param hql
-     * @param pageIndex
-     * @param pageSize
-     * @param obj
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#findHql(java.lang.String, int, int, java.lang.Object) 
-     */
     List<T> findHql(String hql, int pageIndex, int pageSize, Object obj);
-
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param queryString
-     * @param pageIndex
-     * @param pageSize
-     * @param param
-     * @param type
-     * @param session
-     * @param entity
-     * @return 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#getQuery(java.lang.String, int, int, java.lang.Object, int, org.hibernate.Session, java.lang.Class) 
-     */
-    Query getQuery(String queryString, int pageIndex, int pageSize, Object param, int type, Session session,
-            Class<?> entity);
-
-    /* 
-     * 简述
-     * <p>详细说明第一行<br>    
-     * 详细说明第二行 
-     * @date 2015年4月1日 上午9:13:57   
-     * @author Eric   
-     * @param query
-     * @param pageIndex
-     * @param pageSize 
-     * @see com.lenovo.rms.common.dao.impl.Iterfa#setPageResult(org.hibernate.Query, int, int) 
-     */
-    void setPageResult(Query query, int pageIndex, int pageSize);
 
 }
 
