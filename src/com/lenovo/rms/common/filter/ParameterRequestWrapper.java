@@ -1,3 +1,12 @@
+/**
+ * Project: rms
+ * Package: com.lenovo.rms.common.filter
+ * File: Test.java
+ * Author: zhanglei
+ * Date: 2015年3月31日-下午10:13:34
+ * Copyright (c) 2015 lenovo
+ */
+
 package com.lenovo.rms.common.filter;
 
 import java.util.Enumeration;
@@ -7,6 +16,14 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+/**
+ * 
+ * Class: ParameterRequestWrapper <br/>
+ * Description: TODO <br/>
+ * CreatedTimeime: 2015年3月31日 下午10:14:47 <br/>
+ * @author zhanglei
+ * @version V1.0
+ */
 public class ParameterRequestWrapper extends HttpServletRequestWrapper {
 	private Map params;
 

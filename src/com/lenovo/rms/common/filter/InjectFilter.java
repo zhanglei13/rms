@@ -1,3 +1,12 @@
+/**
+ * Project: rms
+ * Package: com.lenovo.rms.common.filter
+ * File: Test.java
+ * Author: zhanglei
+ * Date: 2015年3月31日-下午10:13:34
+ * Copyright (c) 2015 lenovo
+ */
+
 package com.lenovo.rms.common.filter;
 
 import java.io.IOException;
@@ -16,6 +25,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+/**
+ * 
+ * Class: InjectFilter <br/>
+ * Description: TODO <br/>
+ * CreatedTimeime: 2015年3月31日 下午10:14:40 <br/>
+ * @author zhanglei
+ * @version V1.0
+ */
 public class InjectFilter implements Filter {
 	private static final Logger logger = Logger.getLogger(InjectFilter.class);
 

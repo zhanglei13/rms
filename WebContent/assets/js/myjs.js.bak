@@ -1,0 +1,44 @@
+function change(){
+	var project=[
+	 ["project1.1","project1.2","project1.3","project1.4"],
+	 ["project2.1","project2.2","project2.3","project2.4"],
+	 ["project3.1","project3.2","project3.3","project3.4"],
+	];
+	var sltrelease=document.getElementById("release");
+	var sltproject=document.getElementById("project");
+	var projectname=project[sltrelease.selectedIndex-1];
+	sltproject.length=0;
+	for(var i=0;i<projectname.length;i++){
+		sltproject[i]=new Option(projectname[i],projectname[i]);
+	}
+}
+
+function addRow(){
+ var bodyObj=document.getElementById("sample-table-1");  
+ bodyObj.style.display = '';
+    if(bodyObj==null)   
+    {  
+        alert("Body of Table not Exist!");  
+        return;  
+    }  
+    var rowCount = bodyObj.rows.length;  
+    var newRow = bodyObj.insertRow(rowCount++);    
+    var 1Cell = newRow.insertCell(0);
+    var 2Cell = newRow.insertCell(1);
+    var 3Cell = newRow.insertCell(2);
+    var 4Cell = newRow.insertCell(3);
+    var 5Cell = newRow.insertCell(4);
+    var 6Cell = newRow.insertCell(5);
+    var 7Cell = newRow.insertCell(6);
+    var 8Cell = newRow.insertCell(7);
+    var 9Cell = newRow.insertCell(8);
+    var 10Cell = newRow.insertCell(9);
+    var 11Cell = newRow.insertCell(10);
+    1Cell.className = "bgc_tt short"; 
+    2Cell.className = "bgc_tt short";
+    1Cell.innerHTML = "AA";
+    2Cell.innerHTML="BB";
+    3Cell.innerHTML="SIT";
+  
+    
+}

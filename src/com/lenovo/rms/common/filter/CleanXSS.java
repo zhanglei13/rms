@@ -1,5 +1,22 @@
+/**
+ * Project: rms
+ * Package: com.lenovo.rms.common.filter
+ * File: Test.java
+ * Author: zhanglei
+ * Date: 2015年3月31日-下午10:13:34
+ * Copyright (c) 2015 lenovo
+ */
+
 package com.lenovo.rms.common.filter;
 
+/**
+ * 
+ * Class: CleanXSS <br/>
+ * Description: 过滤url参数中的特殊字符，防止SQL注入
+ * CreatedTimeime: 2015年3月31日 下午10:14:32 <br/>
+ * @author zhanglei
+ * @version V1.0
+ */
 public class CleanXSS {
 	/**
 	 * INJ_STR:定义有哪些特殊字符
