@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Collection;
 import java.util.List;
 
-import com.lenovo.rms.common.dao.IHibernateBaseDao;
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
 
@@ -36,5 +35,17 @@ public interface IWorkloadDao{
     * @param status   状态
     * @return List<EmployeeWorkload> 查找到的workload列表  
     */
-    List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to, String status); 
+    List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to, String status);
+    
+    /**   
+    * 根据时间和类型，查找某empoyee某一时间段的workloads
+    * @date 2015年4月1日 下午10:24:51   
+    * @author Eric   
+    * @param employee
+    * @param from
+    * @param to
+    * @return
+    * List<EmployeeWorkload>   查找到的workload列表  
+    */
+    List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to); 
 }

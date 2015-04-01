@@ -2,16 +2,23 @@ package com.lenovo.rms.common.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,14 +28,15 @@ import com.lenovo.rms.common.util.Page;
 import com.lenovo.rms.common.util.ReflectUtils;
 
 @Repository("hibernateBaseDao")
-public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibernateBaseDao<T,PK> {
+public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibernateBaseDao<T, PK> {
     /**
      * log4j日志
      */
     protected final Logger logger = Logger.getLogger(getClass());
+
     @Autowired
     private SessionFactory sessionFactory;
-    
+
     protected Class<T> entityClass;
 
     public Class<T> getEntityClass() {
@@ -41,16 +49,16 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     public HibernateBaseDaoImpl() {
         entityClass = ReflectUtils.getClassGenricType(getClass());
     }
-    
-    private Session getSession(){
-       return  sessionFactory.openSession();
+
+    private Session getSession() {
+        return sessionFactory.openSession();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T get(PK id) {
-       return (T) this.getSession().get(entityClass, id);
-       
+        return (T) this.getSession().get(entityClass, id);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -74,15 +82,15 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     @Override
     public void delete(T entity) {
         this.getSession().delete(entity);
-        
+
     }
 
     @Override
     public void deleteAll(Collection<T> entities) {
-        for(T entity : entities) {
+        for (T entity : entities) {
             this.getSession().delete(entity);
         }
-        
+
     }
 
     @Override
@@ -93,22 +101,22 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
 
     @Override
     public void deleteByIds(PK[] ids) {
-        for(PK id:ids){
+        for (PK id : ids) {
             deleteById(id);
-        }   
+        }
     }
 
     @Override
     public void save(T entity) {
         this.getSession().save(entity);
-        
+
     }
 
     @Override
     public void saveAll(Collection<T> entities) {
-         for(T entity:entities){
-             save(entity);
-         }
+        for (T entity : entities) {
+            save(entity);
+        }
     }
 
     @Override
@@ -118,267 +126,529 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
 
     @Override
     public void saveOrUpdateAll(Collection<T> entities) {
-        for(T entity:entities){
+        for (T entity : entities) {
             saveOrUpdate(entity);
         }
-        
+
     }
 
     @Override
     public void persist(T entity) {
-       this.getSession().persist(entity);
+        this.getSession().persist(entity);
     }
 
     @Override
     public void update(T entity) {
-       this.getSession().update(entity);
+        this.getSession().update(entity);
     }
 
     @Override
     public void updateAll(Collection<T> entities) {
-        for(T entity:entities){
+        for (T entity : entities) {
             update(entity);
         }
-        
+
     }
 
     @Override
     public void flush() {
         this.getSession().flush();
-        
+
     }
 
     @Override
     public void clear() {
         this.getSession().clear();
-        
+
     }
 
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:13:57   
-    * @author Eric   
-    * @param entity 
-    * @see com.lenovo.rms.common.dao.impl.Iterfa#refresh(T) 
-    */
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param entity 
-    * @see com.lenovo.rms.common.dao.impl.It#refresh(T) 
-    */
     @Override
     public void refresh(T entity) {
         this.getSession().refresh(entity);
-        
+
     }
 
-//-------------------------------------------------------------------------------------------------
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:13:57   
-    * @author Eric   
-    * @param hql
-    * @param page
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.Iterfa#findHqlListPage(java.lang.String, com.lenovo.rms.common.util.Page) 
-    */
+    // -------------------------------------------------------------------------------------------------
+
     @Override
     public ListPage<T> findHqlListPage(final String hql, final Page page) {
         return findHqlListPage(hql, page, null);
     }
-    
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:13:57   
-    * @author Eric   
-    * @param hql
-    * @param page
-    * @param obj
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.Iterfa#findHqlListPage(java.lang.String, com.lenovo.rms.common.util.Page, java.lang.Object) 
-    */
+
     @Override
-    public ListPage<T> findHqlListPage(final String hql, final Page page,
-            final Object obj) {
+    public ListPage<T> findHqlListPage(final String hql, final Page page, final Object obj) {
         List<T> list = findHql(hql, page, obj);
         page.setRowCount(list.size());
         return new ListPage<T>(list, page);
     }
 
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param hql
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.It#findHql(java.lang.String) 
-    */
     @Override
     public List<T> findHql(String hql) {
-        return findHql(hql,null);
+        return findHql(hql, null);
     }
 
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param hql
-    * @param obj
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.It#findHql(java.lang.String, java.lang.Object) 
-    */
     @Override
     public List<T> findHql(final String hql, Object obj) {
         return findHql(hql, -1, -1, obj);
     }
-    
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:13:57   
-    * @author Eric   
-    * @param hql
-    * @param pageIndex
-    * @param pageSize
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.Iterfa#findHql(java.lang.String, int, int) 
-    */
+
     @Override
-    public List<T> findHql(final String hql, final int pageIndex,
-            final int pageSize) {
+    public List<T> findHql(final String hql, final int pageIndex, final int pageSize) {
         return findHql(hql, pageIndex, pageSize, null);
     }
 
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param hql
-    * @param page
-    * @param obj
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.It#findHql(java.lang.String, com.lenovo.rms.common.util.Page, java.lang.Object) 
-    */
     @Override
-    public List<T> findHql(final String hql, final Page page,
-            final Object obj){
-        return this.findHql(hql, page.getCurrentRow(), page.getPageSize(),
-                obj);
+    public List<T> findHql(final String hql, final Page page, final Object obj) {
+        return this.findHql(hql, page.getCurrentRow(), page.getPageSize(), obj);
     }
- 
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param hql
-    * @param pageIndex
-    * @param pageSize
-    * @param obj
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.It#findHql(java.lang.String, int, int, java.lang.Object) 
-    */
+
     @Override
-    public List<T> findHql(final String hql, final int pageIndex,
-            final int pageSize, final Object obj) {
-        return this.getQueryList(hql, pageIndex, pageSize, obj,2);
+    public List<T> findHql(final String hql, final int pageIndex, final int pageSize, final Object obj) {
+        return this.getQueryList(hql, pageIndex, pageSize, obj, 2);
     }
-    
-    
-    private List<T> getQueryList(final String queryString, final int pageIndex,
-            final int pageSize, final Object obj,final int type){
+
+    private List<T> getQueryList(final String queryString, final int pageIndex, final int pageSize, final Object obj,
+            final int type) {
         return getQueryList(queryString, pageIndex, pageSize, obj, entityClass, type);
     }
+
     @SuppressWarnings("unchecked")
-    private <X>List<X> getQueryList(final String queryString, final int pageIndex,
-            final int pageSize, final Object obj,final Class<X> clazz,final int type){
-        
-            Query query = getQuery(queryString, pageIndex, pageSize, obj,
-                        type, this.getSession(),clazz);
-                return query.list(); 
+    private <X> List<X> getQueryList(final String queryString, final int pageIndex, final int pageSize,
+            final Object obj, final Class<X> clazz, final int type) {
+
+        Query query = getQuery(queryString, pageIndex, pageSize, obj, type, this.getSession(), clazz);
+        return query.list();
     }
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param queryString
-    * @param pageIndex
-    * @param pageSize
-    * @param param
-    * @param type
-    * @param session
-    * @param entity
-    * @return 
-    * @see com.lenovo.rms.common.dao.impl.It#getQuery(java.lang.String, int, int, java.lang.Object, int, org.hibernate.Session, java.lang.Class) 
-    */
-    @Override
-    public Query getQuery(final String queryString,
-            final int pageIndex, final int pageSize, final Object param,
+
+    public Query getQuery(final String queryString, final int pageIndex, final int pageSize, final Object param,
             final int type, Session session, Class<?> entity) {
-        Query query = null; 
-        if(type == 2){  //createQuery   HQL
-            query= session.createQuery(queryString);
-        }else if(type == 1){    //createSQLQuery    SQL
-            if(queryString.toLowerCase().trim().startsWith("select count"))
+        Query query = null;
+        if (type == 2) { // createQuery HQL
+            query = session.createQuery(queryString);
+        } else if (type == 1) { // createSQLQuery SQL
+            if (queryString.toLowerCase().trim().startsWith("select count"))
                 query = session.createSQLQuery(queryString);
             else
                 query = session.createSQLQuery(queryString).addEntity(entity);
         }
-        if (param != null){
-            if(param instanceof Map<?,?>){
-                query.setProperties((Map<?,?>)param);
-            }else if(param.getClass().isArray()){
+        if (param != null) {
+            if (param instanceof Map<?, ?>) {
+                query.setProperties((Map<?, ?>) param);
+            } else if (param.getClass().isArray()) {
                 int len = Array.getLength(param);
-                for (int i = 0; i <len; i++) {
+                for (int i = 0; i < len; i++) {
                     query.setParameter(i, Array.get(param, i));
                 }
-            }else{
+            } else {
                 query.setProperties(param);
             }
         }
-        setPageResult(query, pageIndex, pageSize);  //设置分页
+        setPageResult(query, pageIndex, pageSize); // 设置分页
         return query;
     }
 
-    /* 
-    * 简述
-    * <p>详细说明第一行<br>    
-    * 详细说明第二行 
-    * @date 2015年4月1日 上午9:15:02   
-    * @author Eric   
-    * @param query
-    * @param pageIndex
-    * @param pageSize 
-    * @see com.lenovo.rms.common.dao.impl.It#setPageResult(org.hibernate.Query, int, int) 
-    */
-    @Override
-    public void setPageResult(Query query, int pageIndex, int pageSize){
-        if (pageIndex >= 0) query.setFirstResult(pageIndex);
-        if (pageSize > 0) query.setMaxResults(pageSize);
+    public void setPageResult(Query query, int pageIndex, int pageSize) {
+        if (pageIndex >= 0)
+            query.setFirstResult(pageIndex);
+        if (pageSize > 0)
+            query.setMaxResults(pageSize);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public List findByCriteria(final DetachedCriteria criteria, final int firstResult, final int maxResults) {
+
+        Criteria executableCriteria = criteria.getExecutableCriteria(getSession());
+        if (firstResult >= 0) {
+            executableCriteria.setFirstResult(firstResult);
+        }
+        if (maxResults > 0) {
+            executableCriteria.setMaxResults(maxResults);
+        }
+        return executableCriteria.list();
+    }
+
+    @SuppressWarnings("rawtypes")
+    public List findByCriteria(DetachedCriteria criteria) {
+        return findByCriteria(criteria, -1, -1);
+    }
+
+    /**
+     * QBC 查询方式：
+     * 
+     * @Author: Charles
+     * @Description: 获取全部对象,带查询、排序、分页
+     * @param entityClass
+     * @param criterions
+     * @param orderBys
+     * @param firstResult
+     * @param maxResults
+     * @return List<X>:
+     */
+    @SuppressWarnings("unchecked")
+    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys,
+            int firstResult, int maxResults) {
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(entityClass);
+        if (criterions != null) {
+            for (Criterion c : criterions) {
+                detachedCriteria.add(c);
+            }
+        }
+        if (orderBys != null) {
+            for (Order o : orderBys) {
+                detachedCriteria.addOrder(o);
+            }
+        }
+        return findByCriteria(detachedCriteria, firstResult, maxResults);
+    }
+
+    /**
+     * 获取全部对象,带排序字段与升降序参
+     * 
+     * @Author: fjz
+     * @param entityClass
+     *            要获得类型的class
+     * @param orderBy
+     *            排序字段名
+     * @param isAsc
+     *            是否是正序
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public <X> List<X> findAll(Class<X> entityClass, String orderBy, boolean isAsc) {
+        if (isAsc)
+            return findByCriteria(DetachedCriteria.forClass(entityClass).addOrder(Order.asc(orderBy)));
+        else
+            return findByCriteria(DetachedCriteria.forClass(entityClass).addOrder(Order.desc(orderBy)));
+    }
+
+    /**
+     * @Author: Charles
+     * @Description: 获取全部对象,带查询、排序、分页
+     * @param entityClass
+     * @param criterions
+     * @param orderBys
+     * @param page
+     * @return List<X>:
+     */
+    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys, Page page) {
+        return this.findAll(entityClass, criterions, orderBys, page.getCurrentRow(), page.getPageSize());
+    }
+
+    /**
+     * @Author: Charles
+     * @Description: 获取全部对象,带查询、排序、不带分页
+     * @param entityClass
+     * @param criterions
+     * @param orderBys
+     * @return List<X>:
+     */
+    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys) {
+        return this.findAll(entityClass, criterions, orderBys, -1, -1);
+    }
+
+    /**
+     * 获取全部对象,带排序字段与升降序参
+     * 
+     * @Author: fjz
+     * @param orderBy
+     *            排序字段名
+     * @param isAsc
+     *            是否是正序
+     * @return
+     */
+    public List<T> findAll(String orderBy, boolean isAsc) {
+        return findAll(entityClass, orderBy, isAsc);
+    }
+
+    /**
+     * 获取全部对象
+     * 
+     * @Author: fjz
+     * @param entityClass
+     *            要获得类型的class
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public <X> List<X> findAll(Class<X> entityClass) {
+        return findByCriteria(DetachedCriteria.forClass(entityClass));
+    }
+
+    /**
+     * 获取全部对象
+     */
+    public List<T> findAll() {
+        return findAll(entityClass);
+    }
+
+    public T findUnique(final Criterion... criterions) {
+        return findUnique(entityClass, criterions);
+    }
+
+    public <X> X findUnique(Class<X> clazz, final Criterion... criterions) {
+        Criteria executableCriteria = getSession().createCriteria(clazz);
+        for (Criterion c : criterions) {
+            executableCriteria.add(c);
+        }
+        @SuppressWarnings("unchecked")
+        X result = (X) executableCriteria.uniqueResult();
+        return result;
+    }
+
+    /**
+     * 根据条件获取数据
+     * 
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     */
+    public <X> List<X> find(DetachedCriteria detachedCriteria) {
+        return findByCriteria(detachedCriteria);
+    }
+
+    /**
+     * 根据条件获取数据
+     * 
+     * @param firstResult
+     *            第几条开始查询
+     * @param maxResults
+     *            最大返回数据行数
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public List<T> find(int firstResult, int maxResults, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(criterions), firstResult, maxResults);
+    }
+
+    /**
+     * 根据条件获取数据
+     * 
+     * @param firstResult
+     *            从第几条开始查询
+     * @param maxResults
+     *            最大返回数据行数
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     * @return
+     */
+    public List<T> find(DetachedCriteria detachedCriteria, int firstResult, int maxResults) {
+        return findByCriteria(detachedCriteria, firstResult, maxResults);
+    }
+
+    /**
+     * 根据条件获取数据,带分页
+     * 
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public List<T> find(Page page, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(criterions), page.getCurrentRow(),
+                page.getPageSize());
+    }
+
+    /**
+     * 根据条件获取数据,带分页
+     * 
+     * @param page
+     * @param entity
+     *            对象
+     * @return
+     */
+    public List<T> find(final Page page, T entity) {
+        return find(null, page, Example.create(entity));
+    }
+
+    /**
+     * 根据条件获取数据,带分页
+     * 
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public List<T> find(DetachedCriteria detachedCriteria, Page page, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(detachedCriteria, criterions),
+                page.getCurrentRow(), page.getPageSize());
+    }
+
+    
+
+    /**
+     * ,根据条件获取数据,带分页,有总记录数
+     * 
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public ListPage<T> findListPage(DetachedCriteria detachedCriteria, final Page page, final Criterion... criterions) {
+        detachedCriteria = detachedCriteria == null ? createDetachedCriteria(criterions) : this.createDetachedCriteria(
+                detachedCriteria, criterions);
+        List<T> ls = this.find(detachedCriteria, page.getCurrentRow(), page.getPageSize());
+        page.setRowCount(this.getDetachedCriteriaRowCount(detachedCriteria));
+        return new ListPage<T>(ls, page);
+    }
+
+    /**
+     * ,根据条件获取数据,带分页,有总记录数
+     * 
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public ListPage<T> findListPage(final Page page, final Criterion... criterions) {
+        return findListPage(null, page, criterions);
+    }
+
+    /**
+     * ,根据条件获取数据,带分页,有总记录数
+     * 
+     * @param page
+     * @param entity
+     *            对象 里面的值为查询条件
+     * @return
+     */
+    public ListPage<T> findListPage(final Page page, T entity) {
+        return findListPage(null, page, Example.create(entity));
+    }
+
+    /**
+     * 对象化查询
+     * 
+     * @param criterions
+     *            数量可变的Criterion
+     */
+    public DetachedCriteria createDetachedCriteria(final Criterion... criterions) {
+        return createDetachedCriteria(entityClass, criterions);
+    }
+
+    /**
+     * 对象化查询
+     * 
+     * @param entityClass
+     *            参数T的反射类型
+     * @param criterions
+     *            数量可变的Criterion
+     */
+    public DetachedCriteria createDetachedCriteria(final Class clazz, final Criterion... criterions) {
+        return createDetachedCriteria(DetachedCriteria.forClass(clazz), criterions);
+    }
+
+    /**
+     * 对象化查询
+     * 
+     * @param detachedCriteria
+     *            离线查询 DetachedCriteria
+     * @param criterions
+     *            数量可变的Criterion
+     */
+    public DetachedCriteria createDetachedCriteria(DetachedCriteria detachedCriteria, final Criterion... criterions) {
+
+        if (detachedCriteria == null)
+            detachedCriteria = DetachedCriteria.forClass(entityClass);
+        if (criterions == null)
+            return detachedCriteria;
+        for (Criterion d : criterions) {
+            detachedCriteria.add(d);
+        }
+        return detachedCriteria;
+    }
+
+    /**
+     * 根据字段生成 like
+     * 
+     * @param clazz
+     * @param values
+     * @return
+     */
+    public Criterion[] getCriterionLike(Map<String, ?> values) {
+        if (values == null || values.isEmpty())
+            return null;
+        List<Criterion> list = new ArrayList<Criterion>();
+        for (Entry<String, ?> m : values.entrySet()) {
+            list.add(Restrictions.like(m.getKey(), m.getValue()));
+        }
+        return list.toArray(new Criterion[0]);
+    }
+
+    /**
+     * 生成 smart<=propertyName<=big
+     * 
+     * @return
+     */
+    public Criterion getBentweenCriterion(String propertyName, Object smart, Object big) {
+        if (smart == null || big == null)
+            return null;
+        return Restrictions.between(propertyName, smart, big);
     }
 
    
-    
-    
+
+    /**
+     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
+     * 
+     * @param entity
+     * @return
+     */
+    public int getDetachedCriteriaRowCount(final T entity) {
+        return getDetachedCriteriaRowCount(entityClass, Example.create(entity));
+    }
+
+    /**
+     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
+     * 
+     * @param criterions
+     * @param clazz
+     * @return
+     */
+    public int getDetachedCriteriaRowCount(Class<?> clazz, final Criterion... criterions) {
+        return getDetachedCriteriaRowCount(DetachedCriteria.forClass(clazz), criterions);
+    }
+
+    /**
+     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
+     * 
+     * @param entity
+     * @return
+     */
+    public int getDetachedCriteriaRowCount(final DetachedCriteria detachedCriteria, final Criterion... criterions) {
+        this.createDetachedCriteria(detachedCriteria, criterions);
+        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+        int totalCount = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+        return totalCount;
+
+    }
+
+    /**
+     * @Author: Charles
+     * @Description: 根据HQL查询数据总数
+     * @param hql
+     * @return
+     */
+    public int getHqlRowCount(String hql) {
+        return getHqlRowCount(hql, null);
+    }
+
+    /**
+     * @Author: Charles
+     * @Description: 根据HQL查询数据总数
+     * @param hql
+     * @return long:
+     */
+    public int getHqlRowCount(String hql, Object obj) {
+        if (!hql.trim().toLowerCase().startsWith("from")) {
+            hql = hql.substring(hql.toLowerCase().indexOf("from "));
+        }
+        hql = "select count(*) " + hql;
+        List<?> list = this.findHql(hql, obj);
+        int row = ((Long) list.get(0)).intValue();
+        return row;
+    }
 
 }
