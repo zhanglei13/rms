@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lenovo.rms.common.util.Constants;
 
+/**
+ * 
+* 简述
+* <p>详细说明第一行<br>    
+* 详细说明第二行 
+* @date 2015年4月1日 下午2:19:22   
+* @author zhanglei   
+* @version V1.0
+ */
 @Controller
 @RequestMapping
 public class BaseController {
@@ -19,7 +28,7 @@ public class BaseController {
 	public String login(HttpSession session, Model model) {
 		String info="Login failed";
 		boolean flag=false;
-		String url="/tologin";
+		String url="/workload";
 //		if(user.getAccount().isEmpty()||user.getPassword().isEmpty()){
 //			info="用户名和密码不能为空";
 //		}

@@ -71,7 +71,7 @@
 	</filter-mapping>
 
 	<!-- 登录 session 过滤 -->
-	<filter>
+<!--  	<filter>
 		<filter-name>LoginFilter</filter-name>
 		<filter-class>com.lenovo.rms.common.filter.LoginFilter</filter-class>
 		<init-param>
@@ -82,7 +82,7 @@
 	<filter-mapping>
 		<filter-name>LoginFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 
 	<!-- 重新指定基本异常类型的报告页面 -->
 	<error-page>
