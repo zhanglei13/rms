@@ -2,9 +2,11 @@ package com.lenovo.rms.common.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -13,7 +15,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -387,6 +392,263 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         @SuppressWarnings("unchecked")
         X result = (X) executableCriteria.uniqueResult();
         return result;
+    }
+
+    /**
+     * 根据条件获取数据
+     * 
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     */
+    public <X> List<X> find(DetachedCriteria detachedCriteria) {
+        return findByCriteria(detachedCriteria);
+    }
+
+    /**
+     * 根据条件获取数据
+     * 
+     * @param firstResult
+     *            第几条开始查询
+     * @param maxResults
+     *            最大返回数据行数
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public List<T> find(int firstResult, int maxResults, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(criterions), firstResult, maxResults);
+    }
+
+    /**
+     * 根据条件获取数据
+     * 
+     * @param firstResult
+     *            从第几条开始查询
+     * @param maxResults
+     *            最大返回数据行数
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     * @return
+     */
+    public List<T> find(DetachedCriteria detachedCriteria, int firstResult, int maxResults) {
+        return findByCriteria(detachedCriteria, firstResult, maxResults);
+    }
+
+    /**
+     * 根据条件获取数据,带分页
+     * 
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public List<T> find(Page page, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(criterions), page.getCurrentRow(),
+                page.getPageSize());
+    }
+
+    /**
+     * 根据条件获取数据,带分页
+     * 
+     * @param page
+     * @param entity
+     *            对象
+     * @return
+     */
+    public List<T> find(final Page page, T entity) {
+        return find(null, page, Example.create(entity));
+    }
+
+    /**
+     * 根据条件获取数据,带分页
+     * 
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public List<T> find(DetachedCriteria detachedCriteria, Page page, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(detachedCriteria, criterions),
+                page.getCurrentRow(), page.getPageSize());
+    }
+
+    
+
+    /**
+     * ,根据条件获取数据,带分页,有总记录数
+     * 
+     * @param detachedCriteria
+     *            hibernate 离线查询 DetachedCriteria
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public ListPage<T> findListPage(DetachedCriteria detachedCriteria, final Page page, final Criterion... criterions) {
+        detachedCriteria = detachedCriteria == null ? createDetachedCriteria(criterions) : this.createDetachedCriteria(
+                detachedCriteria, criterions);
+        List<T> ls = this.find(detachedCriteria, page.getCurrentRow(), page.getPageSize());
+        page.setRowCount(this.getDetachedCriteriaRowCount(detachedCriteria));
+        return new ListPage<T>(ls, page);
+    }
+
+    /**
+     * ,根据条件获取数据,带分页,有总记录数
+     * 
+     * @param page
+     * @param criterions
+     *            数量可变的Criterion(面向对象查询条件)
+     * @return
+     */
+    public ListPage<T> findListPage(final Page page, final Criterion... criterions) {
+        return findListPage(null, page, criterions);
+    }
+
+    /**
+     * ,根据条件获取数据,带分页,有总记录数
+     * 
+     * @param page
+     * @param entity
+     *            对象 里面的值为查询条件
+     * @return
+     */
+    public ListPage<T> findListPage(final Page page, T entity) {
+        return findListPage(null, page, Example.create(entity));
+    }
+
+    /**
+     * 对象化查询
+     * 
+     * @param criterions
+     *            数量可变的Criterion
+     */
+    public DetachedCriteria createDetachedCriteria(final Criterion... criterions) {
+        return createDetachedCriteria(entityClass, criterions);
+    }
+
+    /**
+     * 对象化查询
+     * 
+     * @param entityClass
+     *            参数T的反射类型
+     * @param criterions
+     *            数量可变的Criterion
+     */
+    public DetachedCriteria createDetachedCriteria(final Class clazz, final Criterion... criterions) {
+        return createDetachedCriteria(DetachedCriteria.forClass(clazz), criterions);
+    }
+
+    /**
+     * 对象化查询
+     * 
+     * @param detachedCriteria
+     *            离线查询 DetachedCriteria
+     * @param criterions
+     *            数量可变的Criterion
+     */
+    public DetachedCriteria createDetachedCriteria(DetachedCriteria detachedCriteria, final Criterion... criterions) {
+
+        if (detachedCriteria == null)
+            detachedCriteria = DetachedCriteria.forClass(entityClass);
+        if (criterions == null)
+            return detachedCriteria;
+        for (Criterion d : criterions) {
+            detachedCriteria.add(d);
+        }
+        return detachedCriteria;
+    }
+
+    /**
+     * 根据字段生成 like
+     * 
+     * @param clazz
+     * @param values
+     * @return
+     */
+    public Criterion[] getCriterionLike(Map<String, ?> values) {
+        if (values == null || values.isEmpty())
+            return null;
+        List<Criterion> list = new ArrayList<Criterion>();
+        for (Entry<String, ?> m : values.entrySet()) {
+            list.add(Restrictions.like(m.getKey(), m.getValue()));
+        }
+        return list.toArray(new Criterion[0]);
+    }
+
+    /**
+     * 生成 smart<=propertyName<=big
+     * 
+     * @return
+     */
+    public Criterion getBentweenCriterion(String propertyName, Object smart, Object big) {
+        if (smart == null || big == null)
+            return null;
+        return Restrictions.between(propertyName, smart, big);
+    }
+
+   
+
+    /**
+     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
+     * 
+     * @param entity
+     * @return
+     */
+    public int getDetachedCriteriaRowCount(final T entity) {
+        return getDetachedCriteriaRowCount(entityClass, Example.create(entity));
+    }
+
+    /**
+     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
+     * 
+     * @param criterions
+     * @param clazz
+     * @return
+     */
+    public int getDetachedCriteriaRowCount(Class<?> clazz, final Criterion... criterions) {
+        return getDetachedCriteriaRowCount(DetachedCriteria.forClass(clazz), criterions);
+    }
+
+    /**
+     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
+     * 
+     * @param entity
+     * @return
+     */
+    public int getDetachedCriteriaRowCount(final DetachedCriteria detachedCriteria, final Criterion... criterions) {
+        this.createDetachedCriteria(detachedCriteria, criterions);
+        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+        int totalCount = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+        return totalCount;
+
+    }
+
+    /**
+     * @Author: Charles
+     * @Description: 根据HQL查询数据总数
+     * @param hql
+     * @return
+     */
+    public int getHqlRowCount(String hql) {
+        return getHqlRowCount(hql, null);
+    }
+
+    /**
+     * @Author: Charles
+     * @Description: 根据HQL查询数据总数
+     * @param hql
+     * @return long:
+     */
+    public int getHqlRowCount(String hql, Object obj) {
+        if (!hql.trim().toLowerCase().startsWith("from")) {
+            hql = hql.substring(hql.toLowerCase().indexOf("from "));
+        }
+        hql = "select count(*) " + hql;
+        List<?> list = this.findHql(hql, obj);
+        int row = ((Long) list.get(0)).intValue();
+        return row;
     }
 
 }

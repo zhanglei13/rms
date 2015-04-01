@@ -47,6 +47,9 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
         List<EmployeeWorkload> workloads = findHql(hql,params);
         return workloads;
     }
+    
+    
+    
     public static void main(String[] args) throws ParseException{
         ApplicationContext   ctx = new ClassPathXmlApplicationContext("spring-servlet.xml");
         System.out.println("afasf");
@@ -60,6 +63,17 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
         for(EmployeeWorkload w:workloads){
             System.out.println(w.getProjectNo());
         }
+    }
+
+    @Override
+    public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to) {
+        String hql = "from EmployeeWorkload w where w.itCode=:itCode and w.workloadDate>=:from and w.workloadDate<=:to";
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("itCode", employee.getItCode());
+        params.put("from", from);
+        params.put("to", to);
+        List<EmployeeWorkload> workloads = findHql(hql,params);
+        return workloads;
     }
 
    
