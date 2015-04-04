@@ -1,0 +1,2 @@
+1.问题：org.hibernate.HibernateException: No Session found for current thread。
+解决：需要在调用dao的方法上加上事务管理@Transactional,具体见EmployeeServiceImpl
