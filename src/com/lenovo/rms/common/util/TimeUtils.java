@@ -1,5 +1,6 @@
 package com.lenovo.rms.common.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +15,11 @@ public class TimeUtils {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd HH:mm:ss");
 		return dateFormat.format(c.getTime());
+	}
+	
+	public static Timestamp nowTimestamp(){
+	    Timestamp ts = new Timestamp(System.currentTimeMillis());  
+	    return ts;
 	}
 
 	// 取得当前日期

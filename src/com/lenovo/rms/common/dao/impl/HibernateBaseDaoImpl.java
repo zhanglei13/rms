@@ -129,7 +129,11 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     public void saveOrUpdate(T entity) {
         this.getSession().saveOrUpdate(entity);
     }
-
+    
+    @Override
+    public <X> void saveOrUpdate(Class<X> clazz, X entity) {
+        this.getSession().saveOrUpdate(entity);
+    }
     @Override
     public void saveOrUpdateAll(Collection<T> entities) {
         for (T entity : entities) {
@@ -564,5 +568,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
             return null;
         return Restrictions.between(propertyName, small, big);
     }
+
+   
    
 }
