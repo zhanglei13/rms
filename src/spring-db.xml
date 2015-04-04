@@ -70,7 +70,6 @@
 			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
 			<tx:method name="*" propagation="REQUIRED" />
-
 		</tx:attributes>
 	</tx:advice>
 
