@@ -62,5 +62,7 @@ public interface IWorkloadService {
 	* List<EmployeeWorkload>
 	 */
 	public List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to, String status);
+	
+	public List<WorkloadRow> listWorkloadRows(String itCode);
 }
 

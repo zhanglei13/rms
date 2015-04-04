@@ -52,8 +52,8 @@ public class Employee {
 	}
 
 	/** minimal constructor */
-	public Employee(Integer empId) {
-		this.empId = empId;
+	public Employee(String itCode) {
+		this.itCode = itCode;
 	}
 
 	/** full constructor */

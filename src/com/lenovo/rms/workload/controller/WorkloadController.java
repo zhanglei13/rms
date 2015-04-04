@@ -1,6 +1,5 @@
 package com.lenovo.rms.workload.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -8,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.lenovo.rms.model.Employee;
-import com.lenovo.rms.model.EmployeeWorkload;
 import com.lenovo.rms.workload.model.WorkloadRow;
 import com.lenovo.rms.workload.service.IWorkloadService;
 
@@ -34,8 +31,8 @@ public class WorkloadController {
 	private IWorkloadService workloadService;
 	
 	@RequestMapping("/list")
-	public List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to, String status) {
-		return workloadService.findWorkloads(employee, from, to, status);
+	public List<WorkloadRow> listWorkloadRows(String itCode) {
+		return workloadService.listWorkloadRows(itCode);
 	}
 	
 	@RequestMapping("/save")

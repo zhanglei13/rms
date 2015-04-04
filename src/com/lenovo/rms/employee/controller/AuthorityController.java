@@ -23,9 +23,9 @@ public class AuthorityController {
 	@Autowired
 	private IAuthorityService authorityService;
 	
-	@RequestMapping("/get")
+	@RequestMapping("/roles")
 	@ResponseBody
-	public List<AuthorityRole> getAuthorityRoles(Employee employee) {
-		return authorityService.getAuthorityRoles(employee);
+	public List<AuthorityRole> getAuthorityRoles(String itCode) {
+		return authorityService.getAuthorityRoles(itCode);
 	}
 }

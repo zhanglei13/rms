@@ -10,18 +10,20 @@ import com.lenovo.rms.employee.dao.IAuthorityDao;
 import com.lenovo.rms.employee.service.IAuthorityService;
 import com.lenovo.rms.model.AuthorityRole;
 import com.lenovo.rms.model.Employee;
+
 @Service("authorityService")
 public class AuthorityService implements IAuthorityService {
 
-    // 开启日志
-    protected static Logger logger = Logger.getLogger(AuthorityService.class);
+	// 开启日志
+	protected static Logger logger = Logger.getLogger(AuthorityService.class);
 
-    @Autowired
-    protected IAuthorityDao authorityDao;
-    @Override
-    public List<AuthorityRole> getAuthorityRoles(Employee employee) {
+	@Autowired
+	protected IAuthorityDao authorityDao;
 
-        return authorityDao.getAuthorityRoles(employee);
-    }
+	@Override
+	public List<AuthorityRole> getAuthorityRoles(String itCode) {
+		Employee employee = new Employee(itCode);
+		return authorityDao.getAuthorityRoles(employee);
+	}
 
 }

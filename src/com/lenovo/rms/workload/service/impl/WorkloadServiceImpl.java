@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
@@ -59,7 +57,6 @@ public class WorkloadServiceImpl implements IWorkloadService {
      * .rms.workload.model.WorkloadRow)
      */
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, timeout = 100)
     public void saveWorkload(WorkloadRow workloadRow, String itCode) {
         for (int i = 0; i < 7; i++) {
             EmployeeWorkload workload = new EmployeeWorkload();
@@ -115,13 +112,16 @@ public class WorkloadServiceImpl implements IWorkloadService {
      * .rms.model.Employee, java.util.Date, java.util.Date, java.lang.String)
      */
     @Override
-    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true, timeout = 30)
     public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to, String status) {
-
-        return null;
+        return workloadDao.findWorkloads(employee, from, to);
     }
 
-    public static void main(String[] args) throws ParseException {
+	@Override
+	public List<WorkloadRow> listWorkloadRows(String itCode) {
+		return null;
+	}
+	
+	public static void main(String[] args) throws ParseException {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-servlet.xml");
         System.out.println("afasf");
         IWorkloadService service = ctx.getBean(IWorkloadService.class);
