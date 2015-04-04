@@ -43,10 +43,42 @@
 		</property>
 	</bean>
 
+  <!--配置事务管理  -->
+  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  
+  <!-- 配置事务特性 -->
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+        <tx:method name="exists" read-only="true" /> 
+    	<tx:method name="save*" propagation="REQUIRED" />   
+        <tx:method name="add*" propagation="REQUIRED" />   
+        <tx:method name="create*" propagation="REQUIRED" />   
+        <tx:method name="insert*" propagation="REQUIRED" />   
+        <tx:method name="update*" propagation="REQUIRED" />   
+        <tx:method name="merge*" propagation="REQUIRED" />   
+        <tx:method name="del*" propagation="REQUIRED" />   
+        <tx:method name="remove*" propagation="REQUIRED" />   
+        <tx:method name="put*" propagation="REQUIRED" />   
+        <tx:method name="use*" propagation="REQUIRED"/>   
+        
+        <!-- hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到    -->
+        <tx:method name="get*" propagation="REQUIRED" />   
+        <tx:method name="count*" propagation="REQUIRED" read-only="true" />   
+        <tx:method name="find*" propagation="REQUIRED" read-only="true" />   
+        <tx:method name="list*" propagation="REQUIRED" read-only="true" />  
+        <tx:method name="*" propagation="REQUIRED" /> 
+      
+    </tx:attributes>
+  </tx:advice>  
+
+ <!--
 	<bean id="txManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
 	<tx:annotation-driven transaction-manager="txManager"/>  
+  -->
 </beans>
