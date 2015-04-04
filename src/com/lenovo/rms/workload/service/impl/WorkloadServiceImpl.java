@@ -9,6 +9,8 @@
 package com.lenovo.rms.workload.service.impl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.lenovo.rms.common.util.DateUtils;
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
 import com.lenovo.rms.workload.dao.IWorkloadDao;
@@ -43,19 +46,6 @@ public class WorkloadServiceImpl implements IWorkloadService {
     @Autowired
     protected IWorkloadDao workloadDao;
 
-    /*
-     * 简述 <p>详细说明第一行<br> 详细说明第二行
-     * 
-     * @date 2015年4月1日 下午9:28:34
-     * 
-     * @author zhanglei
-     * 
-     * @param workloadRow
-     * 
-     * @see
-     * com.lenovo.rms.workload.service.IWorkloadService#saveWorkload(com.lenovo
-     * .rms.workload.model.WorkloadRow)
-     */
     @Override
     public void saveWorkload(WorkloadRow workloadRow, String itCode) {
         for (int i = 0; i < 7; i++) {
@@ -71,66 +61,68 @@ public class WorkloadServiceImpl implements IWorkloadService {
         }
     }
 
-    /*
-     * 简述 <p>详细说明第一行<br> 详细说明第二行
-     * 
-     * @date 2015年4月1日 下午9:20:51
-     * 
-     * @author zhanglei
-     * 
-     * @param workloadRows
-     * 
-     * @see
-     * com.lenovo.rms.workload.service.IWorkloadService#saveWorkloads(java.util
-     * .List)
-     */
     @Override
     public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode) {
         for (WorkloadRow workloadRow : workloadRows)
             saveWorkload(workloadRow, itCode);
     }
 
-    /*
-     * 简述 <p>详细说明第一行<br> 详细说明第二行
-     * 
-     * @date 2015年4月1日 下午9:20:51
-     * 
-     * @author zhanglei
-     * 
-     * @param employee
-     * 
-     * @param from
-     * 
-     * @param to
-     * 
-     * @param status
-     * 
-     * @return
-     * 
-     * @see
-     * com.lenovo.rms.workload.service.IWorkloadService#findWorkloads(com.lenovo
-     * .rms.model.Employee, java.util.Date, java.util.Date, java.lang.String)
-     */
+    @Override
+    public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to) {
+        return workloadDao.findWorkloads(employee, from, to);
+    }
+    
     @Override
     public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to, String status) {
-        return workloadDao.findWorkloads(employee, from, to);
+        return workloadDao.findWorkloads(employee, from, to, status);
     }
 
 	@Override
 	public List<WorkloadRow> listWorkloadRows(String itCode) {
+	    List<WorkloadRow> rows = new ArrayList<>();
+	    Employee employee = new Employee(itCode);
+		Date today = new Date();  //获取当前时间
+		
+		Date[] dates = DateUtils.firstAndLastDate(today); //获取时间
+		Date prevMonthFirstDay = dates[0];
+		Date prevMonthFirstMon = dates[1];
+		Date prevMonthLastDay = dates[2];
+		Date prevMonthLastSun = dates[3];
+		
+		if(!DateUtils.isReachDeadLine(today)) { //判断是否是本月10号以后
+		    List<EmployeeWorkload> rejectedWorkloads = 
+		            this.findWorkloads(employee, prevMonthFirstDay, prevMonthLastDay, "2");   //是否存在驳回的workload
+		    if(rejectedWorkloads.size() != 0) {   //存在的话上个月所有的workload打印出来修改
+		        List<EmployeeWorkload> lastMonthWorkloads = this.findWorkloads(employee, prevMonthFirstMon, prevMonthLastSun);
+		        this.addWorkloadRows(rows, lastMonthWorkloads);
+		    }
+		}
+		
+		List<EmployeeWorkload> savedWorkloads = this.findWorkloads(employee, DateUtils.getFirstDay(today), today);    //本月已经保存workload
+		if(savedWorkloads.size()!=0)
+		    this.addWorkloadRows(rows, savedWorkloads);
+		else {
+		    //获取上个月最后一个星期的workload
+		}
+		
 		return null;
 	}
 	
+	public void addWorkloadRows(List<WorkloadRow> rows, List<EmployeeWorkload> workloads) {
+	    
+	}
+	
 	public static void main(String[] args) throws ParseException {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-servlet.xml");
-        System.out.println("afasf");
-        IWorkloadService service = ctx.getBean(IWorkloadService.class);
-        Date date = new Date();
-        Date[] dates = new Date[7];
-        for (int i = 0; i < 7; i++)
-            dates[i] = date;
-        WorkloadRow row = new WorkloadRow("release", "dmm", "noPhrase", dates, new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-                0.0, 0.0 }, "123", "zhanglei", "zhanglei");
-        service.saveWorkload(row, "zhanglei");
+//        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-servlet.xml");
+//        System.out.println("afasf");
+//        IWorkloadService service = ctx.getBean(IWorkloadService.class);
+//        Date date = new Date();
+//        Date[] dates = new Date[7];
+//        for (int i = 0; i < 7; i++)
+//            dates[i] = date;
+//        WorkloadRow row = new WorkloadRow("release", "dmm", "noPhrase", dates, new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+//                0.0, 0.0 }, "123", "zhanglei", "zhanglei");
+//        service.saveWorkload(row, "zhanglei");
+	    
     }
 }
