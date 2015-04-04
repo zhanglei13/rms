@@ -70,6 +70,17 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- 配置Session -->  
+	<filter>  
+		<filter-name>openSession</filter-name>  
+		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>  
+	</filter>  
+	
+	<filter-mapping>  
+		<filter-name>openSession</filter-name>  
+		<url-pattern>/*</url-pattern>  
+	</filter-mapping>  
+  
 	<!-- 登录 session 过滤 -->
 <!--  	<filter>
 		<filter-name>LoginFilter</filter-name>
