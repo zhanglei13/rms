@@ -3,17 +3,13 @@ package com.lenovo.rms.common.dao;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 
 import com.lenovo.rms.common.util.ListPage;
 import com.lenovo.rms.common.util.Page;
-import com.lenovo.rms.common.util.PageView;
 
 /**   
 * Hibernate基本dao操作接口
@@ -130,6 +126,14 @@ public interface IHibernateBaseDao<T, PK extends Serializable> {
     */
     void saveOrUpdate(final T entity) ;
     
+    /**   
+     * 新增或更新一个实体记录
+     * @date 2015年3月30日 下午7:05:25   
+     * @author Eric   
+     * @param entity 待新增或更新的实体
+     * @return void  
+     */
+    <X> void saveOrUpdate(Class<X> clazz,final X entity) ;
     /**   
     * 批量新增或更新实体 
     * @date 2015年3月30日 下午7:05:59   

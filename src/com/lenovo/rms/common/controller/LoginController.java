@@ -1,5 +1,6 @@
 package com.lenovo.rms.common.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -7,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lenovo.rms.common.service.ILoginService;
 import com.lenovo.rms.common.util.Constants;
+import com.lenovo.rms.common.util.IPUtils;
 import com.lenovo.rms.employee.service.IEmployeeService;
 
 /**
@@ -22,27 +27,32 @@ import com.lenovo.rms.employee.service.IEmployeeService;
  */
 @Controller
 @RequestMapping
-public class BaseController {
+public class LoginController {
 
-	private static Logger logger = Logger.getLogger(BaseController.class);
+	protected static Logger logger = Logger.getLogger(LoginController.class);
+
 	@Autowired
-	private IEmployeeService employeeService;
-	@RequestMapping("/login")
-	public String login(HttpSession session, Model model) {
-		String info="Login failed";
+	private ILoginService loginService;
+	
+	@RequestMapping(value="/login",method = RequestMethod.POST)
+	public String login(HttpServletRequest request,HttpSession session, Model model) {
+		String name = request.getParameter("username");
+		String password = request.getParameter("password");
+	    String info="登录失败";
 		boolean flag=false;
-		String url="/workload";
-//		if(user.getAccount().isEmpty()||user.getPassword().isEmpty()){
-//			info="用户名和密码不能为空";
-//		}
-//		else {
-//			if(true){
-//				info="登入成功";
-//				flag=true;
-//				url="redirect:/index";
-//			}
-//		}
-		System.out.println(employeeService.getEmployeeByItCode("liweif"));
+		String url="/login";
+		if(name.isEmpty()||password.isEmpty()){
+			info="用户名和密码不能为空";
+		}
+		else {
+		    String ip=IPUtils.getRemoteHost(request);
+			if(loginService.login(name, password, ip, session)){
+				info="登录成功";
+				flag=true;
+				url="redirect:/index";
+			}
+		}
+		
 		model.addAttribute("info",info);
 		model.addAttribute("flag", flag);
 		return url;

@@ -10,7 +10,7 @@ public class VerifyUtils {
     private final static String DOMAIN = "lenovo\\";
     
     public static boolean verify(String name,String passwd){
-        Properties env = new Properties();
+       /* Properties env = new Properties();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         //set security credentials, note using simple cleartext authentication
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
@@ -25,8 +25,8 @@ public class VerifyUtils {
            ctx.close();   
         }catch (NamingException e) {
             //e.printStackTrace();
-            return false;
-        }
+            return false;//for test
+        }*/
         return true;
     }
     public static void main (String[] args) {
