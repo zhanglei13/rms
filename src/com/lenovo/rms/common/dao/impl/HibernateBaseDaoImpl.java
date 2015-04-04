@@ -51,7 +51,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     private Session getSession() {
-        return sessionFactory.openSession();
+        return sessionFactory.getCurrentSession();
     }
 
     @SuppressWarnings("unchecked")

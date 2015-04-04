@@ -3,11 +3,13 @@ package com.lenovo.rms.common.controller;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lenovo.rms.common.util.Constants;
+import com.lenovo.rms.employee.service.IEmployeeService;
 
 /**
  * 
@@ -23,7 +25,8 @@ import com.lenovo.rms.common.util.Constants;
 public class BaseController {
 
 	private static Logger logger = Logger.getLogger(BaseController.class);
-
+	@Autowired
+	private IEmployeeService employeeService;
 	@RequestMapping("/login")
 	public String login(HttpSession session, Model model) {
 		String info="Login failed";
@@ -39,6 +42,7 @@ public class BaseController {
 //				url="redirect:/index";
 //			}
 //		}
+		System.out.println(employeeService.getEmployeeByItCode("liweif"));
 		model.addAttribute("info",info);
 		model.addAttribute("flag", flag);
 		return url;
