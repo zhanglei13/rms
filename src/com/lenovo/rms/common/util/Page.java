@@ -3,18 +3,18 @@ package com.lenovo.rms.common.util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Page {
-    private int pageIndex = 1;     //当前页数
-    private int pageSize = 20;  //每页显示记录数
+    private long pageIndex = 1;     //当前页数
+    private long pageSize = 20;  //每页显示记录数
     
-    private int currentRow = 0; //当前记录数
-    private int rowCount = 0;       //总记录数
+    private long currentRow = 0; //当前记录数
+    private long rowCount = 0;       //总记录数
     
-    private int pageCount=0;    //总共页数,一共有多少页
+    private long pageCount=0;    //总共页数,一共有多少页
     
-    private int firstPage = 1;      //首页
-    private int prevPage = 1;       //上一页
-    private int nextPage = 1;       //下一页
-    private int lastPage = 1;       //最后一页
+    private long firstPage = 1;      //首页
+    private long prevPage = 1;       //上一页
+    private long nextPage = 1;       //下一页
+    private long lastPage = 1;       //最后一页
     
     private Page(){}
     
@@ -65,78 +65,78 @@ public class Page {
      * @Description: 设置总记录数的时候初始化所有数据
      * @param countRow void: 
      */
-    public void setRowCount(int countRow) {
+    public void setRowCount(long countRow) {
         this.rowCount = countRow;
         this.initPage();
         this.countCurrentRow();
     }
 
-    public int getPageIndex() {
+    public long getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(int pageIndex) {
+    public void setPageIndex(long pageIndex) {
         this.pageIndex = pageIndex;
     }
 
-    public int getPageSize() {
+    public long getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(long pageSize) {
         this.pageSize = pageSize;
         this.countCurrentRow();
     }
 
-    public int getCurrentRow() {
+    public long getCurrentRow() {
         return currentRow;
     }
 
-    public void setCurrentRow(int currentRow) {
+    public void setCurrentRow(long currentRow) {
         this.currentRow = currentRow;
     }
 
-    public int getRowCount() {
+    public long getRowCount() {
         return rowCount;
     }
 
-    public int getFirstPage() {
+    public long getFirstPage() {
         return firstPage;
     }
 
-    public void setFirstPage(int firstPage) {
+    public void setFirstPage(long firstPage) {
         this.firstPage = firstPage;
     }
 
-    public int getPrevPage() {
+    public long getPrevPage() {
         return prevPage;
     }
 
-    public void setPrevPage(int prevPage) {
+    public void setPrevPage(long prevPage) {
         this.prevPage = prevPage;
     }
 
-    public int getNextPage() {
+    public long getNextPage() {
         return nextPage;
     }
 
-    public void setNextPage(int nextPage) {
+    public void setNextPage(long nextPage) {
         this.nextPage = nextPage;
     }
 
-    public int getLastPage() {
+    public long getLastPage() {
         return lastPage;
     }
 
-    public void setLastPage(int lastPage) {
+    public void setLastPage(long lastPage) {
         this.lastPage = lastPage;
     }
 
-    public int getPageCount() {
+    public long getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
     }
 

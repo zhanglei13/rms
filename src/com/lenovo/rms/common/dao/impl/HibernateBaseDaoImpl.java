@@ -53,7 +53,9 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     private Session getSession() {
         return sessionFactory.getCurrentSession();
     }
-
+    
+    //---------------------------以下是获取对象的接口实现------------------------
+    
     @SuppressWarnings("unchecked")
     @Override
     public T get(PK id) {
@@ -78,7 +80,9 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     public <X> X load(Class<X> clazz, PK id) {
         return (X) this.getSession().load(clazz, id);
     }
-
+    
+    //---------------------------以下是删除对象的接口实现------------------------
+    
     @Override
     public void delete(T entity) {
         this.getSession().delete(entity);
@@ -106,6 +110,8 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         }
     }
 
+    //---------------------------以下是新增或更新对象的接口实现------------------------
+    
     @Override
     public void save(T entity) {
         this.getSession().save(entity);
@@ -150,6 +156,8 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
 
     }
 
+   //---------------------------以下是清理操作接口实现------------------------------
+    
     @Override
     public void flush() {
         this.getSession().flush();
@@ -168,8 +176,8 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
 
     }
 
-    // -------------------------------------------------------------------------------------------------
-
+    //------------------------------以下是HQL操作实现------------------------------------------------
+    
     @Override
     public ListPage<T> findHqlListPage(final String hql, final Page page) {
         return findHqlListPage(hql, page, null);
@@ -193,7 +201,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     @Override
-    public List<T> findHql(final String hql, final int pageIndex, final int pageSize) {
+    public List<T> findHql(final String hql, final long pageIndex, final long pageSize) {
         return findHql(hql, pageIndex, pageSize, null);
     }
 
@@ -203,25 +211,236 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     @Override
-    public List<T> findHql(final String hql, final int pageIndex, final int pageSize, final Object obj) {
+    public List<T> findHql(final String hql, final long pageIndex, final long pageSize, final Object obj) {
         return this.getQueryList(hql, pageIndex, pageSize, obj, 2);
     }
 
-    private List<T> getQueryList(final String queryString, final int pageIndex, final int pageSize, final Object obj,
-            final int type) {
+    protected List<T> getQueryList(final String queryString, final long pageIndex, final long pageSize, final Object obj,
+            final long type) {
         return getQueryList(queryString, pageIndex, pageSize, obj, entityClass, type);
+    }
+   
+    @Override
+    public long getHqlRowCount(String hql) {
+        return getHqlRowCount(hql, null);
+    }
+
+    @Override
+    public long getHqlRowCount(String hql, Object obj) {
+        if (!hql.trim().toLowerCase().startsWith("from")) {
+            hql = hql.substring(hql.toLowerCase().indexOf("from "));
+        }
+        hql = "select count(*) " + hql;
+        List<?> list = this.findHql(hql, obj);
+        long row = ((Long) list.get(0)).intValue();
+        return row;
     }
 
     @SuppressWarnings("unchecked")
-    private <X> List<X> getQueryList(final String queryString, final int pageIndex, final int pageSize,
-            final Object obj, final Class<X> clazz, final int type) {
+    protected <X> List<X> getQueryList(final String queryString, final long pageIndex, final long pageSize,
+            final Object obj, final Class<X> clazz, final long type) {
 
         Query query = getQuery(queryString, pageIndex, pageSize, obj, type, this.getSession(), clazz);
         return query.list();
     }
 
-    public Query getQuery(final String queryString, final int pageIndex, final int pageSize, final Object param,
-            final int type, Session session, Class<?> entity) {
+    
+    //------------------------------以下是QBC操作实现------------------------------------------------
+    
+    @SuppressWarnings("rawtypes")
+    @Override
+    public List findByCriteria(final DetachedCriteria criteria, final long firstResult, final long maxResults) {
+
+        Criteria executableCriteria = criteria.getExecutableCriteria(getSession());
+        if (firstResult >= 0) {
+            executableCriteria.setFirstResult((int)firstResult);
+        }
+        if (maxResults > 0) {
+            executableCriteria.setMaxResults((int)maxResults);
+        }
+        return executableCriteria.list();
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public List findByCriteria(DetachedCriteria criteria) {
+        return findByCriteria(criteria, -1, -1);
+    }
+
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys,
+            long firstResult, long maxResults) {
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(entityClass);
+        if (criterions != null) {
+            for (Criterion c : criterions) {
+                detachedCriteria.add(c);
+            }
+        }
+        if (orderBys != null) {
+            for (Order o : orderBys) {
+                detachedCriteria.addOrder(o);
+            }
+        }
+        return findByCriteria(detachedCriteria, firstResult, maxResults);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <X> List<X> findAll(Class<X> entityClass, String orderBy, boolean isAsc) {
+        if (isAsc)
+            return findByCriteria(DetachedCriteria.forClass(entityClass).addOrder(Order.asc(orderBy)));
+        else
+            return findByCriteria(DetachedCriteria.forClass(entityClass).addOrder(Order.desc(orderBy)));
+    }
+
+    @Override
+    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys, Page page) {
+        return this.findAll(entityClass, criterions, orderBys, page.getCurrentRow(), page.getPageSize());
+    }
+
+
+    @Override
+    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys) {
+        return this.findAll(entityClass, criterions, orderBys, -1, -1);
+    }
+
+ 
+    @Override
+    public List<T> findAll(String orderBy, boolean isAsc) {
+        return findAll(entityClass, orderBy, isAsc);
+    }
+
+  
+    @Override
+    @SuppressWarnings("unchecked")
+    public <X> List<X> findAll(Class<X> entityClass) {
+        return findByCriteria(DetachedCriteria.forClass(entityClass));
+    }
+
+    @Override
+    public List<T> findAll() {
+        return findAll(entityClass);
+    }
+
+    @Override
+    public T findUnique(final Criterion... criterions) {
+        return findUnique(entityClass, criterions);
+    }
+
+    @Override
+    public <X> X findUnique(Class<X> clazz, final Criterion... criterions) {
+        Criteria executableCriteria = getSession().createCriteria(clazz);
+        for (Criterion c : criterions) {
+            executableCriteria.add(c);
+        }
+        @SuppressWarnings("unchecked")
+        X result = (X) executableCriteria.uniqueResult();
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <X> List<X> find(DetachedCriteria detachedCriteria) {
+        return findByCriteria(detachedCriteria);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> find(long firstResult, long maxResults, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(criterions), firstResult, maxResults);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> find(DetachedCriteria detachedCriteria, long firstResult, long maxResults) {
+        return findByCriteria(detachedCriteria, firstResult, maxResults);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> find(Page page, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(criterions), page.getCurrentRow(),
+                page.getPageSize());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<T> find(DetachedCriteria detachedCriteria, Page page, final Criterion... criterions) {
+        return findByCriteria(createDetachedCriteria(detachedCriteria, criterions),
+                page.getCurrentRow(), page.getPageSize());
+    }
+
+    @Override
+    public ListPage<T> findListPage(DetachedCriteria detachedCriteria, final Page page, final Criterion... criterions) {
+        detachedCriteria = detachedCriteria == null ? createDetachedCriteria(criterions) : this.createDetachedCriteria(
+                detachedCriteria, criterions);
+        List<T> ls = this.find(detachedCriteria, page.getCurrentRow(), page.getPageSize());
+        page.setRowCount(this.getDetachedCriteriaRowCount(detachedCriteria));
+        return new ListPage<T>(ls, page);
+    }
+
+    @Override
+    public ListPage<T> findListPage(final Page page, final Criterion... criterions) {
+        return findListPage(null, page, criterions);
+    }
+
+   
+    
+    @Override
+    public long getDetachedCriteriaRowCount(Class<?> clazz, final Criterion... criterions) {
+        return getDetachedCriteriaRowCount(DetachedCriteria.forClass(clazz), criterions);
+    }
+
+    @Override
+    public long getDetachedCriteriaRowCount(final DetachedCriteria detachedCriteria, final Criterion... criterions) {
+        this.createDetachedCriteria(detachedCriteria, criterions);
+        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+        long totalCount = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+        return totalCount;
+
+    }
+
+
+    //------------------------------以下是QBE操作实现------------------------------------------------
+    
+
+    @Override
+    public List<T> find(final Page page, T entity) {
+        return find(null, page, Example.create(entity));
+    }
+    @Override
+    public ListPage<T> findListPage(final Page page, T entity) {
+        return findListPage(null, page, Example.create(entity));
+    }
+
+    @Override
+    public long getDetachedCriteriaRowCount(final T entity) {
+        return getDetachedCriteriaRowCount(entityClass, Example.create(entity));
+    }
+
+   
+  //------------------------------以下是用来实现接口的辅助方法------------------------------------------------
+    
+    /**   
+    * 根据相应条件生成query对象
+    * @date 2015年4月4日 下午2:52:16   
+    * @author Eric   
+    * @param queryString 查询语句
+    * @param pageIndex   分页其实页
+    * @param pageSize    分页大小
+    * @param param       参数
+    * @param type        类型：1代表SQL查询，2代表 HQL查询
+    * @param session     用来生成query的session
+    * @param entity      类型信息
+    * @return
+    * Query  
+    */
+    protected Query getQuery(final String queryString, final long pageIndex, final long pageSize, final Object param,
+            final long type, Session session, Class<?> entity) {
         Query query = null;
         if (type == 2) { // createQuery HQL
             query = session.createQuery(queryString);
@@ -246,309 +465,61 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         setPageResult(query, pageIndex, pageSize); // 设置分页
         return query;
     }
-
-    public void setPageResult(Query query, int pageIndex, int pageSize) {
+    
+    /**   
+    * 为query对象设置分页信息
+    * @date 2015年4月4日 下午2:51:12   
+    * @author Eric   
+    * @param query 待设置分页信息的query对象
+    * @param pageIndex 起始页
+    * @param pageSize  页大小
+    * void  
+    */
+    protected void setPageResult(Query query, long pageIndex, long pageSize) {
         if (pageIndex >= 0)
-            query.setFirstResult(pageIndex);
+            query.setFirstResult((int)pageIndex);
         if (pageSize > 0)
-            query.setMaxResults(pageSize);
-    }
-
-    @SuppressWarnings("rawtypes")
-    public List findByCriteria(final DetachedCriteria criteria, final int firstResult, final int maxResults) {
-
-        Criteria executableCriteria = criteria.getExecutableCriteria(getSession());
-        if (firstResult >= 0) {
-            executableCriteria.setFirstResult(firstResult);
-        }
-        if (maxResults > 0) {
-            executableCriteria.setMaxResults(maxResults);
-        }
-        return executableCriteria.list();
-    }
-
-    @SuppressWarnings("rawtypes")
-    public List findByCriteria(DetachedCriteria criteria) {
-        return findByCriteria(criteria, -1, -1);
-    }
-
-    /**
-     * QBC 查询方式：
-     * 
-     * @Author: Charles
-     * @Description: 获取全部对象,带查询、排序、分页
-     * @param entityClass
-     * @param criterions
-     * @param orderBys
-     * @param firstResult
-     * @param maxResults
-     * @return List<X>:
-     */
-    @SuppressWarnings("unchecked")
-    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys,
-            int firstResult, int maxResults) {
-        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(entityClass);
-        if (criterions != null) {
-            for (Criterion c : criterions) {
-                detachedCriteria.add(c);
-            }
-        }
-        if (orderBys != null) {
-            for (Order o : orderBys) {
-                detachedCriteria.addOrder(o);
-            }
-        }
-        return findByCriteria(detachedCriteria, firstResult, maxResults);
-    }
-
-    /**
-     * 获取全部对象,带排序字段与升降序参
-     * 
-     * @Author: fjz
-     * @param entityClass
-     *            要获得类型的class
-     * @param orderBy
-     *            排序字段名
-     * @param isAsc
-     *            是否是正序
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public <X> List<X> findAll(Class<X> entityClass, String orderBy, boolean isAsc) {
-        if (isAsc)
-            return findByCriteria(DetachedCriteria.forClass(entityClass).addOrder(Order.asc(orderBy)));
-        else
-            return findByCriteria(DetachedCriteria.forClass(entityClass).addOrder(Order.desc(orderBy)));
-    }
-
-    /**
-     * @Author: Charles
-     * @Description: 获取全部对象,带查询、排序、分页
-     * @param entityClass
-     * @param criterions
-     * @param orderBys
-     * @param page
-     * @return List<X>:
-     */
-    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys, Page page) {
-        return this.findAll(entityClass, criterions, orderBys, page.getCurrentRow(), page.getPageSize());
-    }
-
-    /**
-     * @Author: Charles
-     * @Description: 获取全部对象,带查询、排序、不带分页
-     * @param entityClass
-     * @param criterions
-     * @param orderBys
-     * @return List<X>:
-     */
-    public <X> List<X> findAll(Class<X> entityClass, final Criterion[] criterions, final Order[] orderBys) {
-        return this.findAll(entityClass, criterions, orderBys, -1, -1);
-    }
-
-    /**
-     * 获取全部对象,带排序字段与升降序参
-     * 
-     * @Author: fjz
-     * @param orderBy
-     *            排序字段名
-     * @param isAsc
-     *            是否是正序
-     * @return
-     */
-    public List<T> findAll(String orderBy, boolean isAsc) {
-        return findAll(entityClass, orderBy, isAsc);
-    }
-
-    /**
-     * 获取全部对象
-     * 
-     * @Author: fjz
-     * @param entityClass
-     *            要获得类型的class
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public <X> List<X> findAll(Class<X> entityClass) {
-        return findByCriteria(DetachedCriteria.forClass(entityClass));
-    }
-
-    /**
-     * 获取全部对象
-     */
-    public List<T> findAll() {
-        return findAll(entityClass);
-    }
-
-    public T findUnique(final Criterion... criterions) {
-        return findUnique(entityClass, criterions);
-    }
-
-    public <X> X findUnique(Class<X> clazz, final Criterion... criterions) {
-        Criteria executableCriteria = getSession().createCriteria(clazz);
-        for (Criterion c : criterions) {
-            executableCriteria.add(c);
-        }
-        @SuppressWarnings("unchecked")
-        X result = (X) executableCriteria.uniqueResult();
-        return result;
-    }
-
-    /**
-     * 根据条件获取数据
-     * 
-     * @param detachedCriteria
-     *            hibernate 离线查询 DetachedCriteria
-     */
-    public <X> List<X> find(DetachedCriteria detachedCriteria) {
-        return findByCriteria(detachedCriteria);
-    }
-
-    /**
-     * 根据条件获取数据
-     * 
-     * @param firstResult
-     *            第几条开始查询
-     * @param maxResults
-     *            最大返回数据行数
-     * @param criterions
-     *            数量可变的Criterion(面向对象查询条件)
-     * @return
-     */
-    public List<T> find(int firstResult, int maxResults, final Criterion... criterions) {
-        return findByCriteria(createDetachedCriteria(criterions), firstResult, maxResults);
-    }
-
-    /**
-     * 根据条件获取数据
-     * 
-     * @param firstResult
-     *            从第几条开始查询
-     * @param maxResults
-     *            最大返回数据行数
-     * @param detachedCriteria
-     *            hibernate 离线查询 DetachedCriteria
-     * @return
-     */
-    public List<T> find(DetachedCriteria detachedCriteria, int firstResult, int maxResults) {
-        return findByCriteria(detachedCriteria, firstResult, maxResults);
-    }
-
-    /**
-     * 根据条件获取数据,带分页
-     * 
-     * @param page
-     * @param criterions
-     *            数量可变的Criterion(面向对象查询条件)
-     * @return
-     */
-    public List<T> find(Page page, final Criterion... criterions) {
-        return findByCriteria(createDetachedCriteria(criterions), page.getCurrentRow(),
-                page.getPageSize());
-    }
-
-    /**
-     * 根据条件获取数据,带分页
-     * 
-     * @param page
-     * @param entity
-     *            对象
-     * @return
-     */
-    public List<T> find(final Page page, T entity) {
-        return find(null, page, Example.create(entity));
-    }
-
-    /**
-     * 根据条件获取数据,带分页
-     * 
-     * @param detachedCriteria
-     *            hibernate 离线查询 DetachedCriteria
-     * @param page
-     * @param criterions
-     *            数量可变的Criterion(面向对象查询条件)
-     * @return
-     */
-    public List<T> find(DetachedCriteria detachedCriteria, Page page, final Criterion... criterions) {
-        return findByCriteria(createDetachedCriteria(detachedCriteria, criterions),
-                page.getCurrentRow(), page.getPageSize());
+            query.setMaxResults((int)pageSize);
     }
 
     
-
-    /**
-     * ,根据条件获取数据,带分页,有总记录数
-     * 
-     * @param detachedCriteria
-     *            hibernate 离线查询 DetachedCriteria
-     * @param page
-     * @param criterions
-     *            数量可变的Criterion(面向对象查询条件)
-     * @return
-     */
-    public ListPage<T> findListPage(DetachedCriteria detachedCriteria, final Page page, final Criterion... criterions) {
-        detachedCriteria = detachedCriteria == null ? createDetachedCriteria(criterions) : this.createDetachedCriteria(
-                detachedCriteria, criterions);
-        List<T> ls = this.find(detachedCriteria, page.getCurrentRow(), page.getPageSize());
-        page.setRowCount(this.getDetachedCriteriaRowCount(detachedCriteria));
-        return new ListPage<T>(ls, page);
-    }
-
-    /**
-     * ,根据条件获取数据,带分页,有总记录数
-     * 
-     * @param page
-     * @param criterions
-     *            数量可变的Criterion(面向对象查询条件)
-     * @return
-     */
-    public ListPage<T> findListPage(final Page page, final Criterion... criterions) {
-        return findListPage(null, page, criterions);
-    }
-
-    /**
-     * ,根据条件获取数据,带分页,有总记录数
-     * 
-     * @param page
-     * @param entity
-     *            对象 里面的值为查询条件
-     * @return
-     */
-    public ListPage<T> findListPage(final Page page, T entity) {
-        return findListPage(null, page, Example.create(entity));
-    }
-
-    /**
-     * 对象化查询
-     * 
-     * @param criterions
-     *            数量可变的Criterion
-     */
-    public DetachedCriteria createDetachedCriteria(final Criterion... criterions) {
+    
+    /**   
+    * 根据可变数量的criterion生成detachedCriteria
+    * @date 2015年4月4日 下午2:48:25   
+    * @author Eric   
+    * @param criterions 可变数量的criterion
+    * @return
+    * DetachedCriteria  
+    */
+    protected DetachedCriteria createDetachedCriteria(final Criterion... criterions) {
         return createDetachedCriteria(entityClass, criterions);
     }
 
-    /**
-     * 对象化查询
-     * 
-     * @param entityClass
-     *            参数T的反射类型
-     * @param criterions
-     *            数量可变的Criterion
-     */
-    public DetachedCriteria createDetachedCriteria(final Class clazz, final Criterion... criterions) {
+    /**   
+    * 根据相应的类型信息和可变数量的criterion生成detachedCriteria
+    * @date 2015年4月4日 下午2:46:40   
+    * @author Eric   
+    * @param clazz      类型信息
+    * @param criterions 可变数量的criterion
+    * @return
+    * DetachedCriteria  
+    */
+    @SuppressWarnings("rawtypes")
+    protected DetachedCriteria createDetachedCriteria( final Class clazz, final Criterion... criterions) {
         return createDetachedCriteria(DetachedCriteria.forClass(clazz), criterions);
     }
 
-    /**
-     * 对象化查询
-     * 
-     * @param detachedCriteria
-     *            离线查询 DetachedCriteria
-     * @param criterions
-     *            数量可变的Criterion
-     */
-    public DetachedCriteria createDetachedCriteria(DetachedCriteria detachedCriteria, final Criterion... criterions) {
+    /**   
+    * 根据可变数量的criterion生成离线查询条件detachedCriteria
+    * @date 2015年4月4日 下午2:45:04   
+    * @author Eric   
+    * @param detachedCriteria 待生成的离线查询条件detachedCriteria
+    * @param criterions  数量可变的criterion
+    * @return
+    * DetachedCriteria  
+    */
+    protected DetachedCriteria createDetachedCriteria(DetachedCriteria detachedCriteria, final Criterion... criterions) {
 
         if (detachedCriteria == null)
             detachedCriteria = DetachedCriteria.forClass(entityClass);
@@ -560,14 +531,15 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         return detachedCriteria;
     }
 
-    /**
-     * 根据字段生成 like
-     * 
-     * @param clazz
-     * @param values
-     * @return
-     */
-    public Criterion[] getCriterionLike(Map<String, ?> values) {
+    /**   
+    * 根据字段生成 like的crieterion
+    * @date 2015年4月4日 下午2:43:45   
+    * @author Eric   
+    * @param values 参数
+    * @return
+    * Criterion[]  
+    */
+    protected Criterion[] getCriterionLike(Map<String, ?> values) {
         if (values == null || values.isEmpty())
             return null;
         List<Criterion> list = new ArrayList<Criterion>();
@@ -577,78 +549,20 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         return list.toArray(new Criterion[0]);
     }
 
-    /**
-     * 生成 smart<=propertyName<=big
-     * 
-     * @return
-     */
-    public Criterion getBentweenCriterion(String propertyName, Object smart, Object big) {
-        if (smart == null || big == null)
+    /**   
+    * 生成 smart<=propertyName<=big的criterion
+    * @date 2015年4月4日 下午2:42:00   
+    * @author Eric   
+    * @param propertyName 字段
+    * @param small       最小值        
+    * @param big         最大值
+    * @return
+    * Criterion   
+    */
+    protected Criterion getBentweenCriterion(String propertyName, Object small, Object big) {
+        if (small == null || big == null)
             return null;
-        return Restrictions.between(propertyName, smart, big);
+        return Restrictions.between(propertyName, small, big);
     }
-
    
-
-    /**
-     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
-     * 
-     * @param entity
-     * @return
-     */
-    public int getDetachedCriteriaRowCount(final T entity) {
-        return getDetachedCriteriaRowCount(entityClass, Example.create(entity));
-    }
-
-    /**
-     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
-     * 
-     * @param criterions
-     * @param clazz
-     * @return
-     */
-    public int getDetachedCriteriaRowCount(Class<?> clazz, final Criterion... criterions) {
-        return getDetachedCriteriaRowCount(DetachedCriteria.forClass(clazz), criterions);
-    }
-
-    /**
-     * QBE（Query By Example）DetachedCriteria 查询方式 查询数据的总行
-     * 
-     * @param entity
-     * @return
-     */
-    public int getDetachedCriteriaRowCount(final DetachedCriteria detachedCriteria, final Criterion... criterions) {
-        this.createDetachedCriteria(detachedCriteria, criterions);
-        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
-        int totalCount = ((Long) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
-        return totalCount;
-
-    }
-
-    /**
-     * @Author: Charles
-     * @Description: 根据HQL查询数据总数
-     * @param hql
-     * @return
-     */
-    public int getHqlRowCount(String hql) {
-        return getHqlRowCount(hql, null);
-    }
-
-    /**
-     * @Author: Charles
-     * @Description: 根据HQL查询数据总数
-     * @param hql
-     * @return long:
-     */
-    public int getHqlRowCount(String hql, Object obj) {
-        if (!hql.trim().toLowerCase().startsWith("from")) {
-            hql = hql.substring(hql.toLowerCase().indexOf("from "));
-        }
-        hql = "select count(*) " + hql;
-        List<?> list = this.findHql(hql, obj);
-        int row = ((Long) list.get(0)).intValue();
-        return row;
-    }
-
 }
