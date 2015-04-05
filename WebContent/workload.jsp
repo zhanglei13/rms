@@ -6,19 +6,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<%@ include file="../../res/common/header.txt" %>
+	<%@ include file="res/common/header.txt" %>
 	<title>RMS WorkLoad</title>
 	</head>
 
 	<body class="no-skin">
 	     <!-- -top information -->
-         <%@ include file="../../res/common/top.txt" %>
+         <%@ include file="res/common/top.txt" %>
 		<div class="main-container" id="main-container">
 			<script type="text/javascript">
 				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
 			</script>
 			<!-- -leftlist -->
-			<%@ include file="../../res/common/leftlist.txt" %>
+			<%@ include file="res/common/leftlist.txt" %>
 
 			
 			<div class="main-content">
@@ -152,8 +152,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-content -->
-			<%@ include file="../../res/common/footer.txt" %>
+			<%@ include file="res/common/footer.txt" %>
 		</div><!-- /.main-container -->
-       <%@ include file="../../res/common/bottomjs.txt" %>
+       <%@ include file="res/common/bottomjs.txt" %>
    </body>
 </html>

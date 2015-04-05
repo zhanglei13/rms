@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
 	<head>
 		<title>RMS Login</title>
-		<%@ include file="res/common/header.txt" %>
+		<%@ include file="../../res/common/header.txt" %>
 	</head>
 	<body class="login-layout">
 		<div class="main-container">
@@ -105,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
-    <%@ include file="res/common/login.txt" %>
+    <%@ include file="../../res/common/login.txt" %>
 	
 	</body>
 </html>
