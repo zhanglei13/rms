@@ -14,4 +14,13 @@ public interface IProjectService {
      */
      List<Project> getAllProjects();
 
+     /**
+      * 
+     * 根据id获得project  
+     * @author zhanglei   
+     * @param projectNo
+     * @return
+     * Project
+      */
+     Project getByProjectNo(String projectNo);
 }

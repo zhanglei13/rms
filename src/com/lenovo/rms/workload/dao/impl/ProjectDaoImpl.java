@@ -2,6 +2,8 @@ package com.lenovo.rms.workload.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.lenovo.rms.common.dao.impl.HibernateBaseDaoImpl;
@@ -13,6 +15,12 @@ public class ProjectDaoImpl extends HibernateBaseDaoImpl<Project,Long> implement
     @Override
     public List<Project> getAllProjects() {
         return findAll();
+    }
+
+    @Override
+    public Project getByProjectNo(String projectNo) {
+        Criterion condition = Restrictions.eq("projectNo", projectNo);
+        return findUnique(condition);
     }
   
 }

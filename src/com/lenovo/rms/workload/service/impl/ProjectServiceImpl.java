@@ -24,4 +24,9 @@ public class ProjectServiceImpl implements IProjectService{
         return projectDao.getAllProjects();
     }
 
+    @Override
+    public Project getByProjectNo(String projectNo) {
+        return projectDao.getByProjectNo(projectNo);
+    }
+
 }

@@ -72,6 +72,7 @@ public class DateUtils {
     public static int getWeekOfYear(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         return cal.get(Calendar.WEEK_OF_YEAR);
     }
 
@@ -87,6 +88,7 @@ public class DateUtils {
     public static int getWeekOfMonth(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
         return cal.get(Calendar.WEEK_OF_MONTH);
     }
 
@@ -119,7 +121,7 @@ public class DateUtils {
      * @return long
      */
     public static long getDaysBetween(Date date0, Date date1) {
-        long daysBetween = (date0.getTime() - date1.getTime() + 1000000) / 86400000;
+        long daysBetween = (date1.getTime() - date0.getTime() + 1000000) / 86400000;
         return daysBetween;
     }
 
@@ -130,31 +132,31 @@ public class DateUtils {
     }
 
     public static Date[] firstAndLastDate(Date date) {
-        //为了保证效率，返回Date数组，依次存放上个月第一天;上个月第一个周一;最后一天;最后一个周日
+        // 为了保证效率，返回Date数组，依次存放上个月第一天;上个月第一个周一;最后一天;最后一个周日
         Date[] dates = new Date[4];
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.MONDAY, calendar.get(Calendar.MONDAY) - 1);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         dates[0] = calendar.getTime();
-        
+
         int diff = getDayDiff(dates[0]);
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - diff);
         dates[1] = calendar.getTime();
-        
+
         calendar.setTime(date);
         calendar.set(Calendar.MONDAY, calendar.get(Calendar.MONDAY) - 1);
         calendar.set(Calendar.DAY_OF_MONTH,
                 getDaysOfMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1));
         dates[2] = calendar.getTime();
-        
+
         diff = 6 - getDayDiff(dates[2]);
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + diff);
         dates[3] = calendar.getTime();
-        
+
         return dates;
     }
-    
+
     public static Date prevMonthFirstDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -162,7 +164,7 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
     }
-    
+
     public static Date prevMonthLastDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -201,8 +203,29 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
     }
-    
+
+    public static Date[] getPrevMonthLastWeek(Date date) {
+        Date[] dates = new Date[2];
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MONDAY, calendar.get(Calendar.MONDAY) - 1);
+        calendar.set(Calendar.DAY_OF_MONTH,
+                getDaysOfMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1));
+        dates[1] = calendar.getTime();
+
+        int diff = getDayDiff(dates[1]);
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - diff);
+        dates[0] = calendar.getTime();
+
+        return dates;
+    }
+
     public static void main(String[] args) {
-        System.out.println(DateUtils.getFirstDay(new Date()));
+        Date date = new Date();
+        Date start = DateUtils.prevMonthFirstMon(date);
+        Date end = DateUtils.prevMonthLastSun(date);
+        System.out.println(start);
+        System.out.println(end);
+        System.out.println((DateUtils.getDaysBetween(start, end) + 1) / 7);
     }
 }

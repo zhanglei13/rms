@@ -58,7 +58,7 @@ public class InjectFilter implements Filter {
 		Map map = req.getParameterMap();
 		Map tmp = new HashMap();
 		Iterator itr = map.keySet().iterator();
-		logger.info("\u53C2\u6570\u5FAA\u73AF\u5F00\u59CB");
+//		logger.info("\u53C2\u6570\u5FAA\u73AF\u5F00\u59CB");
 		String key;
 		String values[];
 		for (; itr.hasNext(); tmp.put(key, values)) {
@@ -66,8 +66,8 @@ public class InjectFilter implements Filter {
 			values = req.getParameterValues(key);
 			if (!key.equals("FILEDATA") && values != null) {
 				for (int i = 0; i < values.length; i++) {
-					logger.debug((new StringBuilder("参数:")).append(key)
-							.append("=====>").append(values[i]).toString());
+//					logger.debug((new StringBuilder("参数:")).append(key)
+//							.append("=====>").append(values[i]).toString());
 					// values[i] = CleanXSS.cleanXSS(values[i]);
 					// logger.info((new
 					// StringBuilder("*********")).append(key).append("=====").append(values[i]).toString());
@@ -75,7 +75,7 @@ public class InjectFilter implements Filter {
 
 			}
 		}
-		logger.info("\u53C2\u6570\u5FAA\u73AF\u7ED3\u675F");
+//		logger.info("\u53C2\u6570\u5FAA\u73AF\u7ED3\u675F");
 		req = new ParameterRequestWrapper(req, tmp);
 		chain.doFilter(req, response);
 	}
