@@ -18,96 +18,97 @@ import com.lenovo.rms.employee.service.IEmployeeService;
 
 /**
  * 
-* 简述
-* <p>详细说明第一行<br>    
-* 详细说明第二行 
-* @date 2015年4月1日 下午2:19:22   
-* @author zhanglei   
-* @version V1.0
+ * 简述
+ * <p>
+ * 详细说明第一行<br>
+ * 详细说明第二行
+ * 
+ * @date 2015年4月1日 下午2:19:22
+ * @author zhanglei
+ * @version V1.0
  */
 @Controller
 @RequestMapping
 public class LoginController {
 
-	protected static Logger logger = Logger.getLogger(LoginController.class);
+    protected static Logger logger = Logger.getLogger(LoginController.class);
 
-	@Autowired
-	private ILoginService loginService;
-	
-	@RequestMapping(value="/login",method = RequestMethod.POST)
-	public String login(HttpServletRequest request,HttpSession session, Model model) {
-		String name = request.getParameter("username");
-		String password = request.getParameter("password");
-	    String info="登录失败";
-		boolean flag=false;
-		String url="/login";
-		if(name.isEmpty()||password.isEmpty()){
-			info="用户名和密码不能为空";
-		}
-		else {
-		    String ip=IPUtils.getRemoteHost(request);
-			if(loginService.login(name, password, ip, session)){
-				info="登录成功";
-				flag=true;
-				url="redirect:/index";
-			}
-		}
-		
-		model.addAttribute("info",info);
-		model.addAttribute("flag", flag);
-		return url;
-	}
+    @Autowired
+    private ILoginService loginService;
 
-	/**
-	 * 
-	 * 名称：to500 <br/>
-	 * 描述：500错误跳转 <br/>
-	 * 
-	 * @return String
-	 */
-	@RequestMapping(value = "/to500", produces = "text/html;charset=UTF-8")
-	public String to500() {
-		return "/error/500";
-	}
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(HttpServletRequest request, HttpSession session, Model model) {
+        String name = request.getParameter("username");
+        String password = request.getParameter("password");
 
-	/**
-	 * 
-	 * 名称：to404 <br/>
-	 * 描述：404错误跳转 <br/>
-	 * 
-	 * @return String
-	 */
-	@RequestMapping(value = "/to404", produces = "text/html;charset=UTF-8")
-	public String to404() {
-		return "/error/404";
-	}
+        String info = "Login failed!";
+        String failure = "/login";
+        if (name.isEmpty())
+            info = "Please input your username!";
+        else if (password.isEmpty())
+            info = "Please input your password!";
+        else {
+            String ip = IPUtils.getRemoteHost(request);
+            if (loginService.login(name, password, ip, session)) {
+                info = "登录成功";
+                return "redirect:/index";
+            }
+        }
 
-	/**
-	 * 
-	 * 名称：index <br/>
-	 * 描述：登入成功后跳到首页 <br/>
-	 * 
-	 * @return String
-	 */
-	@RequestMapping("/index")
-	public String index() {
-		return "/index";
-	}
+        model.addAttribute("info", info);
+        return failure;
+    }
 
-	/**
-	 * 
-	 * 名称：logOut <br/>
-	 * 描述：登入注销 <br/>
-	 * 
-	 * @return String
-	 */
-	@RequestMapping(value = "/logOut", produces = "text/html;charset=UTF-8")
-	public String logOut(HttpSession session, Model model) {
-		if (session.getAttribute(Constants.SESSION_USERINFO_KEY) != null) {
-			session.removeAttribute(Constants.SESSION_USERINFO_KEY);
-		}
-		model.addAttribute("info", "用户已成功登出！");
-		model.addAttribute("flag", true);
-		return "/tologin";
-	}
+    /**
+     * 
+     * 名称：to500 <br/>
+     * 描述：500错误跳转 <br/>
+     * 
+     * @return String
+     */
+    @RequestMapping(value = "/to500", produces = "text/html;charset=UTF-8")
+    public String to500() {
+        return "/error/500";
+    }
+
+    /**
+     * 
+     * 名称：to404 <br/>
+     * 描述：404错误跳转 <br/>
+     * 
+     * @return String
+     */
+    @RequestMapping(value = "/to404", produces = "text/html;charset=UTF-8")
+    public String to404() {
+        return "/error/404";
+    }
+
+    /**
+     * 
+     * 名称：index <br/>
+     * 描述：登入成功后跳到首页 <br/>
+     * 
+     * @return String
+     */
+    @RequestMapping("/index")
+    public String index() {
+        return "/index";
+    }
+
+    /**
+     * 
+     * 名称：logOut <br/>
+     * 描述：登入注销 <br/>
+     * 
+     * @return String
+     */
+    @RequestMapping(value = "/logOut", produces = "text/html;charset=UTF-8")
+    public String logOut(HttpSession session, Model model) {
+        if (session.getAttribute(Constants.SESSION_USERINFO_KEY) != null) {
+            session.removeAttribute(Constants.SESSION_USERINFO_KEY);
+        }
+        model.addAttribute("info", "用户已成功登出！");
+        model.addAttribute("flag", true);
+        return "/tologin";
+    }
 }

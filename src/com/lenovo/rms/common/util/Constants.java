@@ -24,7 +24,7 @@ public class Constants {
 	/**
 	 * STATIC_RESOURCE:页面静态文件路径
 	 */
-	public static String STATIC_RESOURCE = "/assets";
+	public static String STATIC_RESOURCE = "/res";
 	/**
 	 * IS_CONVERT:是否转码
 	 */
