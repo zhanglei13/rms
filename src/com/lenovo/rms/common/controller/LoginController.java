@@ -95,6 +95,11 @@ public class LoginController {
         return "/index";
     }
 
+    @RequestMapping("/workload")
+    public String workload() {
+        return "/workload";
+    }
+    
     /**
      * 
      * 名称：logOut <br/>
