@@ -41,4 +41,9 @@ public class WorkloadController {
 	public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode) {
 		workloadService.saveWorkloads(workloadRows, itCode);
 	}
+	
+	@RequestMapping("/add")
+    public String mdAdd() {
+        return "/mdadd";
+    }
 }

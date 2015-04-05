@@ -9,12 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lenovo.rms.common.service.ILoginService;
 import com.lenovo.rms.common.util.Constants;
 import com.lenovo.rms.common.util.IPUtils;
-import com.lenovo.rms.employee.service.IEmployeeService;
 
 /**
  * 
