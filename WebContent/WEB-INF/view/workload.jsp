@@ -3,6 +3,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+<%request.setAttribute("ctp", request.getContextPath());%>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -36,6 +37,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<!-- /.breadcrumb -->
 			</div>
 
+			<script type="text/javascript">
+			var scripts = [null, null];
+			ace.load_ajax_scripts(scripts, function() {
+				jQuery(function($) {			
+					$.ajax({
+						type : 'POST',
+						cache : false,
+						url : '${ctp}/workload/list',
+						datatype:"json",
+						data :{
+							itCode : "fyahya"
+						},
+						error : function(request) {
+							alert("Server Error!");
+							return false;
+						},
+						success : function(data) {
+							alert(data);
+						//	var content;  
+		                //    $.each(data,function(i,result){  
+		                //    	content = "<tr><td>"+result['num']+"</td><td>"+result['title']+"</td><td>"+result['credate']+"</td><td>操作</td></tr>";  
+		                //        $('.table').append(content);  
+		                //    });
+						}	
+					});				
+				});
+			});
+			</script>
+			
 			<!-- /section:basics/content.breadcrumbs -->
 			<div class="page-content">
 				<div class="page-content-area">
@@ -45,8 +75,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="row">
 								<div class="col-xs-12">
 									<h3 class="header smaller lighter blue">Check you MD</h3>
-									<div class="table-header">Name:Member1 &nbsp;&nbsp;&nbsp;
-										Date:2015.04</div>
+									<div class="table-header">
+									Name: &nbsp;${name} &nbsp;&nbsp;&nbsp; Date: &nbsp;${date}
+									</div>
 
 									<div>
 										<table id="sample-table-1"

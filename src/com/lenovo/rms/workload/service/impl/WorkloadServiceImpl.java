@@ -122,6 +122,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
 
     public void addWorkloadRows(List<WorkloadRow> rows, List<EmployeeWorkload> workloads, Date start, Date end) {
         int gap = (int) ((DateUtils.getDaysBetween(start, end) + 1) / 7); // 一共跨越的周数
+        if(gap == 0) gap = 1;
         Map<String, WorkloadRow>[] weekRows = new HashMap[gap];
         for (int i = 0; i < gap; i++)
             weekRows[i] = new HashMap<>();
