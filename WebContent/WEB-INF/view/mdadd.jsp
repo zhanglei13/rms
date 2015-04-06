@@ -37,13 +37,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													<th class="hidden-480">Release</th>
 													<th class="hidden-480">Project</th>
 													<th class="hidden-480">Phase</th>
-													<td class="hidden-480">03/17</td>
-													<td class="hidden-480">03/18</td>
-													<td class="hidden-480">03/19</td>
-													<td class="hidden-480">03/20</td>
-													<td class="hidden-480">03/21</td>
-													<td class="hidden-480">03/22</td>
-													<td class="hidden-480">03/23</td>
+													<td class="hidden-480">2010-10-01</td>
+													<td class="hidden-480">2010-10-02</td>
+													<td class="hidden-480">2010-10-03</td>
+													<td class="hidden-480">2010-10-04</td>
+													<td class="hidden-480">2010-10-05</td>
+													<td class="hidden-480">2010-10-06</td>
+													<td class="hidden-480">2010-10-07</td>
 													<th class="hidden-480">Operation</th>
 												</tr>
 											</thead>

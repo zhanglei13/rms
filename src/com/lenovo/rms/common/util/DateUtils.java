@@ -1,5 +1,6 @@
 package com.lenovo.rms.common.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -218,6 +219,25 @@ public class DateUtils {
         dates[0] = calendar.getTime();
 
         return dates;
+    }
+    
+    public static Date parseString(String dateString){
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	Date date=null;
+    	try {
+			date = sdf.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+    	return date;
+    }
+    
+    public static String formatDate(Date date){
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	String dateString=null;
+		dateString = sdf.format(date);
+    	return dateString;
     }
 
     public static void main(String[] args) {

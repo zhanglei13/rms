@@ -28,19 +28,19 @@ public class WorkloadRow {
 	private String projectType;
 	private String projectName;
 	private String phaseCode;
-	private Date[] datePerWeek;
+	private String[] datePerWeek;
 	private Double[] effortPerWeek;
 	private String projectNo;
 	private String itCode;
 	private String creator;
 
 	public WorkloadRow() {
-		datePerWeek = new Date[7];
+		datePerWeek = new String[7];
 		effortPerWeek = new Double[7];
 	}
 
 	public WorkloadRow(String projectType, String projectName,
-			String phaseCode, Date[] datePerWeek, Double[] effortPerWeek,
+			String phaseCode, String[] datePerWeek, Double[] effortPerWeek,
 			String projectNo, String itCode, String creator) {
 		this.projectType = projectType;
 		this.projectName = projectName;
@@ -76,11 +76,11 @@ public class WorkloadRow {
 		this.phaseCode = phaseCode;
 	}
 
-	public Date[] getDatePerWeek() {
+	public String[] getDatePerWeek() {
 		return datePerWeek;
 	}
 
-	public void setDatePerWeek(Date[] datePerWeek) {
+	public void setDatePerWeek(String[] datePerWeek) {
 		this.datePerWeek = datePerWeek;
 	}
 

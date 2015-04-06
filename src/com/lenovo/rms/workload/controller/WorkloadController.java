@@ -3,13 +3,15 @@ package com.lenovo.rms.workload.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
-
+import com.lenovo.rms.common.util.JsonUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.lenovo.rms.common.util.Constants;
 import com.lenovo.rms.common.util.TimeUtils;
@@ -44,9 +46,11 @@ public class WorkloadController {
 		return workloadService.listWorkloadRows(itCode);
 	}
 	
-	@RequestMapping("/workload/save")
-	public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode) {
-		workloadService.saveWorkloads(workloadRows, itCode);
+	@RequestMapping(value = "/workload/save", method = RequestMethod.POST)
+	@ResponseBody
+	public void saveWorkloads(@RequestParam("workloadRows") String workloadRowsString,@RequestParam("itCode") String itCode) {
+	     List<WorkloadRow> workloadRows = JsonUtils.jsonList2JavaList(workloadRowsString, WorkloadRow.class);
+		 workloadService.saveWorkloads(workloadRows, itCode);
 	}
 	
 	@RequestMapping("/add")

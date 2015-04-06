@@ -44,7 +44,7 @@ function changeRelease(index,obj) {
 	}
 }
 
-function changeRelease(index,obj){
+function changeProject(index,obj){
 	//TODO 这里需要判断:当前要change到的project是否在之前已经被选中了，如果被选中过，则不能再选
 }
 
@@ -126,36 +126,37 @@ function getWorkloadData(){
 	var rowCount = table.rows.length;
 	var workloadData = new Array();
 	for(var i=1;i<rowCount;i++){
-		var row = new Map();//构造一个worloadrow
+		var row = {};//构造一个worloadrow
 		var projectNo = document.getElementById("project_"+(i+1)).value;
-		var projectArray =  projects.values();
+		var projectMatrix =  projects.values();
 		var selectedProject;//找到选中的project对象
-		console.log(projectArray);
-		for(var p in projectArray){
-			if(projectArray[p].projectNo==projectNo){
-				selectedProject = projectArray[p];
+		//console.log(projectMatrix);
+		for(var m in projectMatrix){
+			for(var t in projectMatrix[m])
+			if(projectMatrix[m][t].projectNo==projectNo){
+				selectedProject = projectMatrix[m][t];
 				break;
 			} 
 		}
-		console.log(selectedProject);
-		row.put("projectType",selectedProject.projectType);
-		row.put("projectName",selectedProject.projectName);
-		row.put("projectNo",selectedProject.projectNo);
+		//console.log(selectedProject);
+		row["projectType"]=selectedProject.projectType;
+		row["projectName"]=selectedProject.projectName;
+		row["projectNo"]=selectedProject.projectNo;
 		
 		var phaseCode = table.rows[i].cells[2].innerHTML;
-		row.put("phaseCode",phaseCode);
+		row["phaseCode"]=phaseCode;
 		var datePerWeek = new Array(7);
-		var effortPerWeek = new Array[7];
+		var effortPerWeek = new Array(7);
 		for(var j=3;j<=9;j++){
 			datePerWeek[j-3]   = table.rows[0].cells[j].innerHTML;
 			effortPerWeek[j-3] = table.rows[i].cells[j].getElementsByTagName("INPUT")[0].value;
 		}
-		row.put("datePerWeek",datePerWeek);
-		row.put("effortPerWeek",effortPerWeek);
+		row["datePerWeek"]=datePerWeek;
+		row["effortPerWeek"]=effortPerWeek;
 		
 		//TODO
-		row.put("itCode","eric");
-		row.put("creator","eric");
+		row["itCode"]="eric";
+		row["creator"]="eric";
 		workloadData.push(row);
 	}
 	return workloadData;
@@ -180,9 +181,11 @@ function saveWorkload(){
 	$.ajax({
 		type : 'POST',
 		url : "workload/save",
-		async: false,
-		data: workloadData,
-		success : function() {
+		data:  {
+			workloadRows:JSON.stringify(workloadData),
+			itCode:"eric"
+		},
+		success : function(data) {
 			alert("保存成功！");
 		},
 		error : function() {

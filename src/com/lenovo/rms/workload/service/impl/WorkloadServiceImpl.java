@@ -9,6 +9,7 @@
 package com.lenovo.rms.workload.service.impl;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
             EmployeeWorkload workload = new EmployeeWorkload();
             workload.setItCode(itCode);
             workload.setEffort(effort);
-            workload.setWorkloadDate(workloadRow.getDatePerWeek()[i]);
+			workload.setWorkloadDate(DateUtils.parseString((workloadRow.getDatePerWeek()[i])));
             workload.setCreatorDate(new Date());
             workload.setProjectNo(workloadRow.getProjectNo());
             workload.setPhaseCode(workloadRow.getPhaseCode());
@@ -140,12 +141,12 @@ public class WorkloadServiceImpl implements IWorkloadService {
                 Project project = projectDao.getByProjectNo(projectNo);
                 workloadRow.setProjectName(project.getProjectName());
                 workloadRow.setProjectType(project.getProjectType());
-                workloadRow.getDatePerWeek()[diff] = workload.getWorkloadDate();
+                workloadRow.getDatePerWeek()[diff] = DateUtils.formatDate(workload.getWorkloadDate());
                 workloadRow.getEffortPerWeek()[diff] = workload.getEffort();
                 weekRows[week].put(projectNo, workloadRow);
             } else {
                 WorkloadRow workloadRow = weekRows[week].get(projectNo);
-                workloadRow.getDatePerWeek()[diff] = workload.getWorkloadDate();
+                workloadRow.getDatePerWeek()[diff] =DateUtils.formatDate(workload.getWorkloadDate());
                 workloadRow.getEffortPerWeek()[diff] = workload.getEffort();
             }
         }
@@ -158,7 +159,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
     }
 
     public static void main(String[] args) throws ParseException {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-servlet.xml");
+        /*ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-servlet.xml");
         System.out.println("afasf");
         IWorkloadService service = ctx.getBean(IWorkloadService.class);
         Date date = new Date();
@@ -167,6 +168,6 @@ public class WorkloadServiceImpl implements IWorkloadService {
             dates[i] = date;
         WorkloadRow row = new WorkloadRow("release", "dmm", "noPhrase", dates, new Double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0 }, "123", "zhanglei", "zhanglei");
-        service.saveWorkload(row, "zhanglei");
+        service.saveWorkload(row, "zhanglei");*/
     }
 }
