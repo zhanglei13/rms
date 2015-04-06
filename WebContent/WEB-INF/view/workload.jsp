@@ -49,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="col-xs-12">
 										<h3 class="header smaller lighter blue">Check you MD</h3>
 										<div class="table-header">
-										 Name: ${name} &nbsp;&nbsp;&nbsp; Date: ${date}
+										 Name: &nbsp;${name} &nbsp;&nbsp;&nbsp; Date: &nbsp;${date}
 										</div>
 										
 										<div>
