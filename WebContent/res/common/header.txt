@@ -25,6 +25,7 @@
 		<!--[if lte IE 9]>
 		  <link rel="stylesheet" href="res/assets/css/ace-ie.min.css" />
 		<![endif]-->
+		
 
 		<!-- inline styles related to this page -->
 
@@ -37,3 +38,7 @@
 		<script src="res/assets/js/html5shiv.min.js"></script>
 		<script src="res/assets/js/respond.min.js"></script>
 		<![endif]-->
+		<script src="res/assets/js/jquery.min.js"></script>
+		<script type="text/javascript" src="res/scripts/js/constants.js"></script>
+		
+		
