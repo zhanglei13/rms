@@ -7,10 +7,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
 	<head>
 	<%@ include file="../../res/common/header.txt" %>
-	<script src="res/assets/js/map.js"></script>
-	<script>
-	
-	</script>
+	<script src="res/scripts/js/map.js"></script>
+	<script src="res/scripts/js/add_workload.js"></script>
 	</head>
 	<body class="no-skin">
 		<div class="main-container" id="main-container">
@@ -57,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										 	   <a href="#" class="btn btn-sm btn-primary no-radius" onClick="addProject()"> 
 												  Add Project
 											   </a>
-											   <a href="#" class="btn btn-sm btn-primary no-radius" > 
+											   <a href="#" class="btn btn-sm btn-primary no-radius" onClick="saveWorkload()" > 
 												  Save
 											   </a>
 											   <a href="#" class="btn btn-sm btn-primary no-radius "> 

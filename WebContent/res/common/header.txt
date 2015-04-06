@@ -39,6 +39,5 @@
 		<script src="res/assets/js/respond.min.js"></script>
 		<![endif]-->
 		<script src="res/assets/js/jquery.min.js"></script>
-		<script type="text/javascript" src="res/scripts/js/constants.js"></script>
 		
 		
