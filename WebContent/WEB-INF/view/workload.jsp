@@ -5,30 +5,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<%@ include file="../../res/common/header.txt"%>
-<script language="javascript">
-	function addmd(){
-		/* var hdc=window.open('add','mdadd','width=1000,height=400,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
-		width=screen.width;
-		height=screen.height;
-		hdc.moveTo((width-1000)/2,(height-400)/2); */
-		
-		
-	}
-</script>
-<title>RMS WorkLoad</title>
-</head>
-<body class="no-skin">
-	<!-- -top information -->
-	<%@ include file="../../res/common/top.txt"%>
-	<div class="main-container" id="main-container">
-		<script type="text/javascript">
+	<head>
+	<%@ include file="../../res/common/header.txt" %>
+	<title>RMS WorkLoad</title>
+	</head>
+
+	<body class="no-skin">
+	     <!-- -top information -->
+         <%@ include file="../../res/common/top.txt" %>
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
 				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
 			</script>
-		<!-- -leftlist -->
-		<%@ include file="../../res/common/leftlist.txt"%>
-
+			<!-- -leftlist -->
+			<%@ include file="../../res/common/leftlist.txt" %>
 
 		<div class="main-content">
 			<!-- #section:basics/content.breadcrumbs -->

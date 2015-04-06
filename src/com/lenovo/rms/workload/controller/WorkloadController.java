@@ -2,23 +2,31 @@ package com.lenovo.rms.workload.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import com.lenovo.rms.common.util.Constants;
+import com.lenovo.rms.common.util.TimeUtils;
+import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.workload.model.WorkloadRow;
 import com.lenovo.rms.workload.service.IWorkloadService;
 
-/**   
-* 简述
-* <p>详细说明第一行<br>    
-* 详细说明第二行 
-* @date 2015年4月3日 下午8:39:00   
-* @author zhanglei   
-* @version V1.0   
-*/
+/**
+ * 简述
+ * <p>
+ * 详细说明第一行<br>
+ * 详细说明第二行
+ * 
+ * @date 2015年4月3日 下午8:39:00
+ * @author zhanglei
+ * @version V1.0
+ */
 
 @Controller
 public class WorkloadController {
