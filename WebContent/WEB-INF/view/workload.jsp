@@ -19,8 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</script>
 			<!-- -leftlist -->
 			<%@ include file="../../res/common/leftlist.txt" %>
-
-			
+	
 			<div class="main-content">
 				<!-- #section:basics/content.breadcrumbs -->
 				<div class="breadcrumbs" id="breadcrumbs">
@@ -50,7 +49,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="col-xs-12">
 										<h3 class="header smaller lighter blue">Check you MD</h3>
 										<div class="table-header">
-										 Name:Member1 &nbsp;&nbsp;&nbsp; Date:2015.04
+										 Name: ${name} &nbsp;&nbsp;&nbsp; Date: ${date}
 										</div>
 										
 										<div>
@@ -84,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													<td class="hidden-480">8</td>
 													<td class="hidden-480">8</td>
 													<td class="hidden-480">8</td>
-													<td class="hidden-480">8</td>
+													<td class="hidden-480">8</td>	
 													<th class="hidden-480">
 														<span class="label label-xlg label-grey
                             arrowed arrowed-right">Submitted</span>

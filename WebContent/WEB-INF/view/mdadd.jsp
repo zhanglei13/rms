@@ -7,7 +7,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
 	<head>
 	<%@ include file="../../res/common/header.txt" %>
-	<script src="res/assets/js/myjs.js"></script>
+	<script src="../../res/assets/js/myjs.js"></script>
 	</head>
 	<body class="no-skin">
 		<div class="main-container" id="main-container">
