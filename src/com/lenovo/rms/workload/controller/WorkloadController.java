@@ -21,7 +21,6 @@ import com.lenovo.rms.workload.service.IWorkloadService;
 */
 
 @Controller
-@RequestMapping("/workload")
 public class WorkloadController {
 	/**
 	 * logger:创建日志logger
@@ -31,13 +30,13 @@ public class WorkloadController {
 	@Autowired
 	private IWorkloadService workloadService;
 	
-	@RequestMapping("/list")
+	@RequestMapping("/workload/list")
 	@ResponseBody
 	public List<WorkloadRow> listWorkloadRows(String itCode) {
 		return workloadService.listWorkloadRows(itCode);
 	}
 	
-	@RequestMapping("/save")
+	@RequestMapping("/workload/save")
 	public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode) {
 		workloadService.saveWorkloads(workloadRows, itCode);
 	}

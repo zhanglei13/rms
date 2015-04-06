@@ -92,11 +92,6 @@ public class LoginController {
     public String index() {
         return "/index";
     }
-
-    @RequestMapping("/workload")
-    public String workload() {
-        return "/workload";
-    }
     
     /**
      * 
@@ -105,13 +100,12 @@ public class LoginController {
      * 
      * @return String
      */
-    @RequestMapping(value = "/logOut", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/logout", produces = "text/html;charset=UTF-8")
     public String logOut(HttpSession session, Model model) {
         if (session.getAttribute(Constants.SESSION_USERINFO_KEY) != null) {
             session.removeAttribute(Constants.SESSION_USERINFO_KEY);
         }
-        model.addAttribute("info", "用户已成功登出！");
-        model.addAttribute("flag", true);
-        return "/tologin";
+        model.addAttribute("info", "Logout!");
+        return "/login";
     }
 }
