@@ -7,7 +7,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html lang="en">
 	<head>
 	<%@ include file="../../res/common/header.txt" %>
-	<script src="res/assets/js/myjs.js"></script>
+	<script src="res/assets/js/map.js"></script>
+	<script>
+	
+	</script>
 	</head>
 	<body class="no-skin">
 		<div class="main-container" id="main-container">
@@ -51,7 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										</table>
                                       <div class="widget-toolbar no-border">
                                           <P>
-										 	   <a href="#" class="btn btn-sm btn-primary no-radius" onClick="addRow()"> 
+										 	   <a href="#" class="btn btn-sm btn-primary no-radius" onClick="addProject()"> 
 												  Add Project
 											   </a>
 											   <a href="#" class="btn btn-sm btn-primary no-radius" > 
