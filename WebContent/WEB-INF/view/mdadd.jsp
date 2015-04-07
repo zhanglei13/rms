@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	<%@ include file="../../res/common/importAll.jsp" %>
+	<%@ include file="../../res/common/header.txt" %>
 	<script src="res/scripts/js/map.js"></script>
 	<script src="res/scripts/js/add_workload.js"></script>
 	</head>

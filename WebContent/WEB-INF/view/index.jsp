@@ -6,7 +6,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>RMS</title>
 <%@include file="../../res/common/importAll.jsp"%>
 </head>
@@ -164,15 +167,7 @@
 				<!-- =============================系统设置box========end========================================== -->
 
 				<div class="page-content-area">
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-
-							<!-- PAGE CONTENT ENDS -->
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
+					<!-- ajax content goes here -->
 				</div>
 				<!-- /.page-content-area -->
 			</div>
@@ -181,8 +176,16 @@
 		<!-- /.main-content -->
 
 		<%@ include file="../../res/common/footer.jsp"%>
-	</div>
 
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+	<%@ include file="../../res/common/bottomJs.jsp"%>
+	
 	<script type="text/javascript">
 		//Load content via ajax
 		jQuery(function($) {
@@ -209,7 +212,6 @@
 				}
 				ace.enable_ajax_content($, options)
 			}
-
 		})
 	</script>
 </body>
