@@ -8,8 +8,6 @@ this.valuethis.valuethis.valueoptions.add * 简述
  */
 package com.lenovo.rms.workload.model;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -25,6 +23,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @version V1.0
  */
 public class WorkloadRow {
+	private String dateRange;
 	private String projectType;
 	private String projectName;
 	private String phaseCode;
@@ -33,15 +32,18 @@ public class WorkloadRow {
 	private String projectNo;
 	private String itCode;
 	private String creator;
+	private String status;
 
 	public WorkloadRow() {
 		datePerWeek = new String[7];
 		effortPerWeek = new Double[7];
 	}
 
-	public WorkloadRow(String projectType, String projectName,
-			String phaseCode, String[] datePerWeek, Double[] effortPerWeek,
-			String projectNo, String itCode, String creator) {
+	public WorkloadRow(String dateRange, String projectType,
+			String projectName, String phaseCode, String[] datePerWeek,
+			Double[] effortPerWeek, String projectNo, String itCode,
+			String creator, String status) {
+		this.dateRange = dateRange;
 		this.projectType = projectType;
 		this.projectName = projectName;
 		this.phaseCode = phaseCode;
@@ -50,6 +52,7 @@ public class WorkloadRow {
 		this.projectNo = projectNo;
 		this.itCode = itCode;
 		this.creator = creator;
+		this.status = status;
 	}
 
 	public String getProjectType() {
@@ -114,6 +117,22 @@ public class WorkloadRow {
 
 	public void setCreator(String creator) {
 		this.creator = creator;
+	}
+
+	public String getDateRange() {
+		return dateRange;
+	}
+
+	public void setDateRange(String dateRange) {
+		this.dateRange = dateRange;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override
