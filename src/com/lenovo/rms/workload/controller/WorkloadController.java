@@ -36,10 +36,19 @@ public class WorkloadController {
 	 * logger:创建日志logger
 	 */
 	protected static Logger logger = Logger.getLogger(WorkloadController.class);
-	
+
 	@Autowired
 	private IWorkloadService workloadService;
-	
+
+	@RequestMapping(value = "/workload", method = RequestMethod.GET)
+	public String workload(HttpSession session, Model model) {
+		Employee employee = (Employee) session
+				.getAttribute(Constants.SESSION_USERINFO_KEY);
+		model.addAttribute("name", "zhanglei");
+		model.addAttribute("date", TimeUtils.nowdate());
+		return "/workload";
+	}
+
 	@RequestMapping("/workload/list")
 	@ResponseBody
 	public List<WorkloadRow> listWorkloadRows(String itCode) {
@@ -51,10 +60,11 @@ public class WorkloadController {
 	public void saveWorkloads(@RequestParam("workloadRows") String workloadRowsString,@RequestParam("itCode") String itCode) {
 	     List<WorkloadRow> workloadRows = JsonUtils.jsonList2JavaList(workloadRowsString, WorkloadRow.class);
 		 workloadService.saveWorkloads(workloadRows, itCode);
+
 	}
-	
+
 	@RequestMapping("/add")
-    public String mdAdd() {
-        return "/mdadd";
-    }
+	public String mdAdd() {
+		return "/mdadd";
+	}
 }
