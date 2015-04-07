@@ -51,7 +51,7 @@ public class LoginController {
                 info = "login success";
                 model.addAttribute("info", info);
                 model.addAttribute("itCode",name);
-                return "redirect:/index";
+                return "forward:/index";
             }
         }
 
