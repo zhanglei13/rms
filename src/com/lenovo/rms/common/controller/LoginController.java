@@ -48,7 +48,9 @@ public class LoginController {
         else {
             String ip = IPUtils.getRemoteHost(request);
             if (loginService.login(name, password, ip, session)) {
-                info = "登录成功";
+                info = "login success";
+                model.addAttribute("info", info);
+                model.addAttribute("itCode",name);
                 return "redirect:/index";
             }
         }

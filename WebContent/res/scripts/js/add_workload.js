@@ -3,6 +3,11 @@
  */
 
 var projects;
+
+function addWorkload(){
+	alert(itCode);
+}
+
 function addProject() {
 	if (projects == null) {
 		$.ajax({
@@ -14,12 +19,12 @@ function addProject() {
 				if(projects==null){
 					projects=new Map();
 					for(var i in data){
-						if(projects.containsKey("release1")){ //目前没有release信息
-							projects.get("release1").push(data[i]);
+						if(projects.containsKey(data[i].projectType)){ //目前没有release信息
+							projects.get(data[i].projectType).push(data[i]);
 						}else{
 							var value = new Array();
 							value.push(data[i]);
-							projects.put("release1",value);
+							projects.put(data[i].projectType,value);
 						}
 					}
 				}
