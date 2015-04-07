@@ -43,12 +43,12 @@
 			</span>
 		</a> <b class="arrow"></b></li>
 
-		<li class="active open"><a data-url="view/workload" href="index#view/workload" class="dropdown-toggle">
+		<li class="active open"><a href="index#view/workload">
 				<i class="menu-icon fa fa-list"></i> <span class="menu-text">Personal
 					Workload</span>
 		</a> <b class="arrow"></b></li>
 
-		<li class=""><a href="#" class="dropdown-toggle"> <i
+		<li class=""><a href="index#view/evaluation"> <i
 				class="menu-icon fa fa-pencil-square-o"></i> <span class="menu-text">
 					Evaluation </span>
 		</a> <b class="arrow"></b></li>
