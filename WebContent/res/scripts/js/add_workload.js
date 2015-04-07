@@ -2,17 +2,13 @@
  * 
  */
 
-var projects;
 
-function addWorkload(){
-	alert(itCode);
-}
 
 function addProject() {
-	if (projects == null) {
+	/*if (projects == null) {
 		$.ajax({
 			type : 'GET',
-			url : "project/list",
+			url : "../project/list",
 			dataType : "json",
 			async: false,
 			success : function(data) {
@@ -34,9 +30,9 @@ function addProject() {
 				alert("异常！");
 			}
 		});
-	}
+	}*/
 	
-	addRow();
+	addRow(null);
 }
 
 function changeRelease(index,obj) {
@@ -67,7 +63,7 @@ function initSelects(index){
 	}
 }
 
-function addRow() {
+function addRow(preWorkload) {
 	var bodyObj = document.getElementById("sample-table-1");
 	bodyObj.style.display = '';
 	if (bodyObj == null) {
@@ -99,19 +95,34 @@ function addRow() {
 	jCell.style.textAlign = "center";
 	kCell.style.textAlign = "center";
 	
+	if(preWorkload==null){
+		aCell.innerHTML = "<select name='release' id='release_"+rowCount+"' style='width:80px' onchange='changeRelease("+rowCount+",this)'></select>";
+		bCell.innerHTML = "<select name='project' id='project_"+rowCount+"' style='width:80px' onchange='changeProject("+rowCount+",this)'></select>";
+		initSelects(rowCount);
+		cCell.innerHTML = "SIT";
+		dCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		eCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		fCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		gCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		hCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		iCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		jCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
+		kCell.innerHTML = "<button class='btn btn-sm btn-warning' onClick='deleteRow(this)'><i class='ace-icon fa fa-undo'></i>delete</button>";
+	}else{
+		aCell.innerHTML = "<select name='release' id='release_"+rowCount+"' style='width:80px' onchange='changeRelease("+rowCount+",this)'><option>"+preWorkload.projectType+"</option></select>";
+		bCell.innerHTML = "<select name='project' id='project_"+rowCount+"' style='width:80px' onchange='changeProject("+rowCount+",this)'><option>"+preWorkload.projectName+"</option></select>";
+		//initSelects(rowCount);
+		cCell.innerHTML = preWorkload.phaseCode;
+		dCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[0]+"</input>";
+		eCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[1]+"</input>";
+		fCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[2]+"</input>";
+		gCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[3]+"</input>";
+		hCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[4]+"</input>";
+		iCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[5]+"</input>";
+		jCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[6]+"</input>";
+		kCell.innerHTML = "<button class='btn btn-sm btn-warning' onClick='deleteRow(this)'><i class='ace-icon fa fa-undo'></i>delete</button>";
+	}
 	
-	aCell.innerHTML = "<select name='release' id='release_"+rowCount+"' style='width:80px' onchange='changeRelease("+rowCount+",this)'></select>";
-	bCell.innerHTML = "<select name='project' id='project_"+rowCount+"' style='width:80px' onchange='changeProject("+rowCount+",this)'></select>";
-	initSelects(rowCount);
-	cCell.innerHTML = "SIT";
-	dCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	eCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	fCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	gCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	hCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	iCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	jCell.innerHTML = "<input type='text' style='width:30px;height:30px'></input>";
-	kCell.innerHTML = "<button class='btn btn-sm btn-warning' onClick='deleteRow(this)'><i class='ace-icon fa fa-undo'></i>delete</button>";
 }
 
 function deleteRow(inputobj) {
@@ -185,7 +196,7 @@ function saveWorkload(){
 	}
 	$.ajax({
 		type : 'POST',
-		url : "workload/save",
+		url : "../workload/save",
 		data:  {
 			workloadRows:JSON.stringify(workloadData),
 			itCode:"eric"

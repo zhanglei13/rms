@@ -40,7 +40,7 @@ public class LoginController {
         String password = request.getParameter("password");
 
         String info = "Login failed!";
-        String failure = "/login";
+        String failure = "redirect:/";
         if (name.isEmpty())
             info = "Please input your username!";
         else if (password.isEmpty())

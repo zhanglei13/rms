@@ -68,7 +68,7 @@ public class WorkloadController {
 
 	}
 
-	@RequestMapping("/add")
+	@RequestMapping("/workload/add")
 	public String mdAdd() {
 		return "/mdadd";
 	}
