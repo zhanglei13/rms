@@ -5,7 +5,11 @@
 <link rel="stylesheet" href="${ctp}/res/assets/css/jquery-ui.min.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/datepicker.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/ui.jqgrid.css" />
-
+<script type="text/javascript">
+function editWorkload(data){
+	
+}
+</script>
 <!-- ajax layout which only needs content area -->
 <div class="row">
 	<div class="col-xs-12">
@@ -51,7 +55,7 @@
                                arrowed-in-right arrowed-in">Saved</span>
 						</th>
 						<th class="hidden-480"><a href="#"
-							class="btn btn-sm btn-warning"> <i
+							class="btn btn-sm btn-warning" onClick="editWorkload()"> <i
 								class="ace-icon fa fa-pencil-square-o"></i> Edit
 						</a> <a href="#" class="btn btn-sm btn-warning"> <i
 								class="ace-icon fa fa-cloud-upload"></i> Submit
