@@ -252,7 +252,6 @@ public class DateUtils {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
 		String dateString = null;
 		dateString = sdf.format(date);
-		System.out.println(dateString);
 		String[] strs = dateString.split("-");
 		return Integer.parseInt(strs[0]) + "." + Integer.parseInt(strs[1]);
 	}

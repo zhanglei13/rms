@@ -34,37 +34,26 @@
 					</tr>
 				</thead>
 
-				<tbody class="center">
-					<tr>
-						<td class="hidden-480">3.2-3.8</td>
-						<td class="hidden-480">CSM</td>
-						<td class="hidden-480">UAT</td>
-						<td class="hidden-480">8</td>
-						<td class="hidden-480">8</td>
-						<td class="hidden-480">8</td>
-						<td class="hidden-480">8</td>
-						<td class="hidden-480">8</td>
-						<td class="hidden-480">8</td>
-						<td class="hidden-480">8</td>
-						<th class="hidden-480"><span
-							class="label label-xlg label-grey 
-                               arrowed-in-right arrowed-in">Saved</span>
-						</th>
-						<th class="hidden-480"><a href="#"
-							class="btn btn-sm btn-warning"> <i
-								class="ace-icon fa fa-pencil-square-o"></i> Edit
-						</a> <a href="#" class="btn btn-sm btn-warning"> <i
-								class="ace-icon fa fa-cloud-upload"></i> Submit
-						</a></th>
-					</tr>
+				<tbody>
 				</tbody>
 			</table>
+			
+			<div class="widget-toolbar no-border">
+				<p>
+					<a href="#" class="btn btn-sm btn-primary no-radius"
+						onClick="addmd()"> Add Workload </a> <a href="#"
+						class="btn btn-sm btn-primary no-radius" onClick="addmd()">
+						Submmit All </a>
+				</P>
+			</div>
 		</div>
 
 		<!-- PAGE CONTENT ENDS -->
 	</div>
 	<!-- /.col -->
 </div>
+
+
 <!-- /.row -->
 
 <!-- page specific plugin scripts -->
@@ -114,6 +103,12 @@
 						else
 							content+="<span class='label label-sm label-success'>approved</span>";
 						content += "</td>";
+						content += "<td><div class='hidden-sm hidden-xs action-buttons'>"
+							+ "<a class='green' href='#'>"
+							+ "<i class='ace-icon fa fa-pencil bigger-130'></i></a>"
+							+ "<a class='red' href='#'>"
+							+ "<i class='ace-icon fa fa-trash-o bigger-130'></i></a></div></td>";
+						content += "</tr>";
 						$('.table').append(content);
 					});
 				}
