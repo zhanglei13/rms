@@ -45,6 +45,7 @@ var tools={
 		arrayToString:function(str){
 			return str.join('');
 		},
+		
 		//jqgrid宽度自适应
 		jqGrid_autowidth:function(grid_selector){
 			$(window).on('resize.jqGrid', function () {

@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="${ctp}/res/assets/css/jquery-ui.min.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/datepicker.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/ui.jqgrid.css" />
+<script src="${ctp}/res/scripts/js/hash.js"></script>
 
 <!-- ajax layout which only needs content area -->
 <div class="row">
@@ -41,8 +42,8 @@
 			<div class="widget-toolbar no-border">
 				<p>
 					<a href="#" class="btn btn-sm btn-primary no-radius"
-						onClick="addmd()"> Add Workload </a> <a href="#"
-						class="btn btn-sm btn-primary no-radius" onClick="addmd()">
+						onClick="addOrUpdateWorkload(0,'3.30-3.31')"> Add Workload </a> <a href="#"
+						class="btn btn-sm btn-primary no-radius" onClick="addOrUpdateWorkload(1)">
 						Submmit All </a>
 				</P>
 			</div>
@@ -74,6 +75,7 @@
 					return false;
 				},
 				success : function(data) {
+					workloadList = data;
 					var content;
 					$.each(data, function(i, result) {				
 						var array = [];						
@@ -115,4 +117,25 @@
 			});
 		});
 	});
+</script>
+
+<script type="text/javascript">
+	function addOrUpdateWorkload(flag, range) {
+		$.each(workloadList, function(i, result) {
+			hashtable = new jQuery.Hashtable();
+			if(!hashtable.containsKey(result['dateRange']))
+				hashtable.add(result['dateRange'],[]);
+			hashtable.get(result['dateRange']).push(result);
+		});
+		
+		if(flag == 0) {
+			console.log(hashtable.get(range)[0]);
+			return hashtable.get(range);		
+		}
+		else {
+			console.log(hashtable.getLast());
+			return hashtable.getLast();
+		}
+	}
+	
 </script>
