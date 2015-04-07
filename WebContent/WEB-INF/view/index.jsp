@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+	pageEncoding="utf-8" isELIgnored="false"%>
+<%@page import="com.lenovo.rms.common.util.Constants" %>
+<%@page import="com.lenovo.rms.model.Employee" %>
 <%
 	request.setAttribute("ctp", request.getContextPath());
+    Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -12,11 +15,15 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>RMS</title>
 <%@include file="../../res/common/importAll.jsp"%>
+<script>
+//var itCode ="<c:out value="${itCode}"/>";
+var employee = "<%=employee%>";
+</script>
+
 </head>
 
 <body class="no-skin">
 	<%@ include file="../../res/common/navbar.jsp"%>
-
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<script type="text/javascript">
