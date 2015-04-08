@@ -1,8 +1,9 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.lenovo.rms.workload.model.WorkloadRow"%>
+<%@ page import="com.lenovo.rms.common.util.JsonUtils"%>
 <%
 	request.setAttribute("ctp", request.getContextPath());
-    List<WorkloadRow> workload = (List)request.getAttribute("workload");
+   /*  List<WorkloadRow> workload = (List)request.getAttribute("workload");
     String[]  dates=new String[7];
     if(workload!=null){
     	 dates = workload.get(0).getDatePerWeek();
@@ -14,7 +15,10 @@
     	 dates[4]="4";
     	 dates[5]="5";
     	 dates[6]="6";
-    }
+    } */
+    String workloadStr= (String)request.getParameter("workload");
+   // List<WorkloadRow> workload = JsonUtils.jsonList2JavaList(workloadStr, WorkloadRow.class);
+    
    
 %>
 <!DOCTYPE html>
@@ -53,7 +57,7 @@ $(function(){
 				}
 			});
 		}
-	 var preWorkload = <%=workload%>;
+	 var preWorkload = eval(<%=workloadStr%>);//preWorkloadString.parseJSON();
 	 for(var i in preWorkload){
 		 console.log(preWorkload);
 		 addRow(preWorkload[i]);
@@ -89,13 +93,13 @@ $(function(){
 													<th class="hidden-480">Release</th>
 													<th class="hidden-480">Project</th>
 													<th class="hidden-480">Phase</th>
-													<td class="hidden-480"><%=dates[0] %></td>
-													<td class="hidden-480"><%=dates[1] %></td>
-													<td class="hidden-480"><%=dates[2] %></td>
-													<td class="hidden-480"><%=dates[3] %></td>
-													<td class="hidden-480"><%=dates[4] %></td>
-													<td class="hidden-480"><%=dates[5] %></td>
-													<td class="hidden-480"><%=dates[6] %></td>
+													<td class="hidden-480">1</td>
+													<td class="hidden-480">2</td>
+													<td class="hidden-480">2</td>
+													<td class="hidden-480">3</td>
+													<td class="hidden-480">4</td>
+													<td class="hidden-480">5</td>
+													<td class="hidden-480">6</td>
 													<th class="hidden-480">Operation</th>
 												</tr>
 											</thead>

@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="${ctp}/res/assets/css/jquery-ui.min.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/datepicker.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/ui.jqgrid.css" />
-<script src="${ctp}/res/scripts/js/hash.js"></script>
 
 <!-- ajax layout which only needs content area -->
 <div class="row">
@@ -68,7 +67,7 @@
 				url : '${ctp}/workload/list',
 				datatype : "json",
 				data : {
-					itCode : "fyahya"
+					itCode : "eric"
 				},
 				error : function(request) {
 					alert("Server Error!");
@@ -130,11 +129,15 @@
 		
 		if(flag == 0) {
 			console.log(hashtable.get(range)[0]);
-			return hashtable.get(range);		
+			//return hashtable.get(range);
+			window.open("${ctp}/workload/add?workload=" + JSON.stringify(hashtable.get(range)));
 		}
 		else {
 			console.log(hashtable.getLast());
-			return hashtable.getLast();
+			//return hashtable.getLast();
+			window.open("${ctp}/workload/add?workload=" + JSON.stringify(hashtable.getLast()));
+			
+			
 		}
 	}
 	

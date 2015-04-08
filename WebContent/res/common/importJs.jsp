@@ -26,6 +26,7 @@
 
 <!-- inline scripts related to this page -->
 <script src="${pageContext.request.contextPath}/res/scripts/js/yl.tools.js"></script>
+<script src="${pageContext.request.contextPath}/res/scripts/js/hash.js"></script>
 <script type="text/javascript">
 	$.ajaxSetup ({cache:false});
 </script>

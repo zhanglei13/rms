@@ -113,13 +113,13 @@ function addRow(preWorkload) {
 		bCell.innerHTML = "<select name='project' id='project_"+rowCount+"' style='width:80px' onchange='changeProject("+rowCount+",this)'><option>"+preWorkload.projectName+"</option></select>";
 		//initSelects(rowCount);
 		cCell.innerHTML = preWorkload.phaseCode;
-		dCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[0]+"</input>";
-		eCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[1]+"</input>";
-		fCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[2]+"</input>";
-		gCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[3]+"</input>";
-		hCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[4]+"</input>";
-		iCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[5]+"</input>";
-		jCell.innerHTML = "<input type='text' style='width:30px;height:30px'>"+preWorkload.effortPerWeek[6]+"</input>";
+		dCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[0]+"'></input>";
+		eCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[1]+"'></input>";
+		fCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[2]+"'></input>";
+		gCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[3]+"'></input>";
+		hCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[4]+"'></input>";
+		iCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[5]+"'></input>";
+		jCell.innerHTML = "<input type='text' style='width:30px;height:30px' value='"+preWorkload.effortPerWeek[6]+"'></input>";
 		kCell.innerHTML = "<button class='btn btn-sm btn-warning' onClick='deleteRow(this)'><i class='ace-icon fa fa-undo'></i>delete</button>";
 	}
 	
