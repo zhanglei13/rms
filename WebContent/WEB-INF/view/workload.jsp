@@ -120,20 +120,20 @@
 
 <script type="text/javascript">
 	function addOrUpdateWorkload(flag, range) {
+		var hashtable = new jQuery.Hashtable();
 		$.each(workloadList, function(i, result) {
-			hashtable = new jQuery.Hashtable();
 			if(!hashtable.containsKey(result['dateRange']))
 				hashtable.add(result['dateRange'],[]);
 			hashtable.get(result['dateRange']).push(result);
 		});
 		
 		if(flag == 0) {
-			console.log(hashtable.get(range)[0]);
+			//console.log(hashtable.get(range)[0]);
 			//return hashtable.get(range);
 			window.open("${ctp}/workload/add?workload=" + JSON.stringify(hashtable.get(range)));
 		}
 		else {
-			console.log(hashtable.getLast());
+			//console.log(hashtable.getLast());
 			//return hashtable.getLast();
 			window.open("${ctp}/workload/add?workload=" + JSON.stringify(hashtable.getLast()));
 			

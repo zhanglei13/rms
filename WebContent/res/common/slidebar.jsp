@@ -43,9 +43,9 @@
 			</span>
 		</a> <b class="arrow"></b></li>
 
-		<li class="active open"><a data-url="view/workload" href="index#view/workload">
-				<i class="menu-icon fa fa-list"></i> <span class="menu-text">Personal
-					Workload</span>
+		<li class="active open"><a data-url="view/workload"
+			href="index#view/workload"> <i class="menu-icon fa fa-list"></i>
+				<span class="menu-text">Personal Workload</span>
 		</a> <b class="arrow"></b></li>
 
 		<li class=""><a href="index#view/evaluation"> <i

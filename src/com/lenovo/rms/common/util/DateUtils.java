@@ -215,7 +215,7 @@ public class DateUtils {
 		Date[] dates = new Date[2];
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		calendar.set(Calendar.MONDAY, calendar.get(Calendar.MONDAY) - 1);
+		calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
 		calendar.set(
 				Calendar.DAY_OF_MONTH,
 				getDaysOfMonth(calendar.get(Calendar.YEAR),
@@ -265,10 +265,12 @@ public class DateUtils {
 
 	public static void main(String[] args) {
 		Date date = new Date();
-		Date start = DateUtils.prevMonthFirstMon(date);
-		Date end = DateUtils.prevMonthLastSun(date);
-		System.out.println(start);
-		System.out.println(end);
-		System.out.println((DateUtils.getDaysBetween(start, end) + 1) / 7);
+//		Date start = DateUtils.prevMonthFirstMon(date);
+//		Date end = DateUtils.prevMonthLastSun(date);
+//		System.out.println(start);
+//		System.out.println(end);
+//		System.out.println((DateUtils.getDaysBetween(start, end) + 1) / 7);
+		for(Date d: getPrevMonthLastWeek(date))
+		System.out.println(d);
 	}
 }

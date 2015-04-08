@@ -1,18 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8" isELIgnored="false"%>
-<%@page import="com.lenovo.rms.common.util.Constants" %>
-<%@page import="com.lenovo.rms.model.Employee" %>
+<%@page import="com.lenovo.rms.common.util.Constants"%>
+<%@page import="com.lenovo.rms.model.Employee"%>
 <%
 	request.setAttribute("ctp", request.getContextPath());
-    Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
+	Employee employee = (Employee) session
+			.getAttribute(Constants.SESSION_USERINFO_KEY);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>RMS</title>
 <%@include file="../../res/common/importAll.jsp"%>
 <script>
@@ -46,8 +45,8 @@ var employee = "<%=employee%>";
 				</script>
 
 				<ul class="breadcrumb">
-					<li><i class="ace-icon fa fa-home home-icon"></i> <a
-						href="index">Home</a></li>
+					<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a>
+					</li>
 				</ul>
 				<!-- /.breadcrumb -->
 
@@ -68,8 +67,6 @@ var employee = "<%=employee%>";
 
 			<!-- /section:basics/content.breadcrumbs -->
 			<div class="page-content">
-
-				<!-- =============================系统设置box================================================== -->
 				<!-- #section:settings.box -->
 				<div class="ace-settings-container" id="ace-settings-container">
 					<div class="btn btn-app btn-xs btn-warning ace-settings-btn"
@@ -171,8 +168,6 @@ var employee = "<%=employee%>";
 				<!-- /.ace-settings-container -->
 
 				<!-- /section:settings.box -->
-				<!-- =============================系统设置box========end========================================== -->
-
 				<div class="page-content-area">
 					<!-- ajax content goes here -->
 				</div>
@@ -191,8 +186,6 @@ var employee = "<%=employee%>";
 	</div>
 	<!-- /.main-container -->
 
-	<%@ include file="../../res/common/bottomJs.jsp"%>
-	
 	<script type="text/javascript">
 		//Load content via ajax
 		jQuery(function($) {

@@ -7,3 +7,4 @@
 
 <%@include file="importCss.jsp"%>
 <%@include file="importJs.jsp"%>
+<%@include file="bottomJs.jsp"%>
