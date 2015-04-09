@@ -4,11 +4,6 @@
 <link rel="stylesheet" href="${ctp}/res/assets/css/bootstrap.min.css" />
 <link rel="stylesheet" href="${ctp}/res/assets/css/font-awesome.min.css" />
 
-<!-- page specific plugin styles -->
-<!-- jqgrid -->
-<link rel="stylesheet" href="${ctp}/res/assets/css/jquery-ui.min.css" />
-<link rel="stylesheet" href="${ctp}/res/assets/css/datepicker.css" />
-<link rel="stylesheet" href="${ctp}/res/assets/css/ui.jqgrid.css" />
 <!-- text fonts -->
 <link rel="stylesheet" href="${ctp}/res/assets/css/ace-fonts.css" />
 
@@ -23,14 +18,4 @@
 
 <!--[if lte IE 9]>
   <link rel="stylesheet" href="${ctp}/res/assets/css/ace-ie.min.css" />
-<![endif]-->
-
-<!-- ace settings handler -->
-<script src="${ctp}/res/assets/js/ace-extra.min.js"></script>
-
-<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
-
-<!--[if lte IE 8]>
-<script src="${ctp}/res/assets/js/html5shiv.min.js"></script>
-<script src="${ctp}/res/assets/js/respond.min.js"></script>
 <![endif]-->
