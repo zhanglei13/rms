@@ -11,7 +11,6 @@
 <html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>RMS</title>
 <%@include file="../../res/common/importAll.jsp"%>
@@ -24,7 +23,7 @@ var employee = "<%=employee%>";
 
 <body class="no-skin">
 	<%@ include file="../../res/common/navbar.jsp"%>
-	<!-- /section:basics/navbar.layout -->
+	
 	<div class="main-container" id="main-container">
 		<script type="text/javascript">
 			try {
@@ -34,7 +33,6 @@ var employee = "<%=employee%>";
 		</script>
 		<%@ include file="../../res/common/slidebar.jsp"%>
 
-		<!-- /section:basics/sidebar -->
 		<div class="main-content">
 			<!-- #section:basics/content.breadcrumbs -->
 			<div class="breadcrumbs" id="breadcrumbs">
