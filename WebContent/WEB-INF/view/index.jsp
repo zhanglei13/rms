@@ -169,6 +169,7 @@ var employee = "<%=employee%>";
 				<!-- /section:settings.box -->
 				<div class="page-content-area">
 					<!-- ajax content goes here -->
+					Welcome!
 				</div>
 				<!-- /.page-content-area -->
 			</div>

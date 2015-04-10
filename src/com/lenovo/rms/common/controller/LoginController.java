@@ -97,6 +97,18 @@ public class LoginController {
     
     /**
      * 
+     * 名称：index <br/>
+     * 描述：登入成功后跳到首页 <br/>
+     * 
+     * @return String
+     */
+    @RequestMapping("/jqgrid")
+    public String jqgrid() {
+        return "/jqgrid";
+    }
+    
+    /**
+     * 
      * 名称：logOut <br/>
      * 描述：登入注销 <br/>
      * 

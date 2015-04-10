@@ -8,7 +8,8 @@
 	</script>
 
 	<ul class="nav nav-list">
-		<li class=""><a href="#" class="dropdown-toggle"> <i
+		<li class=""><a data-url="view/jqgrid"
+			href="index#view/jqgrid" class="dropdown-toggle"> <i
 				class="menu-icon fa fa-desktop"></i> <span class="menu-text">Profile
 			</span>
 		</a> <b class="arrow"></b></li>
