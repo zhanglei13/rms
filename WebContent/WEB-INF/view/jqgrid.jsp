@@ -42,6 +42,23 @@
 				}
 		    })
 		    
+		    $.ajax({
+				type : 'POST',
+				cache : false,
+				url : '${ctp}/workload/list',
+				datatype : "json",
+				data : {
+					itCode : "eric"
+				},
+				error : function(request) {
+					alert("Server Error!");
+					return false;
+				},
+				success : function(data) {
+					
+				}
+		    });
+		    
 		    jQuery(grid_selector).jqGrid({
 		    	ajaxGridOptions : {
 					timeout : 500000  //设置ajax加载超时时间
