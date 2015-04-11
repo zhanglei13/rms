@@ -103,7 +103,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
 		Date prevMonthLastDay = dates[2];
 		Date prevMonthLastSun = dates[3];
 
-		if (!DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
+		if (DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
 			List<EmployeeWorkload> rejectedWorkloads = findWorkloads(employee,
 					prevMonthFirstDay, prevMonthLastDay, "2"); // 是否存在驳回的workload
 			if (rejectedWorkloads.size() != 0) { // 存在的话上个月所有的workload打印出来修改
@@ -111,14 +111,17 @@ public class WorkloadServiceImpl implements IWorkloadService {
 						employee, prevMonthFirstMon, prevMonthLastSun);
 				addWorkloadRows(rows, lastMonthWorkloads, prevMonthFirstMon,
 						prevMonthLastSun);
+				return rows;
 			}
 		}
 
 		Date firstDay = DateUtils.getFirstDay(today);
 		List<EmployeeWorkload> savedWorkloads = findWorkloads(employee,
 				firstDay, today); // 本月已经保存workload
-		if (savedWorkloads.size() != 0)
+		if (savedWorkloads.size() != 0) {
 			addWorkloadRows(rows, savedWorkloads, firstDay, today);
+//			return rows;
+		}
 		else {
 			// 获取上个月最后一个星期的workload
 			Date[] week = DateUtils.getPrevMonthLastWeek(today);

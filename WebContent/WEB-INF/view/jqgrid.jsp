@@ -108,8 +108,7 @@
 				   		groupField : ['Date'],
 				   		groupSummary : [true],
 				   		groupColumnShow : [false],
-				   		groupText : ['<b>{0}</b>'],
-				   		groupCollapse : false,
+				   		groupCollapse : true,
 						groupOrder: ['asc']
 				   	},
 					

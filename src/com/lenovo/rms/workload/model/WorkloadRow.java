@@ -33,6 +33,8 @@ public class WorkloadRow {
 	private String itCode;
 	private String creator;
 	private String status;
+	private String monStatus;
+	private Long[] idPerWeek;
 
 	public WorkloadRow() {
 		datePerWeek = new String[7];
