@@ -48,14 +48,14 @@
 				url : '${ctp}/workload/list',
 				datatype : "json",
 				data : {
-					itCode : "eric"
+					itCode : "snallakamu"
 				},
 				error : function(request) {
 					alert("Server Error!");
 					return false;
 				},
 				success : function(data) {
-					
+					console.log(data);
 				}
 		    });
 		    
@@ -95,4 +95,24 @@
 			
 		});
 	});
+	
+function convertToTableData(data){
+	var tableData=new Array();
+	for(var i in data){
+		var row={};
+		row["date"] = data[i].dataRange;
+		row["project"] = data[i].projectName;
+		row["phase"]  = data[i].phaseCode;
+	    row["mon"] = data[i].effortPerWeek[0];
+	    row["tue"] = data[i].effortPerWeek[0];
+	    row["wed"] = data[i].effortPerWeek[0];
+	    row["thu"] = data[i].effortPerWeek[0];
+	    row["fri"] = data[i].effortPerWeek[0];
+	    row["sat"] = data[i].effortPerWeek[0];
+	    row["sun"] = data[i].effortPerWeek[0];
+	    row["status"] = data[i].status;
+	    tableData.push(row);
+	}
+	return tableData;
+}
 </script>
