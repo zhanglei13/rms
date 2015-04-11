@@ -49,6 +49,18 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
     }
     
     @Override
+    public List<EmployeeWorkload> findWorkloadsStatusNotEqual(Employee employee, Date from, Date to, String status) {
+        String hql = "from EmployeeWorkload w where w.itCode=:itCode and w.workloadDate>=:from and w.workloadDate<=:to and w.status!=:status";
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("itCode", employee.getItCode());
+        params.put("from", from);
+        params.put("to", to);
+        params.put("status", status);
+        List<EmployeeWorkload> workloads = findHql(hql,params);
+        return workloads;
+    }
+    
+    @Override
     public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to) {
         String hql = "from EmployeeWorkload w where w.itCode=:itCode and w.workloadDate>=:from and w.workloadDate<=:to";
         Map<String,Object> params = new HashMap<String,Object>();

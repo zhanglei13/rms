@@ -203,6 +203,15 @@ public class DateUtils {
 		calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + diff);
 		return calendar.getTime();
 	}
+	
+	   public static Date currentWeekSun(Date date) {
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(date);
+	        int diff = 6 - getDayDiff(date);
+	        System.out.println(diff);
+	        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + diff);
+	        return calendar.getTime();
+	    }
 
 	public static Date getFirstDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
@@ -262,15 +271,38 @@ public class DateUtils {
 		dateString = sdf.format(date);
 		return dateString;
 	}
+	
+	public static String DateYMDToString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = null;
+        dateString = sdf.format(date);
+        String[] strs = dateString.split("-");
+        return Integer.parseInt(strs[0]) + "." + Integer.parseInt(strs[1]) + "." + Integer.parseInt(strs[2]);
+    }
 
+	public static Date[] numWeeksRange(Date date, int week) {
+	    Date[] dates = new Date[2];    
+	    Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + week*7);
+        dates[0] = calendar.getTime();
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 6);
+        dates[1] = calendar.getTime();
+        return dates;
+	}
+	
 	public static void main(String[] args) {
 		Date date = new Date();
+		Date sun = DateUtils.prevMonthFirstMon(date);
+		for(Date d:DateUtils.numWeeksRange(sun, 1)) {
+		    System.out.println(d);
+		}
 //		Date start = DateUtils.prevMonthFirstMon(date);
 //		Date end = DateUtils.prevMonthLastSun(date);
 //		System.out.println(start);
 //		System.out.println(end);
 //		System.out.println((DateUtils.getDaysBetween(start, end) + 1) / 7);
-		for(Date d: getPrevMonthLastWeek(date))
-		System.out.println(d);
+//		for(Date d: getPrevMonthLastWeek(date))
+//		System.out.println(currentWeekSun(date));
 	}
 }

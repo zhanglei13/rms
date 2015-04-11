@@ -102,34 +102,41 @@ public class WorkloadServiceImpl implements IWorkloadService {
 		Date prevMonthFirstMon = dates[1];
 		Date prevMonthLastDay = dates[2];
 		Date prevMonthLastSun = dates[3];
-
-		if (DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
-			List<EmployeeWorkload> rejectedWorkloads = findWorkloads(employee,
-					prevMonthFirstDay, prevMonthLastDay, "2"); // 是否存在驳回的workload
-			if (rejectedWorkloads.size() != 0) { // 存在的话上个月所有的workload打印出来修改
-				List<EmployeeWorkload> lastMonthWorkloads = findWorkloads(
-						employee, prevMonthFirstMon, prevMonthLastSun);
-				addWorkloadRows(rows, lastMonthWorkloads, prevMonthFirstMon,
-						prevMonthLastSun);
-				return rows;
-			}
+		
+		List<EmployeeWorkload> notApprovedWorkloads = workloadDao.findWorkloadsStatusNotEqual(employee,
+                prevMonthFirstDay, today, "3");
+		if(notApprovedWorkloads.size()!=0) {
+		    List<EmployeeWorkload> workloads = findWorkloads(employee, prevMonthFirstMon, DateUtils.currentWeekSun(today));
+		    addWorkloadRows(rows, workloads, prevMonthFirstMon, DateUtils.currentWeekSun(today));
 		}
-
-		Date firstDay = DateUtils.getFirstDay(today);
-		List<EmployeeWorkload> savedWorkloads = findWorkloads(employee,
-				firstDay, today); // 本月已经保存workload
-		if (savedWorkloads.size() != 0) {
-			addWorkloadRows(rows, savedWorkloads, firstDay, today);
-//			return rows;
-		}
-		else {
-			// 获取上个月最后一个星期的workload
-			Date[] week = DateUtils.getPrevMonthLastWeek(today);
-			List<EmployeeWorkload> lastWeekWorkloads = findWorkloads(employee,
-					week[0], week[1]);
-			if (lastWeekWorkloads != null && lastWeekWorkloads.size() != 0)
-				addWorkloadRows(rows, lastWeekWorkloads, week[0], week[1]);
-		}
+		
+//		if (DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
+//			List<EmployeeWorkload> notApprovedWorkloads = workloadDao.findWorkloadsStatusNotEqual(employee,
+//					prevMonthFirstDay, prevMonthLastDay, "3"); 
+//			if (rejectedWorkloads.size() != 0) {
+//				List<EmployeeWorkload> lastMonthWorkloads = findWorkloads(
+//						employee, prevMonthFirstMon, prevMonthLastSun);
+//				addWorkloadRows(rows, lastMonthWorkloads, prevMonthFirstMon,
+//						prevMonthLastSun);
+//				return rows;
+//			}
+//		}
+//
+//		Date firstDay = DateUtils.getFirstDay(today);
+//		List<EmployeeWorkload> savedWorkloads = findWorkloads(employee,
+//				firstDay, today); // 本月已经保存workload
+//		if (savedWorkloads.size() != 0) {
+//			addWorkloadRows(rows, savedWorkloads, firstDay, today);
+////			return rows;
+//		}
+//		else {
+//			// 获取上个月最后一个星期的workload
+//			Date[] week = DateUtils.getPrevMonthLastWeek(today);
+//			List<EmployeeWorkload> lastWeekWorkloads = findWorkloads(employee,
+//					week[0], week[1]);
+//			if (lastWeekWorkloads != null && lastWeekWorkloads.size() != 0)
+//				addWorkloadRows(rows, lastWeekWorkloads, week[0], week[1]);
+//		}
 		return rows;
 	}
 
@@ -143,15 +150,16 @@ public class WorkloadServiceImpl implements IWorkloadService {
 			weekRows[i] = new HashMap<>();
 
 		for (EmployeeWorkload workload : workloads) {
-			int week = (int) (DateUtils.getDaysBetween(start, end) / 7);
+			int week = (int) ((DateUtils.getDaysBetween(start, workload.getWorkloadDate()) + 1) / 7);
 			int diff = (int) ((DateUtils.getDaysBetween(start,
 					workload.getWorkloadDate()) + 1) % 7);
 
 			String projectNo = workload.getProjectNo();
 			if (!weekRows[week].containsKey(projectNo)) { // 判断该行是否存在
 				WorkloadRow workloadRow = new WorkloadRow();
-				workloadRow.setDateRange(DateUtils.DateMDToString(start)
-						+ "-" + DateUtils.DateMDToString(end));
+				Date[] range = DateUtils.numWeeksRange(start, week);
+				workloadRow.setDateRange(DateUtils.DateYMDToString(range[0])
+						+ "-" + DateUtils.DateYMDToString(range[1]));
 				workloadRow.setProjectNo(projectNo);
 				workloadRow.setItCode(workload.getItCode());
 				workloadRow.setCreator(workload.getCreator());
