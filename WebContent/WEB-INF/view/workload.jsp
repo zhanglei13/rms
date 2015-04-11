@@ -67,7 +67,7 @@
 				url : '${ctp}/workload/list',
 				datatype : "json",
 				data : {
-					itCode : "eric"
+					itCode : "fyahya"
 				},
 				error : function(request) {
 					alert("Server Error!");
@@ -135,9 +135,7 @@
 		else {
 			//console.log(hashtable.getLast());
 			//return hashtable.getLast();
-			window.open("${ctp}/workload/add?workload=" + JSON.stringify(hashtable.getLast()));
-			
-			
+			window.open("${ctp}/workload/add?workload=" + JSON.stringify(hashtable.getLast()));			
 		}
 	}
 	
