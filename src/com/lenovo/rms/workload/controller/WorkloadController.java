@@ -82,7 +82,7 @@ public class WorkloadController {
 	public String addWorkload(@RequestParam("dateRange") String dateRange,HttpSession session, Model model) {
 	    List<WorkloadRow> workloadRows=null;
 	    int earliestEditableMonth = 0;
-	    if(dateRange!=null){
+	    if(!dateRange.equals("")){
 	        String[] dates = dateRange.split("-");//date[0]代表起始日期，date[1]代表终止日期
 	        Date from = DateUtils.parseString(dates[0]);
 	        Date to = DateUtils.parseString(dates[1]);

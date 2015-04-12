@@ -5,7 +5,6 @@
 <%@page import="com.lenovo.rms.model.Employee"%>
 <%
 	request.setAttribute("ctp", request.getContextPath());
-    String historyWorkload= (String)request.getParameter("history_workload");
     Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
 %>
 <!DOCTYPE html>
@@ -46,7 +45,7 @@ $(function(){
 				}
 			});
 		}
-	 var historyWorkload = eval(<%=historyWorkload%>);//preWorkloadString.parseJSON();
+	 var historyWorkload = ${historyWorkloads};//preWorkloadString.parseJSON();
 	 for(var i in historyWorkload){
 		 addRow(historyWorkload[i]);
 	 }
