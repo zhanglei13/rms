@@ -47,7 +47,7 @@ public interface IWorkloadService {
 	 */
 	public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode);
 	
-	public void saveOrSubmitWorkloads(List<WorkloadRow> toDelete,List<WorkloadRow> toUpdate,List<WorkloadRow> toAdd,int optMonth,boolean submit,String itCode);
+	public boolean saveOrSubmitWorkloads(List<WorkloadRow> toDelete,List<WorkloadRow> toUpdate,List<WorkloadRow> toAdd,int optMonth,boolean submit,String itCode);
 
 	public List<WorkloadRow> findWorkloads(Employee employee,Date from,Date to, String status);
 		

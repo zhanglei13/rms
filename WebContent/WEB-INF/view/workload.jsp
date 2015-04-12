@@ -187,7 +187,7 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 <script type="text/javascript">
 	function addOrEditWorkload(range) {
 		var dateRange = range == null?'':range;
-		alert(dateRange);
+		/* alert(dateRange);
 		$.ajax({
 			type : 'POST',
 			url : '${ctp}/workload/add',
@@ -195,8 +195,9 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 			async : false,
 			data : {
 				dateRange : dateRange
-			},
-		});
+			}
+		}); */
+		window.open("${ctp}/workload/add?dateRange=" + dateRange);
 	}
 	
 	function addOrUpdateWorkload(flag, range) {

@@ -17,14 +17,17 @@ function changeProject(index,obj){
 }
 
 function initSelects(index,releaseName,projectName){
+	//console.log(releaseName);
+	//console.log(projectName);
 	var sltRelease = document.getElementById("release_"+index);
 	var sltProject = document.getElementById("project_"+index);
 	var releases = projects.keys();
 	for(var i in releases){
 		sltRelease.options.add(new Option(releases[i],releases[i]));
 	}
-		
-	if(releaseName==null){
+	//console.log("haha");	
+	if(releaseName==null||releaseName==""){
+		//console.log("haha");
 		sltRelease.options[0].selected = true;
 		var projectArray = projects.get(releases[0]);//第一个release下的projects
 		for(var i in projectArray){
@@ -43,7 +46,7 @@ function initSelects(index,releaseName,projectName){
 		for(var i in projectArray){
 			sltProject.options.add(new Option(projectArray[i].projectName,projectArray[i].projectNo));
 		}
-		if(projectName==null){
+		if(projectName==null||projectName==""){
 			sltProject.options[0].selected = true;
 		}else{
 			//将对应projectName的option设置为选择
@@ -56,6 +59,7 @@ function initSelects(index,releaseName,projectName){
 		}
 	}
 	var selctReleaseName = sltRelease.options[sltRelease.options.selectedIndex].text;
+	//console.log(sltProject.options);
 	var selctProjectName = sltProject.options[sltProject.options.selectedIndex].text;
 	var project = getProject(selctReleaseName,selctProjectName);
 	return project.phase;
@@ -69,9 +73,9 @@ function getProject(releaseName,projectName){
 		}
 	}
 }
-
+var selectId=0;//全局量，用作select的ID
 function addRow(historyWorkloadRow) {
-	console.log(historyWorkloadRow);
+	//console.log(historyWorkloadRow);
 	var tBody = document.getElementById("add_workload_table");
 	var rowCount = tBody.rows.length;
 	var newRow = tBody.insertRow(rowCount++); //新插入一行
@@ -81,17 +85,18 @@ function addRow(historyWorkloadRow) {
 		cells.push(newRow.insertCell(i));
 		cells[i].style.textAlign = "center";
 	}
-	cells[0].innerHTML="<select name='release' id='release_"+rowCount+"' style='width:120px' onchange='changeRelease("+rowCount+",this)'></select>";
-	cells[1].innerHTML="<select name='project' id='project_"+rowCount+"' style='width:120px' onchange='changeProject("+rowCount+",this)'></select>";
+	selectId++;
+	cells[0].innerHTML="<select name='release' id='release_"+selectId+"' style='width:120px' onchange='changeRelease("+selectId+",this)'></select>";
+	cells[1].innerHTML="<select name='project' id='project_"+selectId+"' style='width:120px' onchange='changeProject("+selectId+",this)'></select>";
 	
 	//是否有历史数据
 	if(historyWorkloadRow==null){
-		cells[2].innerHTML= initSelects(rowCount,null,null); //该函数返回project所在的phase
+		cells[2].innerHTML= initSelects(selectId,null,null); //该函数返回project所在的phase
 		for(var i=3;i<=9;i++){
 			cells[i].innerHTML="<input type='text' style='width:40px;height:30px'></input>";
 		}
 	}else{
-		cells[2].innerHTML= initSelects(rowCount,historyWorkloadRow.projectType,historyWorkloadRow.projectName); //该函数返回project所在的phase
+		cells[2].innerHTML= initSelects(selectId,historyWorkloadRow.projectType,historyWorkloadRow.projectName); //该函数返回project所在的phase
 		for(var i=3;i<=9;i++){
 			cells[i].innerHTML="<input type='text' style='width:40px;height:30px' value='"+historyWorkloadRow.effortPerWeek[i-3]+"'></input>";
 		}
@@ -114,11 +119,14 @@ function getWorkloadData(){
 		return null;
 	}
 	var rowCount = table.rows.length;
+	//console.log(table.rows[1].childNodes[1].childNodes[0]);
 	var workloadData = new Array();
-	for(var i=1;i<rowCount;i++){
+	for(var i=0;i<rowCount;i++){
 		var row = {};//构造一个worloadrow
-		if(document.getElementById("project_"+(i+1))==null) continue;
-		var projectNo = document.getElementById("project_"+(i+1)).value;
+		//if(document.getElementById("project_"+(i+1))==null) continue;
+		//var projectNo = document.getElementById("project_"+(i+1)).value;
+		var projectNo = table.rows[i].cells[1].getElementsByTagName("SELECT")[0].value;
+		//console.log(projectNo);
 		var projectMatrix =  projects.values();
 		var selectedProject;//找到选中的project对象
 		//console.log(projectMatrix);
@@ -129,26 +137,26 @@ function getWorkloadData(){
 				break;
 			} 
 		}
-		console.log(projectMatrix);
-		console.log(selectedProject);
+		//console.log(projectMatrix);
+		//console.log(selectedProject);
 		row["projectType"]=selectedProject.projectType;
 		row["projectName"]=selectedProject.projectName;
 		row["projectNo"]=selectedProject.projectNo;
 		
 		var phaseCode = table.rows[i].cells[2].innerHTML;
 		row["phaseCode"]=phaseCode;
-		var datePerWeek = new Array(7);
+		//var datePerWeek = new Array(7);
 		var effortPerWeek = new Array(7);
 		for(var j=3;j<=9;j++){
-			datePerWeek[j-3]   = table.rows[0].cells[j].innerHTML;
+			//datePerWeek[j-3]   = table.rows[0].cells[j].innerHTML;
 			effortPerWeek[j-3] = table.rows[i].cells[j].getElementsByTagName("INPUT")[0].value;
 		}
 		row["datePerWeek"]=datePerWeek;
 		row["effortPerWeek"]=effortPerWeek;
 		
 		//TODO
-		row["itCode"]="eric";
-		row["creator"]="eric";
+		row["itCode"]=itCode;
+		row["creator"]=itCode;
 		workloadData.push(row);
 	}
 	return workloadData;
@@ -164,11 +172,17 @@ var toUpdate = new Array();
 var toAdd = new Array();
 
 function classifyWorkloads(historyWorkloads,curWorkloads){
+	
+	toDelete.splice(0,toDelete.length);
+	toUpdate.splice(0,toUpdate.length);
+	toAdd.splice(0,toAdd.length);
 	//求新旧交集，即要更新的
+	console.log(historyWorkloads);
+	console.log(curWorkloads);
 	for(var i in historyWorkloads){
 		for(var j in curWorkloads){
-			if(historyWorkloads[i].projectName==curWorkloads.projectName){
-				toUpdate.push(curWorkloads);
+			if(historyWorkloads[i].projectName==curWorkloads[j].projectName){
+				toUpdate.push(curWorkloads[j]);
 			}
 		}
 	}
@@ -176,7 +190,8 @@ function classifyWorkloads(historyWorkloads,curWorkloads){
 	for(var i in historyWorkloads){
 		var flag=false;
 		for(var j in toUpdate){
-			if(historyWorkloads[i].projectName==toUpdate.projectName){
+			alert("#"+historyWorkloads[i].projectName+" "+toUpdate[j].projectName+"#");
+			if(historyWorkloads[i].projectName==toUpdate[j].projectName){
 				flag=true;
 				break;
 			}
@@ -188,7 +203,7 @@ function classifyWorkloads(historyWorkloads,curWorkloads){
 	for(var i in curWorkloads){
 		var flag=false;
 		for(var j in toUpdate){
-			if(curWorkloads[i].projectName==toUpdate.projectName){
+			if(curWorkloads[i].projectName==toUpdate[j].projectName){
 				flag=true;
 				break;
 			}
@@ -239,8 +254,8 @@ function saveAndSubmitWorkload(){
 		}
 	}
 	//划分要提交的数据
-	classifyWorkloads(preWorkload,workloadData);
-	console.log("haha");
+	classifyWorkloads(historyWorkloads,workloadData);
+	//console.log("haha");
 	console.log(toUpdate);
 	console.log(toDelete);
 	console.log(toAdd);
@@ -252,12 +267,12 @@ function saveAndSubmitWorkload(){
 			toUpdate :JSON.stringify(toUpdate),
 			toDelete:JSON.stringify(toDelete),
 			toAdd:JSON.stringify(toAdd),
-			optMonth:3,
+			optMonth:2,
 			submit:false,
-			itCode:"eric",
+			itCode:itCode,
 		},
 		success : function(data) {
-			alert("保存成功！");
+			alert(data);
 		},
 		error : function() {
 			alert("保存失败！");

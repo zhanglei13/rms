@@ -254,6 +254,18 @@ public class DateUtils {
 		}
 		return date;
 	}
+	
+	public static Date parseString(String dateString,String schema){
+	    SimpleDateFormat sdf = new SimpleDateFormat(schema);
+        Date date = null;
+        try {
+            date = sdf.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return date;
+	}
 
 	public static String formatDate(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

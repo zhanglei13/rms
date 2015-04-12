@@ -21,7 +21,9 @@ import com.lenovo.rms.common.util.Constants;
 import com.lenovo.rms.common.util.DateUtils;
 import com.lenovo.rms.common.util.TimeUtils;
 import com.lenovo.rms.model.Employee;
+import com.lenovo.rms.model.Project;
 import com.lenovo.rms.workload.model.WorkloadRow;
+import com.lenovo.rms.workload.service.IProjectService;
 import com.lenovo.rms.workload.service.IWorkloadService;
 
 /**
@@ -44,6 +46,8 @@ public class WorkloadController {
 
 	@Autowired
 	private IWorkloadService workloadService;
+	@Autowired
+	private IProjectService projectService;
 
 	@RequestMapping(value = "/workload", method = RequestMethod.GET)
 	public String workload(HttpSession session, Model model) {
@@ -70,27 +74,34 @@ public class WorkloadController {
 	}
 	
 	@RequestMapping(value = "/workload/saveOrSubmit", method = RequestMethod.POST)
-    @ResponseBody
-    public void saveWorkloads(@RequestParam("toUpdate") String toUpdateList,@RequestParam("toDelete") String toDeleteList,@RequestParam("toAdd") String toAddList,@RequestParam("optMonth") int optMonth,@RequestParam("submit") boolean submit,@RequestParam("itCode") String itCode) {
+	@ResponseBody
+    public String saveWorkloads(@RequestParam("toUpdate") String toUpdateList,@RequestParam("toDelete") String toDeleteList,@RequestParam("toAdd") String toAddList,@RequestParam("optMonth") int optMonth,@RequestParam("submit") boolean submit,@RequestParam("itCode") String itCode) {
          List<WorkloadRow> toAdd = JsonUtils.jsonList2JavaList(toAddList, WorkloadRow.class);
          List<WorkloadRow> toDelete = JsonUtils.jsonList2JavaList(toDeleteList, WorkloadRow.class);
          List<WorkloadRow> toUpdate = JsonUtils.jsonList2JavaList(toUpdateList, WorkloadRow.class);
-         workloadService.saveOrSubmitWorkloads(toDelete, toUpdate, toAdd, optMonth, submit, itCode);
+         if(workloadService.saveOrSubmitWorkloads(toDelete, toUpdate, toAdd, optMonth, submit, itCode))
+             return "Successfully saved";
+         else{
+             return "Effor of each day must between 8 to 21";
+         }
     }
 
-	@RequestMapping(value="/workload/add",method = RequestMethod.POST)
+	@RequestMapping(value="/workload/add",method = RequestMethod.GET)
 	public String addWorkload(@RequestParam("dateRange") String dateRange,HttpSession session, Model model) {
 	    List<WorkloadRow> workloadRows=null;
 	    int earliestEditableMonth = 0;
+	    List<Project> projects = projectService.getAllProjects();
 	    if(!dateRange.equals("")){
-	        String[] dates = dateRange.split("-");//date[0]代表起始日期，date[1]代表终止日期
+	        //logger.info(dateRange);
+	        String[] dates = dateRange.split(":");//date[0]代表起始日期，date[1]代表终止日期
 	        Date from = DateUtils.parseString(dates[0]);
 	        Date to = DateUtils.parseString(dates[1]);
 	        Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
 	        workloadRows= workloadService.findWorkloads(employee, from, to);
 	    }
-	    model.addAttribute("historyWorkloads", workloadRows);
+	    model.addAttribute("historyWorkloads", JsonUtils.javaList2JsonList(workloadRows));
 	    model.addAttribute("earliestEditableMonth",earliestEditableMonth);
+	    model.addAttribute("projects", projects);
 	   
 		return "/mdadd";
 	}

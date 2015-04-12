@@ -16,8 +16,10 @@
 <script src="${ctp}/res/scripts/js/add_workload.js"></script>
 <script>
 
-var employee="<%=employee%>";
+var itCode="<%=employee.getItCode()%>";
 var projects;
+var historyWorkloads;
+var datePerWeek;
 $(function(){
 	   if (projects == null) {
 			$.ajax({
@@ -45,10 +47,20 @@ $(function(){
 				}
 			});
 		}
-	 var historyWorkload = ${historyWorkloads};//preWorkloadString.parseJSON();
-	 for(var i in historyWorkload){
-		 addRow(historyWorkload[i]);
+	 historyWorkloads = eval('${historyWorkloads}');//preWorkloadString.parseJSON();
+	 //console.log(historyWorkloads);
+	 for(var i in historyWorkloads){
+		 for(var j in historyWorkloads[i].effortPerWeek){
+			 if(historyWorkloads[i].effortPerWeek[j]==null){
+				 historyWorkloads[i].effortPerWeek[j]="0";
+			 }else{
+				 historyWorkloads[i].effortPerWeek[j]=historyWorkloads[i].effortPerWeek[j].toString();
+			 }
+		 }
+		 addRow(historyWorkloads[i]);
 	 }
+	 //console.log(itCode);
+	 datePerWeek=historyWorkloads[0].datePerWeek;
 	 
  });
 </script>
@@ -98,7 +110,8 @@ $(function(){
 													onClick="addProject()"> Add Project </a> <a href="#"
 													class="btn btn-sm btn-primary no-radius"
 													onClick="saveWorkload()"> Save </a> <a href="#"
-													class="btn btn-sm btn-primary no-radius "> Save &&
+													class="btn btn-sm btn-primary no-radius "
+													onClick="saveAndSubmitWorkload()"> Save &&
 													Submit </a>
 											</P>
 										</div>

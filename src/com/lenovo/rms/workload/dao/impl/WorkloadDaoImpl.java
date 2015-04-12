@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -87,8 +88,11 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
         criterions[1]= Restrictions.eq("projectNo", workload.getProjectNo());
         criterions[2]= Restrictions.eq("workloadDate", workload.getWorkloadDate());
         EmployeeWorkload  e= findUnique(EmployeeWorkload.class,criterions);
-        workload.setId(e.getId());
-        update(workload);
+       /* DetachedCriteria detachedCriteria=null;
+        detachedCriteria=createDetachedCriteria(detachedCriteria,criterions);
+        List<EmployeeWorkload> list= find(detachedCriteria);
+        System.out.println("-----update---------------");*/
+        e.setEffort(workload.getEffort());        
     }
 
     @Override
@@ -104,8 +108,16 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
         criterions[1]= Restrictions.eq("projectNo", workload.getProjectNo());
         criterions[2]= Restrictions.eq("workloadDate", workload.getWorkloadDate());
         EmployeeWorkload  e= findUnique(EmployeeWorkload.class,criterions);
-        workload.setId(e.getId());
-        delete(workload);
+        delete(e);
+        /*DetachedCriteria detachedCriteria=null;
+        detachedCriteria=createDetachedCriteria(detachedCriteria,criterions);
+        List<EmployeeWorkload> list= find(detachedCriteria);
+        System.out.println("--------------------");
+        for(EmployeeWorkload e : list){
+            System.out.println(e.getId());
+            delete(e);
+        }*/
+        
         
     }
     
