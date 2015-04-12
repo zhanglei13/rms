@@ -80,24 +80,45 @@ public class WorkloadServiceImpl implements IWorkloadService {
 	}
 
 	@Override
-	public List<WorkloadRow> findWorkloads(Employee employee, Date from,
-			Date to) {
-		List<EmployeeWorkload> employeeWorkloads=workloadDao.findWorkloads(employee, from, to);
+	public List<WorkloadRow> findWorkloads(Employee employee, Date from, Date to) {
+		List<EmployeeWorkload> employeeWorkloads = workloadDao.findWorkloads(
+				employee, from, to);
 		List<WorkloadRow> workloadRowList = new ArrayList<WorkloadRow>();
-		addWorkloadRows(workloadRowList,employeeWorkloads,from,to);
+		addWorkloadRows(workloadRowList, employeeWorkloads, from, to);
 		return workloadRowList;
 	}
 
 	@Override
 	public List<WorkloadRow> findWorkloads(Employee employee, Date from,
 			Date to, String status) {
-		List<EmployeeWorkload> employeeWorkloads=workloadDao.findWorkloads(employee, from, to, status);
-        List<WorkloadRow> workloadRowList = new ArrayList<WorkloadRow>();
-        addWorkloadRows(workloadRowList,employeeWorkloads,from,to);
-        return workloadRowList;
+		List<EmployeeWorkload> employeeWorkloads = workloadDao.findWorkloads(
+				employee, from, to, status);
+		List<WorkloadRow> workloadRowList = new ArrayList<WorkloadRow>();
+		addWorkloadRows(workloadRowList, employeeWorkloads, from, to);
+		return workloadRowList;
 	}
-	
-	
+
+	@Override
+	public List<WorkloadRow> findWorkloadsStatusNotEqual(Employee employee,
+			Date from, Date to, String status) {
+		List<EmployeeWorkload> employeeWorkloads = workloadDao
+				.findWorkloadsStatusNotEqual(employee, from, to, status);
+		List<WorkloadRow> workloadRowList = new ArrayList<WorkloadRow>();
+		addWorkloadRows(workloadRowList, employeeWorkloads, from, to);
+		return workloadRowList;
+	}
+
+	@Override
+	public int getEarliestEditableMonth(Employee employee) {
+		Date today = new Date();
+		int month = DateUtils.getMonth(today);
+		Date prevMonthFirstDay = DateUtils.prevMonthFirstDay(today);
+		Date prevMonthLastDay = DateUtils.prevMonthLastDay(today);
+		List<EmployeeWorkload> notApprovedWorkloads = workloadDao
+				.findWorkloadsStatusNotEqual(employee, prevMonthFirstDay,
+						prevMonthLastDay, "3");
+		return notApprovedWorkloads.size() == 0 ? month : month - 1;
+	}
 
 	@Override
 	public List<WorkloadRow> listWorkloadRows(String itCode) {
@@ -115,9 +136,12 @@ public class WorkloadServiceImpl implements IWorkloadService {
 				.findWorkloadsStatusNotEqual(employee, prevMonthFirstDay,
 						today, "3");
 		if (notApprovedWorkloads.size() != 0) {
-			rows= findWorkloads(employee,prevMonthFirstMon, DateUtils.currentWeekSun(today));
-			/*addWorkloadRows(rows, workloads, prevMonthFirstMon,
-					DateUtils.currentWeekSun(today));*/
+			rows = findWorkloads(employee, prevMonthFirstMon,
+					DateUtils.currentWeekSun(today));
+			/*
+			 * addWorkloadRows(rows, workloads, prevMonthFirstMon,
+			 * DateUtils.currentWeekSun(today));
+			 */
 		}
 
 		// if (DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
@@ -214,6 +238,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
 		 */
 	}
 
+
     @Override
     public void saveOrSubmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd, int optMonth,
             boolean submit, String itCode) {
@@ -309,4 +334,5 @@ public class WorkloadServiceImpl implements IWorkloadService {
         workloadDao.deleteWorkloads(toDelList);
         
     }
+
 }
