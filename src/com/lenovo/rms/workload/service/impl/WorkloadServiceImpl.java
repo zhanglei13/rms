@@ -218,15 +218,15 @@ public class WorkloadServiceImpl implements IWorkloadService {
     public void saveOrSubmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd, int optMonth,
             boolean submit, String itCode) {
        if(submit){
-           
+           saveWorkloads(toDelete,toUpdate, toAdd,optMonth,"1", itCode);
        }else{
-           saveWorkloads(toDelete,toUpdate, toAdd,optMonth, itCode);
+           saveWorkloads(toDelete,toUpdate, toAdd,optMonth,"0", itCode);
        }
         
     }
     
     @SuppressWarnings("deprecation")
-    protected boolean saveWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd,int optMonth,String itCode){
+    protected void saveWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd,int optMonth,String status,String itCode){
         //选出操作月的要删除的workload
         List<EmployeeWorkload> toDelList=new ArrayList<EmployeeWorkload>();
         for(WorkloadRow del:toDelete){
@@ -263,6 +263,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
                     workload.setProjectNo(upd.getProjectNo());
                     workload.setPhaseCode(upd.getPhaseCode());
                     workload.setCreator(upd.getCreator());
+                    workload.setStatus(status);
                     toUpdateList.add(workload);
                 }
             }
@@ -284,6 +285,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
                     workload.setProjectNo(add.getProjectNo());
                     workload.setPhaseCode(add.getPhaseCode());
                     workload.setCreator(add.getCreator());
+                    workload.setStatus(status);
                     toAddList.add(workload);
                 }
             }
@@ -296,7 +298,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
                 if(date.getMonth()>=optMonth){
                     System.out.println(effortPerDay[i]);
                        if(effortPerDay[i]<8.0||effortPerDay[i]>21.0){
-                           return false;
+                           return;
                        }
                            
                 }
@@ -305,12 +307,6 @@ public class WorkloadServiceImpl implements IWorkloadService {
         workloadDao.saveWorkloads(toAddList);
         workloadDao.updateWorkloads(toUpdateList);
         workloadDao.deleteWorkloads(toDelList);
-        return true;
         
-        
-    }
-        
-    
-    protected void sumbmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd,String itCode){
     }
 }

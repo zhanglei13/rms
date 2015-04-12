@@ -25,16 +25,16 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
     @Override
     public void saveWorkload(EmployeeWorkload workload) {
         //设置状态为0，表示 saved
-        workload.setStatus("0");
+        //workload.setStatus("0");
         save(workload);
     }
 
     @Override
     public void saveWorkloads(Collection<EmployeeWorkload> workloads) {
-        for(EmployeeWorkload workload:workloads){
+        /*for(EmployeeWorkload workload:workloads){
           //设置状态为0，表示 saved
             workload.setStatus("0");
-        }
+        }*/
         saveAll(workloads);
     }
     
