@@ -38,8 +38,8 @@
 			<div class="widget-toolbar no-border">
 				<p>
 					<a href="#" class="btn btn-sm btn-primary no-radius"
-						onClick="addOrUpdateWorkload(0,'3.30-3.31')"> Add Workload </a> <a href="#"
-						class="btn btn-sm btn-primary no-radius" onClick="addOrUpdateWorkload(1)">
+						onClick="addOrEditWorkload()"> Add Workload </a> 
+					<a href="#" class="btn btn-sm btn-primary no-radius" onClick="">
 						Submmit All </a>
 				</P>
 			</div>
@@ -63,7 +63,6 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 			var tableData = new Array();
 			$.ajax({
 				type : 'POST',
-				cache : false,
 				url : '${ctp}/workload/list',
 				datatype : "json",
 				async : false,
@@ -93,7 +92,7 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 				}
 			});
 			
-			console.log(tableData);
+		//	console.log(tableData);
 			var oTable1 = 
 				$('#workloadTable')
 				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
@@ -128,7 +127,7 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
                        api.column(0, {page:'current'} ).data().each( function ( group, i ) {
                            if ( last !== group ) {
                         	   var content = "<div style='display:inline' class='hidden-sm hidden-xs action-buttons'>"
-       							+ "<a class='green' href='#'>"
+       							+ "<a class='green' href='#' onclick=javascript:addOrEditWorkload('"+group+"');>"
     							+ "<i class='ace-icon fa fa-pencil bigger-130'></i></a>"
     							+ "<a class='red' href='#'>"
     							+ "<i class='ace-icon fa fa-trash-o bigger-130'></i></a></div>";
@@ -136,7 +135,6 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
                                    '<tr class="group"><td colspan="10">'+group+"&nbsp;&nbsp;&nbsp;"+content+'</td></tr>'
                                );
                                last = group;
-                               alert(group);
                            }
                        } );
                     },
@@ -187,6 +185,20 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 </script>
 
 <script type="text/javascript">
+	function addOrEditWorkload(range) {
+		var dateRange = range == null?'':range;
+		alert(dateRange);
+		$.ajax({
+			type : 'POST',
+			url : '${ctp}/workload/add',
+			datatype : "json",
+			async : false,
+			data : {
+				dateRange : dateRange
+			},
+		});
+	}
+	
 	function addOrUpdateWorkload(flag, range) {
 		var hashtable = new jQuery.Hashtable();
 		$.each(workloadList, function(i, result) {
