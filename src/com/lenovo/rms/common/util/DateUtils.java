@@ -129,7 +129,13 @@ public class DateUtils {
 	public static boolean isReachDeadLine(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		return cal.get(Calendar.MONTH) >= 11;
+		return cal.get(Calendar.DATE) >= 11;
+	}
+	
+	public static int getMonth(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.MONTH) + 1;
 	}
 
 	public static Date[] firstAndLastDate(Date date) {
@@ -292,10 +298,12 @@ public class DateUtils {
 	
 	public static void main(String[] args) {
 		Date date = new Date();
-		Date sun = DateUtils.prevMonthFirstMon(date);
-		for(Date d:DateUtils.numWeeksRange(sun, 1)) {
-		    System.out.println(d);
-		}
+//		Date sun = DateUtils.prevMonthFirstMon(date);
+//		for(Date d:DateUtils.numWeeksRange(sun, 1)) {
+//		    System.out.println(d);
+//		}
+		System.out.println(getMonth(date));
+		System.out.println(isReachDeadLine(date));
 //		Date start = DateUtils.prevMonthFirstMon(date);
 //		Date end = DateUtils.prevMonthLastSun(date);
 //		System.out.println(start);

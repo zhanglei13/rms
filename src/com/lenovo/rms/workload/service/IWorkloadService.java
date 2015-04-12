@@ -53,6 +53,11 @@ public interface IWorkloadService {
 		
 	public List<WorkloadRow> findWorkloads(Employee employee, Date from, Date to);
 
+	public List<WorkloadRow> findWorkloadsStatusNotEqual(Employee employee, Date from,
+			Date to, String status);
+	
 	public List<WorkloadRow> listWorkloadRows(String itCode);
+	
+	public int getEarliestEditableMonth(Employee employee);
     
 }
