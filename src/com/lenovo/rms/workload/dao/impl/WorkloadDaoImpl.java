@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import com.lenovo.rms.common.dao.impl.HibernateBaseDaoImpl;
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
+import com.lenovo.rms.model.UserLoginInfo;
 import com.lenovo.rms.workload.dao.IWorkloadDao;
 @Repository("workloadDao")
 public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Long> implements IWorkloadDao  {
@@ -69,6 +71,42 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
         params.put("to", to);
         List<EmployeeWorkload> workloads = findHql(hql,params);
         return workloads;
+    }
+    
+    
+    @Override
+    public void updateWorkloads(Collection<EmployeeWorkload> workloads) {
+        for(EmployeeWorkload workload:workloads){
+            updateWorkload(workload);
+        }
+    }
+    
+    private void updateWorkload(EmployeeWorkload workload){
+        Criterion[]  criterions =new Criterion[3];
+        criterions[0]= Restrictions.eq("itCode", workload.getItCode());
+        criterions[1]= Restrictions.eq("projectNo", workload.getProjectNo());
+        criterions[2]= Restrictions.eq("workloadDate", workload.getWorkloadDate());
+        EmployeeWorkload  e= findUnique(EmployeeWorkload.class,criterions);
+        workload.setId(e.getId());
+        update(workload);
+    }
+
+    @Override
+    public void deleteWorkloads(Collection<EmployeeWorkload> workloads) {
+       for(EmployeeWorkload workload:workloads){
+           deleteWorkload(workload);
+       }
+    }
+    
+    private void deleteWorkload(EmployeeWorkload workload){
+        Criterion[]  criterions =new Criterion[3];
+        criterions[0]= Restrictions.eq("itCode", workload.getItCode());
+        criterions[1]= Restrictions.eq("projectNo", workload.getProjectNo());
+        criterions[2]= Restrictions.eq("workloadDate", workload.getWorkloadDate());
+        EmployeeWorkload  e= findUnique(EmployeeWorkload.class,criterions);
+        workload.setId(e.getId());
+        delete(workload);
+        
     }
     
     public static void main(String[] args) throws ParseException{

@@ -68,6 +68,17 @@ public class WorkloadController {
 		 workloadService.saveWorkloads(workloadRows, itCode);
 
 	}
+	
+	@RequestMapping(value = "/workload/saveOrSubmit", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveWorkloads(@RequestParam("toUpdate") String toUpdateList,@RequestParam("toDelete") String toDeleteList,@RequestParam("toAdd") String toAddList,@RequestParam("optMonth") int optMonth,@RequestParam("submit") boolean submit,@RequestParam("itCode") String itCode) {
+         List<WorkloadRow> toAdd = JsonUtils.jsonList2JavaList(toAddList, WorkloadRow.class);
+         System.out.println(toAddList);
+         System.out.println(toDeleteList);
+         List<WorkloadRow> toDelete = JsonUtils.jsonList2JavaList(toDeleteList, WorkloadRow.class);
+         List<WorkloadRow> toUpdate = JsonUtils.jsonList2JavaList(toUpdateList, WorkloadRow.class);
+         workloadService.saveOrSubmitWorkloads(toDelete, toUpdate, toAdd, optMonth, submit, itCode);
+    }
 
 	@RequestMapping("/workload/add")
 	public String mdAdd() {

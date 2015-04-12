@@ -206,4 +206,104 @@ public class WorkloadServiceImpl implements IWorkloadService {
 		 * "zhanglei", "zhanglei"); service.saveWorkload(row, "zhanglei");
 		 */
 	}
+
+    @Override
+    public void saveOrSubmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd, int optMonth,
+            boolean submit, String itCode) {
+       if(submit){
+           
+       }else{
+           saveWorkloads(toDelete,toUpdate, toAdd,optMonth, itCode);
+       }
+        
+    }
+    
+    @SuppressWarnings("deprecation")
+    protected boolean saveWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd,int optMonth,String itCode){
+        //选出操作月的要删除的workload
+        List<EmployeeWorkload> toDelList=new ArrayList<EmployeeWorkload>();
+        for(WorkloadRow del:toDelete){
+            for(int i=0;i<del.getDatePerWeek().length;i++){
+                Date date = DateUtils.parseString(del.getDatePerWeek()[i]);
+                if(date.getMonth()>=optMonth){
+                    EmployeeWorkload workload = new EmployeeWorkload();
+                    workload.setItCode(itCode);
+                    workload.setWorkloadDate(DateUtils.parseString((del.getDatePerWeek()[i])));
+                    workload.setCreatorDate(new Date());
+                    workload.setProjectNo(del.getProjectNo());
+                    workload.setPhaseCode(del.getPhaseCode());
+                    workload.setCreator(del.getCreator());
+                    toDelList.add(workload);
+                }
+            }
+        }
+        
+        double[] effortPerDay = new double[7];
+        
+        //选出操作月的要更新的workload
+        List<EmployeeWorkload> toUpdateList=new ArrayList<EmployeeWorkload>();
+        for(WorkloadRow upd:toUpdate){
+            for(int i=0;i<upd.getDatePerWeek().length;i++){
+                Date date = DateUtils.parseString(upd.getDatePerWeek()[i]);
+                double effort = upd.getEffortPerWeek()[i];
+                effortPerDay[i]+=effort;
+                if(date.getMonth()>=optMonth&&effort!=0){
+                    EmployeeWorkload workload = new EmployeeWorkload();
+                    workload.setItCode(itCode);
+                    workload.setEffort(effort);
+                    workload.setWorkloadDate(DateUtils.parseString((upd.getDatePerWeek()[i])));
+                    workload.setCreatorDate(new Date());
+                    workload.setProjectNo(upd.getProjectNo());
+                    workload.setPhaseCode(upd.getPhaseCode());
+                    workload.setCreator(upd.getCreator());
+                    toUpdateList.add(workload);
+                }
+            }
+        }
+        
+        //选出操作月的要添加的workload
+        List<EmployeeWorkload> toAddList=new ArrayList<EmployeeWorkload>();
+        for(WorkloadRow add:toAdd){
+            for(int i=0;i<add.getDatePerWeek().length;i++){
+                Date date = DateUtils.parseString(add.getDatePerWeek()[i]);
+                double effort = add.getEffortPerWeek()[i];
+                effortPerDay[i]+=effort;
+                if(date.getMonth()>=optMonth&&effort!=0){
+                    EmployeeWorkload workload = new EmployeeWorkload();
+                    workload.setItCode(itCode);
+                    workload.setEffort(effort);
+                    workload.setWorkloadDate(DateUtils.parseString((add.getDatePerWeek()[i])));
+                    workload.setCreatorDate(new Date());
+                    workload.setProjectNo(add.getProjectNo());
+                    workload.setPhaseCode(add.getPhaseCode());
+                    workload.setCreator(add.getCreator());
+                    toAddList.add(workload);
+                }
+            }
+        }
+        //校验工作量
+        
+        for(WorkloadRow del:toAdd){
+            for(int i=0;i<del.getDatePerWeek().length;i++){
+                Date date = DateUtils.parseString(del.getDatePerWeek()[i]);
+                if(date.getMonth()>=optMonth){
+                    System.out.println(effortPerDay[i]);
+                       if(effortPerDay[i]<8.0||effortPerDay[i]>21.0){
+                           return false;
+                       }
+                           
+                }
+            }
+        }      
+        workloadDao.saveWorkloads(toAddList);
+        workloadDao.updateWorkloads(toUpdateList);
+        workloadDao.deleteWorkloads(toDelList);
+        return true;
+        
+        
+    }
+        
+    
+    protected void sumbmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd,String itCode){
+    }
 }

@@ -3,23 +3,7 @@
 <%@ page import="com.lenovo.rms.common.util.JsonUtils"%>
 <%
 	request.setAttribute("ctp", request.getContextPath());
-   /*  List<WorkloadRow> workload = (List)request.getAttribute("workload");
-    String[]  dates=new String[7];
-    if(workload!=null){
-    	 dates = workload.get(0).getDatePerWeek();
-    }else{
-    	 dates[0]="0";
-    	 dates[1]="1";
-    	 dates[2]="2";
-    	 dates[3]="3";
-    	 dates[4]="4";
-    	 dates[5]="5";
-    	 dates[6]="6";
-    } */
-    String workloadStr= (String)request.getParameter("workload");
-   // List<WorkloadRow> workload = JsonUtils.jsonList2JavaList(workloadStr, WorkloadRow.class);
-    
-   
+    String workloadStr= (String)request.getParameter("workload");  
 %>
 <!DOCTYPE html>
 
@@ -57,7 +41,8 @@ $(function(){
 				}
 			});
 		}
-	 var preWorkload = eval(<%=workloadStr%>);//preWorkloadString.parseJSON();
+	 preWorkload = eval(<%=workloadStr%>);//preWorkloadString.parseJSON();
+    // console.log(preWorkload);
 	 for(var i in preWorkload){
 		 console.log(preWorkload);
 		 addRow(preWorkload[i]);
@@ -93,13 +78,13 @@ $(function(){
 													<th class="hidden-480">Release</th>
 													<th class="hidden-480">Project</th>
 													<th class="hidden-480">Phase</th>
-													<td class="hidden-480">1</td>
-													<td class="hidden-480">2</td>
-													<td class="hidden-480">2</td>
-													<td class="hidden-480">3</td>
-													<td class="hidden-480">4</td>
-													<td class="hidden-480">5</td>
-													<td class="hidden-480">6</td>
+													<td class="hidden-480">2015-04-01</td>
+													<td class="hidden-480">2015-04-02</td>
+													<td class="hidden-480">2015-04-03</td>
+													<td class="hidden-480">2015-04-04</td>
+													<td class="hidden-480">2015-04-05</td>
+													<td class="hidden-480">2015-04-06</td>
+													<td class="hidden-480">2015-04-07</td>
 													<th class="hidden-480">Operation</th>
 												</tr>
 											</thead>
@@ -112,7 +97,7 @@ $(function(){
 													onClick="addProject()"> Add Project </a> <a href="#"
 													class="btn btn-sm btn-primary no-radius"
 													onClick="saveWorkload()"> Save </a> <a href="#"
-													class="btn btn-sm btn-primary no-radius "> Save &&
+													class=" btn btn-sm btn-primary no-radius" onClick="saveAndSubmitWorkload() "> Save &&
 													Submit </a>
 											</P>
 										</div>

@@ -25,6 +25,10 @@ public interface IWorkloadDao{
     */
     void saveWorkloads(Collection<EmployeeWorkload> workloads);
     
+    void updateWorkloads(Collection<EmployeeWorkload> workloads);
+    
+    void deleteWorkloads(Collection<EmployeeWorkload> workloads);
+    
     /**   
     * 根据时间和类型，查找某empoyee某一时间段内，某一状态的workloads
     * @date 2015年4月1日 上午11:01:08   

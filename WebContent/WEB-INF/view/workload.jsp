@@ -136,6 +136,7 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
                                    '<tr class="group"><td colspan="10">'+group+"&nbsp;&nbsp;&nbsp;"+content+'</td></tr>'
                                );
                                last = group;
+                               alert(group);
                            }
                        } );
                     },

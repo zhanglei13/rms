@@ -47,6 +47,7 @@ public interface IWorkloadService {
 	 */
 	public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode);
 	
+	public void saveOrSubmitWorkloads(List<WorkloadRow> toDelete,List<WorkloadRow> toUpdate,List<WorkloadRow> toAdd,int optMonth,boolean submit,String itCode);
 	/**
 	 * 
 	* 简述
@@ -68,4 +69,3 @@ public interface IWorkloadService {
 	public List<WorkloadRow> listWorkloadRows(String itCode);
     
 }
-
