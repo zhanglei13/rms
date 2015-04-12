@@ -72,7 +72,7 @@ function getProject(releaseName,projectName){
 
 function addRow(historyWorkloadRow) {
 	console.log(historyWorkloadRow);
-	var tBody = document.getElementById("sample-table-1");
+	var tBody = document.getElementById("add_workload_table");
 	var rowCount = tBody.rows.length;
 	var newRow = tBody.insertRow(rowCount++); //新插入一行
 	var cells = new Array();
@@ -109,7 +109,7 @@ function deleteRow(inputobj) {
 
 
 function getWorkloadData(){
-	var table = document.getElementById("sample-table-1");
+	var table = document.getElementById("add_workload_table");
 	if (table == null) {
 		return null;
 	}

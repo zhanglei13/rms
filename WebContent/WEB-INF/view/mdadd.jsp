@@ -90,7 +90,7 @@ $(function(){
 													<th class="hidden-480">Operation</th>
 												</tr>
 											</thead>
-											<tbody  id="sample-table-1">
+											<tbody  id="add_workload_table">
 											</tbody>
 										</table>
 										<div class="widget-toolbar no-border">
