@@ -1,9 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.lenovo.rms.workload.model.WorkloadRow"%>
 <%@ page import="com.lenovo.rms.common.util.JsonUtils"%>
+<%@page import="com.lenovo.rms.common.util.Constants"%>
+<%@page import="com.lenovo.rms.model.Employee"%>
 <%
 	request.setAttribute("ctp", request.getContextPath());
-    String workloadStr= (String)request.getParameter("workload");  
+    String historyWorkload= (String)request.getParameter("history_workload");
+    Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
 %>
 <!DOCTYPE html>
 
@@ -13,6 +16,8 @@
 <script src="${ctp}/res/scripts/js/map.js"></script>
 <script src="${ctp}/res/scripts/js/add_workload.js"></script>
 <script>
+
+var employee="<%=employee%>";
 var projects;
 $(function(){
 	   if (projects == null) {
@@ -41,11 +46,9 @@ $(function(){
 				}
 			});
 		}
-	 preWorkload = eval(<%=workloadStr%>);//preWorkloadString.parseJSON();
-    // console.log(preWorkload);
-	 for(var i in preWorkload){
-		 console.log(preWorkload);
-		 addRow(preWorkload[i]);
+	 var historyWorkload = eval(<%=historyWorkload%>);//preWorkloadString.parseJSON();
+	 for(var i in historyWorkload){
+		 addRow(historyWorkload[i]);
 	 }
 	 
  });
@@ -69,26 +72,25 @@ $(function(){
 									<h3 class="header smaller lighter blue">Add you MD</h3>
 									<div class="table-header">Name:Member1 &nbsp;&nbsp;&nbsp;
 										Date:2015.04</div>
-
 									<div>
-										<table id="sample-table-1"
+										<table
 											class="table table-striped table-bordered table-hover">
 											<thead class="center">
 												<tr>
 													<th class="hidden-480">Release</th>
 													<th class="hidden-480">Project</th>
 													<th class="hidden-480">Phase</th>
-													<td class="hidden-480">2015-04-01</td>
-													<td class="hidden-480">2015-04-02</td>
-													<td class="hidden-480">2015-04-03</td>
-													<td class="hidden-480">2015-04-04</td>
-													<td class="hidden-480">2015-04-05</td>
-													<td class="hidden-480">2015-04-06</td>
-													<td class="hidden-480">2015-04-07</td>
+													<td class="hidden-480">1</td>
+													<td class="hidden-480">2</td>
+													<td class="hidden-480">2</td>
+													<td class="hidden-480">3</td>
+													<td class="hidden-480">4</td>
+													<td class="hidden-480">5</td>
+													<td class="hidden-480">6</td>
 													<th class="hidden-480">Operation</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody  id="add_workload_table">
 											</tbody>
 										</table>
 										<div class="widget-toolbar no-border">
@@ -97,7 +99,7 @@ $(function(){
 													onClick="addProject()"> Add Project </a> <a href="#"
 													class="btn btn-sm btn-primary no-radius"
 													onClick="saveWorkload()"> Save </a> <a href="#"
-													class=" btn btn-sm btn-primary no-radius" onClick="saveAndSubmitWorkload() "> Save &&
+													class="btn btn-sm btn-primary no-radius "> Save &&
 													Submit </a>
 											</P>
 										</div>
