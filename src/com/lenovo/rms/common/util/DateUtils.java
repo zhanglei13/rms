@@ -208,7 +208,6 @@ public class DateUtils {
 	        Calendar calendar = Calendar.getInstance();
 	        calendar.setTime(date);
 	        int diff = 6 - getDayDiff(date);
-	        System.out.println(diff);
 	        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + diff);
 	        return calendar.getTime();
 	    }

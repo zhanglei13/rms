@@ -57,6 +57,7 @@
 var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/assets/js/jquery.dataTables.bootstrap.js", null]
 	ace.load_ajax_scripts(scripts, function() {
 		//inline scripts related to this page
+		var itCode = '${itCode}';
 		jQuery(function($) {
 			$.ajax({
 				type : 'POST',
@@ -64,7 +65,7 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 				url : '${ctp}/workload/list',
 				datatype : "json",
 				data : {
-					itCode : "fyahya"
+					itCode : itCode
 				},
 				error : function(request) {
 					alert("Server Error!");
@@ -118,6 +119,7 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 	                    ],
 	                    "order": [[ 0, 'asc' ]],
 	                    "bAutoWidth": false,
+	                    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
 	                    "drawCallback": function ( settings ) {
 	                       var api = this.api();
 	                       var rows = api.rows( {page:'current'} ).nodes();
@@ -125,13 +127,13 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 	            
 	                       api.column(0, {page:'current'} ).data().each( function ( group, i ) {
 	                           if ( last !== group ) {
-	                        	   var content = "<div class='hidden-sm hidden-xs action-buttons'>"
+	                        	   var content = "<div style='display:inline' class='hidden-sm hidden-xs action-buttons'>"
 	       							+ "<a class='green' href='#'>"
 	    							+ "<i class='ace-icon fa fa-pencil bigger-130'></i></a>"
 	    							+ "<a class='red' href='#'>"
 	    							+ "<i class='ace-icon fa fa-trash-o bigger-130'></i></a></div>";
 	                               $(rows).eq( i ).before(
-	                                   '<tr class="group"><td colspan="1">'+group+'</td><td colspan="9>"'+content+'</td></tr>'
+	                                   '<tr class="group"><td colspan="10">'+group+"&nbsp;&nbsp;&nbsp;"+content+'</td></tr>'
 	                               );
 	                               last = group;
 	                           }

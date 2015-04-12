@@ -49,7 +49,8 @@ public class WorkloadController {
 	public String workload(HttpSession session, Model model) {
 		Employee employee = (Employee) session
 				.getAttribute(Constants.SESSION_USERINFO_KEY);
-		model.addAttribute("name", "zhanglei");
+		model.addAttribute("itCode", employee.getItCode());
+		model.addAttribute("name", employee.getNameEn());
 		model.addAttribute("date", DateUtils.DateYMToString(new Date()));
 		return "/workload";
 	}
