@@ -48,24 +48,11 @@ public interface IWorkloadService {
 	public void saveWorkloads(List<WorkloadRow> workloadRows, String itCode);
 	
 	public void saveOrSubmitWorkloads(List<WorkloadRow> toDelete,List<WorkloadRow> toUpdate,List<WorkloadRow> toAdd,int optMonth,boolean submit,String itCode);
-	/**
-	 * 
-	* 简述
-	* <p>详细说明第一行<br>    
-	* 详细说明第二行 
-	* @date 2015年4月1日 下午9:19:17   
-	* @author zhanglei   
-	* @param employee
-	* @param from
-	* @param to
-	* @param status
-	* @return
-	* List<EmployeeWorkload>
-	 */
-	public List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to, String status);
-	
-	public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to);
-	
+
+	public List<WorkloadRow> findWorkloads(Employee employee,Date from,Date to, String status);
+		
+	public List<WorkloadRow> findWorkloads(Employee employee, Date from, Date to);
+
 	public List<WorkloadRow> listWorkloadRows(String itCode);
     
 }

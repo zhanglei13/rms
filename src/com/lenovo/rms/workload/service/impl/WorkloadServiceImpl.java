@@ -80,16 +80,24 @@ public class WorkloadServiceImpl implements IWorkloadService {
 	}
 
 	@Override
-	public List<EmployeeWorkload> findWorkloads(Employee employee, Date from,
+	public List<WorkloadRow> findWorkloads(Employee employee, Date from,
 			Date to) {
-		return workloadDao.findWorkloads(employee, from, to);
+		List<EmployeeWorkload> employeeWorkloads=workloadDao.findWorkloads(employee, from, to);
+		List<WorkloadRow> workloadRowList = new ArrayList<WorkloadRow>();
+		addWorkloadRows(workloadRowList,employeeWorkloads,from,to);
+		return workloadRowList;
 	}
 
 	@Override
-	public List<EmployeeWorkload> findWorkloads(Employee employee, Date from,
+	public List<WorkloadRow> findWorkloads(Employee employee, Date from,
 			Date to, String status) {
-		return workloadDao.findWorkloads(employee, from, to, status);
+		List<EmployeeWorkload> employeeWorkloads=workloadDao.findWorkloads(employee, from, to, status);
+        List<WorkloadRow> workloadRowList = new ArrayList<WorkloadRow>();
+        addWorkloadRows(workloadRowList,employeeWorkloads,from,to);
+        return workloadRowList;
 	}
+	
+	
 
 	@Override
 	public List<WorkloadRow> listWorkloadRows(String itCode) {
@@ -107,10 +115,9 @@ public class WorkloadServiceImpl implements IWorkloadService {
 				.findWorkloadsStatusNotEqual(employee, prevMonthFirstDay,
 						today, "3");
 		if (notApprovedWorkloads.size() != 0) {
-			List<EmployeeWorkload> workloads = findWorkloads(employee,
-					prevMonthFirstMon, DateUtils.currentWeekSun(today));
-			addWorkloadRows(rows, workloads, prevMonthFirstMon,
-					DateUtils.currentWeekSun(today));
+			rows= findWorkloads(employee,prevMonthFirstMon, DateUtils.currentWeekSun(today));
+			/*addWorkloadRows(rows, workloads, prevMonthFirstMon,
+					DateUtils.currentWeekSun(today));*/
 		}
 
 		// if (DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
@@ -144,7 +151,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
 		return rows;
 	}
 
-	public void addWorkloadRows(List<WorkloadRow> rows,
+	private void addWorkloadRows(List<WorkloadRow> rows,
 			List<EmployeeWorkload> workloads, Date start, Date end) {
 		int gap = (int) ((DateUtils.getDaysBetween(start, end) + 1) / 7); // 一共跨越的周数
 		if (gap == 0)

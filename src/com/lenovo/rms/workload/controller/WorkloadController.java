@@ -73,15 +73,25 @@ public class WorkloadController {
     @ResponseBody
     public void saveWorkloads(@RequestParam("toUpdate") String toUpdateList,@RequestParam("toDelete") String toDeleteList,@RequestParam("toAdd") String toAddList,@RequestParam("optMonth") int optMonth,@RequestParam("submit") boolean submit,@RequestParam("itCode") String itCode) {
          List<WorkloadRow> toAdd = JsonUtils.jsonList2JavaList(toAddList, WorkloadRow.class);
-         System.out.println(toAddList);
-         System.out.println(toDeleteList);
          List<WorkloadRow> toDelete = JsonUtils.jsonList2JavaList(toDeleteList, WorkloadRow.class);
          List<WorkloadRow> toUpdate = JsonUtils.jsonList2JavaList(toUpdateList, WorkloadRow.class);
          workloadService.saveOrSubmitWorkloads(toDelete, toUpdate, toAdd, optMonth, submit, itCode);
     }
 
-	@RequestMapping("/workload/add")
-	public String mdAdd() {
+	@RequestMapping(value="/workload/add",method = RequestMethod.POST)
+	public String addWorkload(@RequestParam("dateRange") String dateRange,HttpSession session, Model model) {
+	    List<WorkloadRow> workloadRows=null;
+	    int earliestEditableMonth = 0;
+	    if(dateRange!=null){
+	        String[] dates = dateRange.split("-");//date[0]代表起始日期，date[1]代表终止日期
+	        Date from = DateUtils.parseString(dates[0]);
+	        Date to = DateUtils.parseString(dates[1]);
+	        Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
+	        workloadRows= workloadService.findWorkloads(employee, from, to);
+	    }
+	    model.addAttribute("historyWorkloads", workloadRows);
+	    model.addAttribute("earliestEditableMonth",earliestEditableMonth);
+	   
 		return "/mdadd";
 	}
 }
