@@ -119,7 +119,7 @@ public class LoginController {
         if (session.getAttribute(Constants.SESSION_USERINFO_KEY) != null) {
             session.removeAttribute(Constants.SESSION_USERINFO_KEY);
         }
-        model.addAttribute("info", "Logout!");
-        return "/login";
+     //   model.addAttribute("info", "Logout!");
+        return "redirect:/";
     }
 }

@@ -2,15 +2,16 @@
 <%
 	request.setAttribute("ctp", request.getContextPath());
 %>
-<link rel="stylesheet" href="${ctp}/res/assets/css/jquery-ui.min.css" />
-<link rel="stylesheet" href="${ctp}/res/assets/css/datepicker.css" />
-<link rel="stylesheet" href="${ctp}/res/assets/css/ui.jqgrid.css" />
+<div class="page-header">
+	<h1>
+		Check your MD
+	</h1>
+</div><!-- /.page-header -->
 
 <!-- ajax layout which only needs content area -->
 <div class="row">
 	<div class="col-xs-12">
 		<!-- PAGE CONTENT BEGINS -->
-		<h3 class="header smaller lighter blue">Check your MD</h3>
 		<div class="table-header">Name: &nbsp;${name} &nbsp;&nbsp;&nbsp;
 			Date: &nbsp;${date}</div>
 
@@ -89,7 +90,6 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 					    row["Status"] = data[i].status;
 					    tableData.push(row);
 					}
-					prepareTable(tableData);
 				}
 			});
 			
