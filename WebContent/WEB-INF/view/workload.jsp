@@ -59,11 +59,13 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 		//inline scripts related to this page
 		var itCode = '${itCode}';
 		jQuery(function($) {
+			var tableData = new Array();
 			$.ajax({
 				type : 'POST',
 				cache : false,
 				url : '${ctp}/workload/list',
 				datatype : "json",
+				async : false,
 				data : {
 					itCode : itCode
 				},
@@ -72,7 +74,6 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 					return false;
 				},
 				success : function(data) {
-					var tableData = new Array();
 					for(var i in data){
 						var row={};
 						row["Date"] = data[i].dateRange;
@@ -92,95 +93,93 @@ var scripts = [null,"${ctp}/res/assets/js/jquery.dataTables.min.js","${ctp}/res/
 				}
 			});
 			
-			function prepareTable(tableData) {
-				console.log(tableData);
-				var oTable1 = 
-					$('#workloadTable')
-					//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-					.dataTable( {
-						"data":tableData,
-						"searching": false,
-					    "ordering": false,
-						"columns": [
-				            { "data": "Date" },
-				            { "data": "Project" },
-				            { "data": "Phase" },
-				            { "data": "Mon" },
-				            { "data": "Tue" },
-				            { "data": "Wed" },
-				            { "data": "Thu" },
-				            { "data": "Fri" },
-				            { "data": "Sat" },
-				            { "data": "Sun" },
-				            { "data": "Status" }
-				        ],
-				        "columnDefs": [
-	                       { "visible": false, "targets": 0 }
-	                    ],
-	                    "order": [[ 0, 'asc' ]],
-	                    "bAutoWidth": false,
-	                    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
-	                    "drawCallback": function ( settings ) {
-	                       var api = this.api();
-	                       var rows = api.rows( {page:'current'} ).nodes();
-	                       var last=null;
-	            
-	                       api.column(0, {page:'current'} ).data().each( function ( group, i ) {
-	                           if ( last !== group ) {
-	                        	   var content = "<div style='display:inline' class='hidden-sm hidden-xs action-buttons'>"
-	       							+ "<a class='green' href='#'>"
-	    							+ "<i class='ace-icon fa fa-pencil bigger-130'></i></a>"
-	    							+ "<a class='red' href='#'>"
-	    							+ "<i class='ace-icon fa fa-trash-o bigger-130'></i></a></div>";
-	                               $(rows).eq( i ).before(
-	                                   '<tr class="group"><td colspan="10">'+group+"&nbsp;&nbsp;&nbsp;"+content+'</td></tr>'
-	                               );
-	                               last = group;
-	                           }
-	                       } );
-	                    },
-	                    "createdRow": function ( row, data, index ) {
-	                    	var content;
-	                        switch(data['Status']) {
-	                        case '0':
-	                        	content = "<span class='label label-sm label-info arrowed arrowed-righ'>saved</span>";
-	                        	break;
-	                        case '1':
-	                        	content = "<span class='label label-sm label-inverse arrowed-in'>submitted</span>";
-	                        	break;
-	                        case '2':
-	                        	content = "<span class='label label-sm label-warning'>rejected</span>";
-	                        	break;
-	                        default:
-	                        	content = "<span class='label label-sm label-success'>approved</span>";
-	                        }
-	                        $('td', row).eq(9).html(content);
-	                    }
-					});
-				
-				$(document).on('click', 'th input:checkbox' , function(){
-					var that = this;
-					$(this).closest('table').find('tr > td:first-child input:checkbox')
-					.each(function(){
-						this.checked = that.checked;
-						$(this).closest('tr').toggleClass('selected');
-					});
+			console.log(tableData);
+			var oTable1 = 
+				$('#workloadTable')
+				//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+				.dataTable( {
+					"data":tableData,
+					"searching": false,
+				    "ordering": false,
+					"columns": [
+			            { "data": "Date" },
+			            { "data": "Project" },
+			            { "data": "Phase" },
+			            { "data": "Mon" },
+			            { "data": "Tue" },
+			            { "data": "Wed" },
+			            { "data": "Thu" },
+			            { "data": "Fri" },
+			            { "data": "Sat" },
+			            { "data": "Sun" },
+			            { "data": "Status" }
+			        ],
+			        "columnDefs": [
+                       { "visible": false, "targets": 0 }
+                    ],
+                    "order": [[ 0, 'asc' ]],
+                    "bAutoWidth": false,
+                    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]],
+                    "drawCallback": function ( settings ) {
+                       var api = this.api();
+                       var rows = api.rows( {page:'current'} ).nodes();
+                       var last=null;
+            
+                       api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+                           if ( last !== group ) {
+                        	   var content = "<div style='display:inline' class='hidden-sm hidden-xs action-buttons'>"
+       							+ "<a class='green' href='#'>"
+    							+ "<i class='ace-icon fa fa-pencil bigger-130'></i></a>"
+    							+ "<a class='red' href='#'>"
+    							+ "<i class='ace-icon fa fa-trash-o bigger-130'></i></a></div>";
+                               $(rows).eq( i ).before(
+                                   '<tr class="group"><td colspan="10">'+group+"&nbsp;&nbsp;&nbsp;"+content+'</td></tr>'
+                               );
+                               last = group;
+                           }
+                       } );
+                    },
+                    "createdRow": function ( row, data, index ) {
+                    	var content;
+                        switch(data['Status']) {
+                        case '0':
+                        	content = "<span class='label label-sm label-info arrowed arrowed-righ'>saved</span>";
+                        	break;
+                        case '1':
+                        	content = "<span class='label label-sm label-inverse arrowed-in'>submitted</span>";
+                        	break;
+                        case '2':
+                        	content = "<span class='label label-sm label-warning'>rejected</span>";
+                        	break;
+                        default:
+                        	content = "<span class='label label-sm label-success'>approved</span>";
+                        }
+                        $('td', row).eq(9).html(content);
+                    }
 				});
 			
-			
-				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-				function tooltip_placement(context, source) {
-					var $source = $(source);
-					var $parent = $source.closest('table')
-					var off1 = $parent.offset();
-					var w1 = $parent.width();
-			
-					var off2 = $source.offset();
-					//var w2 = $source.width();
-			
-					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-					return 'left';
-				}
+			$(document).on('click', 'th input:checkbox' , function(){
+				var that = this;
+				$(this).closest('table').find('tr > td:first-child input:checkbox')
+				.each(function(){
+					this.checked = that.checked;
+					$(this).closest('tr').toggleClass('selected');
+				});
+			});
+		
+		
+			$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+			function tooltip_placement(context, source) {
+				var $source = $(source);
+				var $parent = $source.closest('table')
+				var off1 = $parent.offset();
+				var w1 = $parent.width();
+		
+				var off2 = $source.offset();
+				//var w2 = $source.width();
+		
+				if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+				return 'left';
 			}
 		});
 	});
