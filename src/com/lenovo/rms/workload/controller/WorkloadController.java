@@ -93,9 +93,9 @@ public class WorkloadController {
 	    List<Project> projects = projectService.getAllProjects();
 	    if(!dateRange.equals("")){
 	        //logger.info(dateRange);
-	        String[] dates = dateRange.split(":");//date[0]代表起始日期，date[1]代表终止日期
-	        Date from = DateUtils.parseString(dates[0]);
-	        Date to = DateUtils.parseString(dates[1]);
+	        String[] dates = dateRange.split("-");//date[0]代表起始日期，date[1]代表终止日期
+	        Date from = DateUtils.parseString2(dates[0]);
+	        Date to = DateUtils.parseString2(dates[1]);
 	        Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
 	        workloadRows= workloadService.findWorkloads(employee, from, to);
 	    }
