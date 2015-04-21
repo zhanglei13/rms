@@ -1,4 +1,4 @@
-package com.lenovo.rms.workload.dao;
+package com.lenovo.rms.project.dao;
 
 import java.util.List;
 

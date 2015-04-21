@@ -7,7 +7,7 @@
 * @version V1.0   
 */
 
-package com.lenovo.rms.workload.controller;
+package com.lenovo.rms.project.controller;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lenovo.rms.model.Project;
-import com.lenovo.rms.workload.service.IProjectService;
+import com.lenovo.rms.project.service.IProjectService;
 
 @Controller
 @RequestMapping("/project")
