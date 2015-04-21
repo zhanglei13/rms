@@ -1,5 +1,8 @@
 package com.lenovo.rms.scorecard.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,14 +12,16 @@ public class ScorecardRow {
 
     private String nameEn;
 
-    private String[] eval_types;
+    private List<String> eval_types;
 
-    private Integer[] eval_levels;
+    private List<Integer> eval_levels;
 
     public ScorecardRow() {
+        eval_types = new ArrayList<>();
+        eval_levels = new ArrayList<>();
     }
 
-    public ScorecardRow(String itCode, String nameEn, String[] eval_types, Integer[] eval_levels) {
+    public ScorecardRow(String itCode, String nameEn, List<String> eval_types, List<Integer> eval_levels) {
         this.itCode = itCode;
         this.nameEn = nameEn;
         this.eval_types = eval_types;
@@ -39,19 +44,19 @@ public class ScorecardRow {
         this.nameEn = nameEn;
     }
 
-    public String[] getEval_types() {
+    public List<String> getEval_types() {
         return eval_types;
     }
 
-    public void setEval_types(String[] eval_types) {
+    public void setEval_types(List<String> eval_types) {
         this.eval_types = eval_types;
     }
 
-    public Integer[] getEval_levels() {
+    public List<Integer> getEval_levels() {
         return eval_levels;
     }
 
-    public void setEval_levels(Integer[] eval_levels) {
+    public void setEval_levels(List<Integer> eval_levels) {
         this.eval_levels = eval_levels;
     }
 
