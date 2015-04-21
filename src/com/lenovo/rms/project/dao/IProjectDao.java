@@ -8,4 +8,6 @@ public interface IProjectDao {
     List<Project> getAllProjects();
     
     Project getByProjectNo(String projectNo);
+    
+    List<Project> getOwnedProjects(String itCode);
 }
