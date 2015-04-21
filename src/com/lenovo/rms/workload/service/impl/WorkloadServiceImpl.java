@@ -26,7 +26,7 @@ import com.lenovo.rms.common.util.DateUtils;
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
 import com.lenovo.rms.model.Project;
-import com.lenovo.rms.workload.dao.IProjectDao;
+import com.lenovo.rms.project.dao.IProjectDao;
 import com.lenovo.rms.workload.dao.IWorkloadDao;
 import com.lenovo.rms.workload.model.WorkloadRow;
 import com.lenovo.rms.workload.service.IWorkloadService;

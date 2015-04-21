@@ -1,4 +1,4 @@
-package com.lenovo.rms.workload.service;
+package com.lenovo.rms.project.service;
 
 import java.util.List;
 
