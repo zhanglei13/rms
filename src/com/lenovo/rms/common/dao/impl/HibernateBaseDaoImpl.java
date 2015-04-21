@@ -197,6 +197,9 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     public <X> List<X> findHql(String hql, Class<X> clazz){
     	return  getQueryList(hql, -1, -1, null, clazz, 2);
     }
+    public <X> List<X> findHql(String hql,Object param , Class<X> clazz){
+        return  getQueryList(hql, -1, -1, param, clazz, 2);
+    }
     @Override
     public List<T> findHql(String hql) {
         return findHql(hql, null);
