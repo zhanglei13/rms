@@ -30,7 +30,7 @@ import com.lenovo.rms.common.util.ReflectUtils;
 @Repository("hibernateBaseDao")
 public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibernateBaseDao<T, PK> {
     /**
-     * log4j日志
+     * log4j鏃ュ織
      */
     protected final Logger logger = Logger.getLogger(getClass());
 
@@ -44,17 +44,18 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     /**
-     * 在构造函数中利用反射机制获得参数T的具体类
+     * 鍦ㄦ瀯閫犲嚱鏁颁腑鍒╃敤鍙嶅皠鏈哄埗鑾峰緱鍙傛暟T鐨勫叿浣撶被
      */
     public HibernateBaseDaoImpl() {
         entityClass = ReflectUtils.getClassGenricType(getClass());
     }
 
     private Session getSession() {
-        return sessionFactory.getCurrentSession();
+        //return sessionFactory.getCurrentSession();
+    	return sessionFactory.openSession();
     }
     
-    //---------------------------以下是获取对象的接口实现------------------------
+    //---------------------------浠ヤ笅鏄幏鍙栧璞＄殑鎺ュ彛瀹炵幇------------------------
     
     @SuppressWarnings("unchecked")
     @Override
@@ -81,7 +82,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         return (X) this.getSession().load(clazz, id);
     }
     
-    //---------------------------以下是删除对象的接口实现------------------------
+    //---------------------------浠ヤ笅鏄垹闄ゅ璞＄殑鎺ュ彛瀹炵幇------------------------
     
     @Override
     public void delete(T entity) {
@@ -110,7 +111,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         }
     }
 
-    //---------------------------以下是新增或更新对象的接口实现------------------------
+    //---------------------------浠ヤ笅鏄柊澧炴垨鏇存柊瀵硅薄鐨勬帴鍙ｅ疄鐜�-----------------------
     
     @Override
     public void save(T entity) {
@@ -160,7 +161,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
 
     }
 
-   //---------------------------以下是清理操作接口实现------------------------------
+   //---------------------------浠ヤ笅鏄竻鐞嗘搷浣滄帴鍙ｅ疄鐜�-----------------------------
     
     @Override
     public void flush() {
@@ -180,7 +181,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
 
     }
 
-    //------------------------------以下是HQL操作实现------------------------------------------------
+    //------------------------------浠ヤ笅鏄疕QL鎿嶄綔瀹炵幇------------------------------------------------
     
     @Override
     public ListPage<T> findHqlListPage(final String hql, final Page page) {
@@ -193,7 +194,9 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         page.setRowCount(list.size());
         return new ListPage<T>(list, page);
     }
-
+    public <X> List<X> findHql(String hql, Class<X> clazz){
+    	return  getQueryList(hql, -1, -1, null, clazz, 2);
+    }
     @Override
     public List<T> findHql(String hql) {
         return findHql(hql, null);
@@ -249,7 +252,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     
-    //------------------------------以下是QBC操作实现------------------------------------------------
+    //------------------------------浠ヤ笅鏄疩BC鎿嶄綔瀹炵幇------------------------------------------------
     
     @SuppressWarnings("rawtypes")
     @Override
@@ -409,7 +412,7 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
 
-    //------------------------------以下是QBE操作实现------------------------------------------------
+    //------------------------------浠ヤ笅鏄疩BE鎿嶄綔瀹炵幇------------------------------------------------
     
 
     @Override
@@ -427,19 +430,19 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
    
-  //------------------------------以下是用来实现接口的辅助方法------------------------------------------------
+  //------------------------------浠ヤ笅鏄敤鏉ュ疄鐜版帴鍙ｇ殑杈呭姪鏂规硶------------------------------------------------
     
     /**   
-    * 根据相应条件生成query对象
-    * @date 2015年4月4日 下午2:52:16   
+    * 鏍规嵁鐩稿簲鏉′欢鐢熸垚query瀵硅薄
+    * @date 2015骞�鏈�鏃�涓嬪崍2:52:16   
     * @author Eric   
-    * @param queryString 查询语句
-    * @param pageIndex   分页其实页
-    * @param pageSize    分页大小
-    * @param param       参数
-    * @param type        类型：1代表SQL查询，2代表 HQL查询
-    * @param session     用来生成query的session
-    * @param entity      类型信息
+    * @param queryString 鏌ヨ璇彞
+    * @param pageIndex   鍒嗛〉鍏跺疄椤�
+    * @param pageSize    鍒嗛〉澶у皬
+    * @param param       鍙傛暟
+    * @param type        绫诲瀷锛�浠ｈ〃SQL鏌ヨ锛�浠ｈ〃 HQL鏌ヨ
+    * @param session     鐢ㄦ潵鐢熸垚query鐨剆ession
+    * @param entity      绫诲瀷淇℃伅
     * @return
     * Query  
     */
@@ -466,17 +469,17 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
                 query.setProperties(param);
             }
         }
-        setPageResult(query, pageIndex, pageSize); // 设置分页
+        setPageResult(query, pageIndex, pageSize); // 璁剧疆鍒嗛〉
         return query;
     }
     
     /**   
-    * 为query对象设置分页信息
-    * @date 2015年4月4日 下午2:51:12   
+    * 涓簈uery瀵硅薄璁剧疆鍒嗛〉淇℃伅
+    * @date 2015骞�鏈�鏃�涓嬪崍2:51:12   
     * @author Eric   
-    * @param query 待设置分页信息的query对象
-    * @param pageIndex 起始页
-    * @param pageSize  页大小
+    * @param query 寰呰缃垎椤典俊鎭殑query瀵硅薄
+    * @param pageIndex 璧峰椤�
+    * @param pageSize  椤靛ぇ灏�
     * void  
     */
     protected void setPageResult(Query query, long pageIndex, long pageSize) {
@@ -489,10 +492,10 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     
     
     /**   
-    * 根据可变数量的criterion生成detachedCriteria
-    * @date 2015年4月4日 下午2:48:25   
+    * 鏍规嵁鍙彉鏁伴噺鐨刢riterion鐢熸垚detachedCriteria
+    * @date 2015骞�鏈�鏃�涓嬪崍2:48:25   
     * @author Eric   
-    * @param criterions 可变数量的criterion
+    * @param criterions 鍙彉鏁伴噺鐨刢riterion
     * @return
     * DetachedCriteria  
     */
@@ -501,11 +504,11 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     /**   
-    * 根据相应的类型信息和可变数量的criterion生成detachedCriteria
-    * @date 2015年4月4日 下午2:46:40   
+    * 鏍规嵁鐩稿簲鐨勭被鍨嬩俊鎭拰鍙彉鏁伴噺鐨刢riterion鐢熸垚detachedCriteria
+    * @date 2015骞�鏈�鏃�涓嬪崍2:46:40   
     * @author Eric   
-    * @param clazz      类型信息
-    * @param criterions 可变数量的criterion
+    * @param clazz      绫诲瀷淇℃伅
+    * @param criterions 鍙彉鏁伴噺鐨刢riterion
     * @return
     * DetachedCriteria  
     */
@@ -515,11 +518,11 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     /**   
-    * 根据可变数量的criterion生成离线查询条件detachedCriteria
-    * @date 2015年4月4日 下午2:45:04   
+    * 鏍规嵁鍙彉鏁伴噺鐨刢riterion鐢熸垚绂荤嚎鏌ヨ鏉′欢detachedCriteria
+    * @date 2015骞�鏈�鏃�涓嬪崍2:45:04   
     * @author Eric   
-    * @param detachedCriteria 待生成的离线查询条件detachedCriteria
-    * @param criterions  数量可变的criterion
+    * @param detachedCriteria 寰呯敓鎴愮殑绂荤嚎鏌ヨ鏉′欢detachedCriteria
+    * @param criterions  鏁伴噺鍙彉鐨刢riterion
     * @return
     * DetachedCriteria  
     */
@@ -536,10 +539,10 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     /**   
-    * 根据字段生成 like的crieterion
-    * @date 2015年4月4日 下午2:43:45   
+    * 鏍规嵁瀛楁鐢熸垚 like鐨刢rieterion
+    * @date 2015骞�鏈�鏃�涓嬪崍2:43:45   
     * @author Eric   
-    * @param values 参数
+    * @param values 鍙傛暟
     * @return
     * Criterion[]  
     */
@@ -554,12 +557,12 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
     }
 
     /**   
-    * 生成 smart<=propertyName<=big的criterion
-    * @date 2015年4月4日 下午2:42:00   
+    * 鐢熸垚 smart<=propertyName<=big鐨刢riterion
+    * @date 2015骞�鏈�鏃�涓嬪崍2:42:00   
     * @author Eric   
-    * @param propertyName 字段
-    * @param small       最小值        
-    * @param big         最大值
+    * @param propertyName 瀛楁
+    * @param small       鏈�皬鍊�       
+    * @param big         鏈�ぇ鍊�
     * @return
     * Criterion   
     */
