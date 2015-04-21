@@ -12,4 +12,6 @@ public interface IProjectDao {
     List<String> getByItLeader(String itCode);
     
     List<String> getProjectMembers(String projectNo);
+
+    List<Project> getOwnedProjects(String itCode);
 }
