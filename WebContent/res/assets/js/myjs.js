@@ -66,3 +66,29 @@ function deleteRow(inputobj){
     var parentTBODY = parentTR.parentNode;  
     parentTBODY.removeChild(parentTR); 
 }
+function setting(role){
+	  //by simple member
+		if(role==1){
+			document.getElementById('evaluation').style.display = "none";
+			document.getElementById('approval').style.display = "none";
+			document.getElementById('project').style.display = "none";
+			document.getElementById('reporter').style.display = "none";
+			}
+		//by itleader
+		if(role==2){
+		document.getElementById('approval').style.display = "";
+		document.getElementById('linemanager').style.display = "none";
+		document.getElementById('project').style.display = "none";
+		}
+		//by linemanager
+		if(role==3){
+		document.getElementById('itleader').style.display = "none";
+		document.getElementById('project').style.display = "none";
+		}
+		//by admin
+		if(role==4){
+		    document.getElementById('evaluation').style.display = "none";
+			document.getElementById('approval').style.display = "none";
+			document.getElementById('project').style.display = "none";
+		}
+	}

@@ -1,0 +1,40 @@
+<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='res/assets/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='res/assets/js/jquery1x.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='res/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="res/assets/js/bootstrap.min.js"></script>
+
+		<!--special: workload.jsp -->
+		<script src="res/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+		<script src="res/assets/js/jqGrid/jquery.jqGrid.min.js"></script>
+		<script src="res/assets/js/jqGrid/i18n/grid.locale-en.js"></script>
+
+		<!-- ace scripts -->
+		<script src="res/assets/js/ace-elements.min.js"></script>
+		<script src="res/assets/js/ace.min.js"></script>
+		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
+		<link rel="stylesheet" href="res/assets/css/ace.onpage-help.css" />
+		<link rel="stylesheet" href="res/docs/assets/js/themes/sunburst.css" />
+
+		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
+		<script src="res/assets/js/ace/elements.onpage-help.js"></script>
+		<script src="res/assets/js/ace/ace.onpage-help.js"></script>
+		<script src="res/docs/assets/js/rainbow.js"></script>
+		<script src="res/docs/assets/js/language/generic.js"></script>
+		<script src="res/docs/assets/js/language/html.js"></script>
+		<script src="res/docs/assets/js/language/css.js"></script>
+		<script src="res/docs/assets/js/language/javascript.js"></script>
+	</body>
