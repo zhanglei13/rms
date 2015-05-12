@@ -34,6 +34,6 @@ public interface IAuthorityDao {
     */
     List<AuthorityGroup> getAuthorityGroups(Employee employee);
     
-    
+    boolean isITLeader(Employee employee);
 
 }

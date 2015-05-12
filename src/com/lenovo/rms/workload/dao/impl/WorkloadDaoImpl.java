@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import com.lenovo.rms.common.dao.impl.HibernateBaseDaoImpl;
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
+import com.lenovo.rms.model.Project;
 import com.lenovo.rms.model.UserLoginInfo;
 import com.lenovo.rms.workload.dao.IWorkloadDao;
 @Repository("workloadDao")
@@ -64,6 +65,22 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
     }
     
     @Override
+	public List<EmployeeWorkload> findWorkloadsStatusNotEqual(
+			Employee employee, Project project, Date from, Date to,
+			String status) {
+    	  String hql = "from EmployeeWorkload w where w.itCode=:itCode and w.workloadDate>=:from and w.workloadDate<=:to and w.status!=:status and w.projectNo=:projectNo";
+          Map<String,Object> params = new HashMap<String,Object>();
+          params.put("itCode", employee.getItCode());
+          params.put("from", from);
+          params.put("to", to);
+          params.put("status", status);
+          params.put("projectNo", project.getProjectNo());
+          List<EmployeeWorkload> workloads = findHql(hql,params);
+          return workloads;
+	}
+   
+    
+    @Override
     public List<EmployeeWorkload> findWorkloads(Employee employee, Date from, Date to) {
         String hql = "from EmployeeWorkload w where w.itCode=:itCode and w.workloadDate>=:from and w.workloadDate<=:to";
         Map<String,Object> params = new HashMap<String,Object>();
@@ -73,6 +90,20 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
         List<EmployeeWorkload> workloads = findHql(hql,params);
         return workloads;
     }
+    
+    @Override
+	public List<EmployeeWorkload> findWorkloads(Employee employee,
+			String projectNo, Date from, Date to) {
+    	  String hql = "from EmployeeWorkload w where w.itCode=:itCode and w.projectNo=:projectNo and w.workloadDate>=:from and w.workloadDate<=:to";
+          Map<String,Object> params = new HashMap<String,Object>();
+          params.put("itCode", employee.getItCode());
+          params.put("projectNo", projectNo);
+          params.put("from", from);
+          params.put("to", to);
+          List<EmployeeWorkload> workloads = findHql(hql,params);
+          return workloads;
+	}
+
     
     
     @Override
@@ -135,5 +166,7 @@ public class WorkloadDaoImpl  extends HibernateBaseDaoImpl<EmployeeWorkload, Lon
             System.out.println(w.getProjectNo());
         }
     }
-   
+
+	
+	
 }

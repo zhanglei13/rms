@@ -35,10 +35,12 @@ public class WorkloadRow {
 	private String status;
 	private String monStatus;
 	private Long[] idPerWeek;
+	private Boolean[] isHoliday;
 
 	public WorkloadRow() {
 		datePerWeek = new String[7];
 		effortPerWeek = new Double[7];
+		isHoliday = new Boolean[7];
 	}
 
 	public WorkloadRow(String dateRange, String projectType,
@@ -137,7 +139,31 @@ public class WorkloadRow {
 		this.status = status;
 	}
 
-	@Override
+	public String getMonStatus() {
+        return monStatus;
+    }
+
+    public void setMonStatus(String monStatus) {
+        this.monStatus = monStatus;
+    }
+
+    public Long[] getIdPerWeek() {
+        return idPerWeek;
+    }
+
+    public void setIdPerWeek(Long[] idPerWeek) {
+        this.idPerWeek = idPerWeek;
+    }
+
+    public Boolean[] getIsHoliday() {
+        return isHoliday;
+    }
+
+    public void setIsHoliday(Boolean[] isHoliday) {
+        this.isHoliday = isHoliday;
+    }
+
+    @Override
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}

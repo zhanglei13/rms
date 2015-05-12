@@ -1,5 +1,6 @@
 package com.lenovo.rms.workload.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.Project;
 import com.lenovo.rms.project.service.IProjectService;
 import com.lenovo.rms.workload.model.WorkloadRow;
+import com.lenovo.rms.workload.model.WorkloadRowView;
 import com.lenovo.rms.workload.service.IWorkloadService;
 
 /**
@@ -61,8 +63,33 @@ public class WorkloadController {
 
 	@RequestMapping("/workload/list")
 	@ResponseBody
-	public List<WorkloadRow> listWorkloadRows(String itCode) {
-		return workloadService.listWorkloadRows(itCode);
+	public String listWorkloadRows(HttpSession session) {
+		Employee employee = (Employee) session.getAttribute(Constants.SESSION_USERINFO_KEY);
+		List<WorkloadRow> rows = workloadService.listWorkloadRows(employee.getItCode());
+		List<WorkloadRowView> views = new ArrayList<>();
+		for(WorkloadRow row : rows) {
+			WorkloadRowView view = new WorkloadRowView();
+			view.setDate(row.getDateRange());
+			view.setProject(row.getProjectName());
+			view.setPhase(row.getPhaseCode());
+			view.setMonw(row.getEffortPerWeek()[0] == null ? "": row.getEffortPerWeek()[0].toString());
+			view.setTusw(row.getEffortPerWeek()[1] == null ? "": row.getEffortPerWeek()[1].toString());
+			view.setWedw(row.getEffortPerWeek()[2] == null ? "": row.getEffortPerWeek()[2].toString());
+			view.setThuw(row.getEffortPerWeek()[3] == null ? "": row.getEffortPerWeek()[3].toString());
+			view.setFriw(row.getEffortPerWeek()[4] == null ? "": row.getEffortPerWeek()[4].toString());
+			view.setSatw(row.getEffortPerWeek()[5] == null ? "": row.getEffortPerWeek()[5].toString());
+			view.setSunw(row.getEffortPerWeek()[6] == null ? "": row.getEffortPerWeek()[6].toString());
+			view.setMonh(row.getIsHoliday()[0] == true?1:0);
+			view.setTush(row.getIsHoliday()[1] == true?1:0);
+			view.setWedh(row.getIsHoliday()[2] == true?1:0);
+			view.setThuh(row.getIsHoliday()[3] == true?1:0);
+			view.setFrih(row.getIsHoliday()[4] == true?1:0);
+			view.setSath(row.getIsHoliday()[5] == true?1:0);
+			view.setSunh(row.getIsHoliday()[6] == true?1:0);
+			view.setStatus(row.getStatus());
+			views.add(view);
+		}
+		return JsonUtils.javaList2JsonList(views);
 	}
 	
 	@RequestMapping(value = "/workload/save", method = RequestMethod.POST)

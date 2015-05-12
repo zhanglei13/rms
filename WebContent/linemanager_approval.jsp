@@ -81,185 +81,185 @@
 								field : 'day1',
 								title : '1',
 								align : 'center',
-								width : 10
+								width : 20
 							},{
 								field : 'day2',
 								title : '2',
 								align : 'center',
-								width : 10
+								width : 20
 							}, {
 								field : 'day3',
 								title : '3',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day4',
 								title : '4',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day5',
 								title : '5',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day6',
 								title : '6',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day7',
 								title : '7',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day8',
 								title : '8',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day9',
 								title : '9',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day10',
 								title : '10',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day11',
 								title : '11',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day12',
 								title : '12',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day13',
 								title : '13',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day14',
 								title : '14',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day15',
 								title : '15',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day16',
 								title : '16',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day17',
 								title : '17',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day18',
 								title : '18',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day19',
 								title : '19',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day20',
 								title : '20',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day21',
 								title : '21',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day22',
 								title : '22',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day23',
 								title : '23',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day24',
 								title : '24',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day25',
 								title : '25',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day26',
 								title : '26',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day27',
 								title : '27',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day28',
 								title : '28',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day29',
 								title : '29',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day30',
 								title : '30',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'day31',
 								title : '31',
 								align : 'center',
-								width : 10
+								width : 20
 							}, 
 							{
 								field : 'status',
@@ -344,7 +344,14 @@
 										  
 										}	
 									  
-						]
+						],
+						onLoadSuccess : function(data) {
+
+							if (data.rows.length > 0) {
+								mergeCellsByField("l_aaprovaletable",
+										"release,project");
+							}
+						}
 						});
 		 /*
 		 *  拒绝申请

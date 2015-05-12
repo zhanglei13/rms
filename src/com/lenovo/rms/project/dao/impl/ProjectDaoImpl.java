@@ -20,16 +20,6 @@ public class ProjectDaoImpl extends HibernateBaseDaoImpl<Project, Long> implemen
         return findAll();
     }
 
-    @Override
-    public List<Project> getOwnedProjects(String itCode) {
-        String hql = "select p from Project p, ProjectOwner po where po.projectItLeader=:itCode and po.projectNo=p.projectNo";
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("itCode", itCode);
-        @SuppressWarnings("unchecked")
-        List<Project> projects = findHql(hql, params);
-        return projects;
-    }
-
     public static void main(String[] args) {
         /*
          * ApplicationContext ctx = new
@@ -45,7 +35,8 @@ public class ProjectDaoImpl extends HibernateBaseDaoImpl<Project, Long> implemen
     @Override
     public Project getByProjectNo(String projectNo) {
         Criterion condition = Restrictions.eq("projectNo", projectNo);
-        return findUnique(condition);
+        Project p= findUnique(condition);
+        return p;
     }
 
     @Override

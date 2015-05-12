@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
+import com.lenovo.rms.model.Project;
 
 public interface IWorkloadDao{
     /**   
@@ -43,6 +44,7 @@ public interface IWorkloadDao{
     
     List<EmployeeWorkload> findWorkloadsStatusNotEqual(Employee employee, Date from, Date to, String status);
     
+    List<EmployeeWorkload> findWorkloadsStatusNotEqual(Employee employee, Project project, Date from, Date to, String status);
     /**   
     * 根据时间和类型，查找某empoyee某一时间段的workloads
     * @date 2015年4月1日 下午10:24:51   
@@ -54,5 +56,7 @@ public interface IWorkloadDao{
     * List<EmployeeWorkload>   查找到的workload列表  
     */
     List<EmployeeWorkload> findWorkloads(Employee employee,Date from,Date to);
+    
+    List<EmployeeWorkload> findWorkloads(Employee employee,String projectNo , Date from,Date to);
      
 }

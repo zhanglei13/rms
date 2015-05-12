@@ -14,7 +14,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="res/jquery-easyui-1.2.6/themes/icon.css" />
 	<script type="text/javascript" src="res/jquery-easyui-1.2.6/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="res/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
-	<script type="text/javascript">
+	<!--  <script type="text/javascript">
 	$(function(){
 	$('#loginbutton').click(function(){
 				$('#loginform').form('submit',{
@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							if(!$('#loginform').form('validate')){
 								$.messager.show({
 									title:'Notice' , 
-									msg:'username!'
+									msg:'usern!--ame!'
 								});
 								return false ;		//当表单验证不通过的时候 必须要return false 
 							}
@@ -38,12 +38,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			});
 	});
-	</script>
+	</script>-->
   </head>
   <body >
   <center>
   <div id="logindiv" class="easyui-panel" style="width:400px;height:350px;align:center" title="RMS-Login"  >
-    		<form id="loginform" action="" method="post">
+    		<form id="loginform" action="login" method="post">
     				<table>
     					<tr>
     						<td>Username:</td>
@@ -55,8 +55,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					</tr>
     					<tr align="center">
     						<td colspan="2">
-    							<a id="loginbutton" class="easyui-linkbutton">Login</a>
+    							<input type="submit" value = "Login" id="loginbutton" class="easyui-linkbutton"></input>
+    							<input type="button" value = "Logout" id="logoutbutton" class="easyui-linkbutton" url="${ctp}/logout"></input>
     						</td>
+    						
+    							
+    						
     					</tr>  
     					<tr align="center">
     						<text id="notice"></text>

@@ -43,16 +43,13 @@ public class HibernateBaseDaoImpl<T, PK extends Serializable> implements IHibern
         return entityClass;
     }
 
-    /**
-     * 鍦ㄦ瀯閫犲嚱鏁颁腑鍒╃敤鍙嶅皠鏈哄埗鑾峰緱鍙傛暟T鐨勫叿浣撶被
-     */
     public HibernateBaseDaoImpl() {
         entityClass = ReflectUtils.getClassGenricType(getClass());
     }
 
     private Session getSession() {
-        //return sessionFactory.getCurrentSession();
-    	return sessionFactory.openSession();
+        return sessionFactory.getCurrentSession();
+    	//return sessionFactory.openSession();
     }
     
     //---------------------------浠ヤ笅鏄幏鍙栧璞＄殑鎺ュ彛瀹炵幇------------------------

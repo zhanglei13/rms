@@ -320,14 +320,23 @@ public class DateUtils {
         return dates;
 	}
 	
+	public static String getYearByDate(Date date) {
+	    Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
+        Integer year = calendar.get(Calendar.YEAR);
+        return year.toString();
+	}
+	
 	public static void main(String[] args) {
 		Date date = new Date();
+		System.out.println((int) ((DateUtils.getDaysBetween(DateUtils.parseString("2015-2-23"), DateUtils.parseString("2015-03-15"))) % 7));
 //		Date sun = DateUtils.prevMonthFirstMon(date);
 //		for(Date d:DateUtils.numWeeksRange(sun, 1)) {
 //		    System.out.println(d);
 //		}
-		System.out.println(getMonth(date));
-		System.out.println(isReachDeadLine(date));
+//		System.out.println(getYearByDate(date));
+//		System.out.println(isReachDeadLine(date));
 //		Date start = DateUtils.prevMonthFirstMon(date);
 //		Date end = DateUtils.prevMonthLastSun(date);
 //		System.out.println(start);

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.lenovo.rms.model.Employee;
 import com.lenovo.rms.model.EmployeeWorkload;
 import com.lenovo.rms.model.Project;
 import com.lenovo.rms.project.dao.IProjectDao;
+import com.lenovo.rms.workload.dao.IHolidayDao;
 import com.lenovo.rms.workload.dao.IWorkloadDao;
 import com.lenovo.rms.workload.model.WorkloadRow;
 import com.lenovo.rms.workload.service.IWorkloadService;
@@ -52,6 +54,9 @@ public class WorkloadServiceImpl implements IWorkloadService {
 
     @Autowired
     protected IProjectDao projectDao;
+
+    @Autowired
+    protected IHolidayDao holidayDao;
 
     @Override
     public void saveWorkload(WorkloadRow workloadRow, String itCode) {
@@ -117,52 +122,17 @@ public class WorkloadServiceImpl implements IWorkloadService {
         List<WorkloadRow> rows = new ArrayList<>();
         Employee employee = new Employee(itCode);
         Date today = new Date(); // 获取当前时间
-
         Date[] dates = DateUtils.firstAndLastDate(today); // 获取时间
         Date prevMonthFirstDay = dates[0];
         Date prevMonthFirstMon = dates[1];
-        Date prevMonthLastDay = dates[2];
-        Date prevMonthLastSun = dates[3];
 
         List<EmployeeWorkload> notApprovedWorkloads = workloadDao.findWorkloadsStatusNotEqual(employee,
                 prevMonthFirstDay, today, "3");
         if (notApprovedWorkloads.size() != 0) {
             rows = findWorkloads(employee, prevMonthFirstMon, DateUtils.currentWeekSun(today));
-            /*
-             * addWorkloadRows(rows, workloads, prevMonthFirstMon,
-             * DateUtils.currentWeekSun(today));
-             */
         }
 
-        // if (DateUtils.isReachDeadLine(today)) { // 判断是否是本月10号以后
-        // List<EmployeeWorkload> notApprovedWorkloads =
-        // workloadDao.findWorkloadsStatusNotEqual(employee,
-        // prevMonthFirstDay, prevMonthLastDay, "3");
-        // if (rejectedWorkloads.size() != 0) {
-        // List<EmployeeWorkload> lastMonthWorkloads = findWorkloads(
-        // employee, prevMonthFirstMon, prevMonthLastSun);
-        // addWorkloadRows(rows, lastMonthWorkloads, prevMonthFirstMon,
-        // prevMonthLastSun);
-        // return rows;
-        // }
-        // }
-        //
-        // Date firstDay = DateUtils.getFirstDay(today);
-        // List<EmployeeWorkload> savedWorkloads = findWorkloads(employee,
-        // firstDay, today); // 本月已经保存workload
-        // if (savedWorkloads.size() != 0) {
-        // addWorkloadRows(rows, savedWorkloads, firstDay, today);
-        // // return rows;
-        // }
-        // else {
-        // // 获取上个月最后一个星期的workload
-        // Date[] week = DateUtils.getPrevMonthLastWeek(today);
-        // List<EmployeeWorkload> lastWeekWorkloads = findWorkloads(employee,
-        // week[0], week[1]);
-        // if (lastWeekWorkloads != null && lastWeekWorkloads.size() != 0)
-        // addWorkloadRows(rows, lastWeekWorkloads, week[0], week[1]);
-        // }
-        return rows;
+        return rows;	
     }
 
     private void addWorkloadRows(List<WorkloadRow> rows, List<EmployeeWorkload> workloads, Date start, Date end) {
@@ -175,8 +145,8 @@ public class WorkloadServiceImpl implements IWorkloadService {
 
         for (EmployeeWorkload workload : workloads) {
             int week = (int) ((DateUtils.getDaysBetween(start, workload.getWorkloadDate())) / 7);
-            int diff = (int) ((DateUtils.getDaysBetween(start, workload.getWorkloadDate())) % 7);
-
+            int diff = (int) ((DateUtils.getDaysBetween(start, workload.getWorkloadDate()) + 1) % 7);
+            
             String projectNo = workload.getProjectNo();
             if (!weekRows[week].containsKey(projectNo)) { // 判断该行是否存在
                 WorkloadRow workloadRow = new WorkloadRow();
@@ -203,8 +173,13 @@ public class WorkloadServiceImpl implements IWorkloadService {
             }
         }
 
+        Set<String> holidays = holidayDao.listHolidaysByYear(DateUtils.getYearByDate(start));
         for (int i = 0; i < gap; i++) {
             for (WorkloadRow row : weekRows[i].values()) {
+                for (int j = 0; j < row.getDatePerWeek().length; j++) {
+                    row.getIsHoliday()[j] = holidays.contains(row.getDatePerWeek()[j]);
+                }
+
                 rows.add(row);
             }
         }
@@ -224,8 +199,8 @@ public class WorkloadServiceImpl implements IWorkloadService {
     }
 
     @Override
-    public boolean saveOrSubmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate, List<WorkloadRow> toAdd,
-            int optMonth, boolean submit, String itCode) {
+    public boolean saveOrSubmitWorkloads(List<WorkloadRow> toDelete, List<WorkloadRow> toUpdate,
+            List<WorkloadRow> toAdd, int optMonth, boolean submit, String itCode) {
         if (submit) {
             return saveWorkloads(toDelete, toUpdate, toAdd, optMonth, "1", itCode);
         } else {
@@ -312,7 +287,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
             // 如果没有新加的且没有更新的，则操作失败
             return false;
 
-        for(int i=0;i<7;i++){
+        for (int i = 0; i < 7; i++) {
             System.out.println(effortPerDay[i]);
         }
         for (int i = 0; i < datePerWeek.length; i++) {
@@ -326,7 +301,7 @@ public class WorkloadServiceImpl implements IWorkloadService {
 
             }
         }
-      
+
         workloadDao.saveWorkloads(toAddList);
         workloadDao.updateWorkloads(toUpdateList);
         workloadDao.deleteWorkloads(toDelList);

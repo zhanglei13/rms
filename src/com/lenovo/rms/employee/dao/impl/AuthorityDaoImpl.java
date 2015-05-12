@@ -37,6 +37,19 @@ public class AuthorityDaoImpl extends HibernateBaseDaoImpl implements IAuthority
         return roles;
     }
     
+	@Override
+	public boolean isITLeader(Employee employee) {
+		List<AuthorityRole> roles = getAuthorityRoles(employee);
+		for(AuthorityRole role:roles){
+			if(role.getRoleName().equals("IT Leader")){
+				return true;
+			}
+		}
+		return false;
+	}
+    
+    
+    
     @Override
     public List<AuthorityGroup> getAuthorityGroups(Employee employee) {
         String hql="select g from AuthorityGroup g, AuthorityEmployeeGroupRef ref where ref.itCode=:itCode and ref.groupCode=g.groupCode";
@@ -64,5 +77,6 @@ public class AuthorityDaoImpl extends HibernateBaseDaoImpl implements IAuthority
         System.out.println("end");
  
     }
-    
+
+
 }

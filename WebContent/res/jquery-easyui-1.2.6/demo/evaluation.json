@@ -1,0 +1,12 @@
+{                                                                                                           
+	"rows":[                                                          
+		{"tower":"001","name":"Name 1","itcode":"IT code 11","items":"composite"},         
+		{"tower":"001","name":"Name 1","itcode":"IT code 11","items":"skill"},         
+		{"tower":"001","name":"Name 1","itcode":"IT code 11","items":"attitude"},         
+		{"tower":"001","name":"Name 1","itcode":"IT code 11","items":"composite"}, 
+		{"tower":"001","name":"Name 2","itcode":"IT code 12","items":"composite"},         
+		{"tower":"001","name":"Name 2","itcode":"IT code 12","items":"skill"},         
+		{"tower":"001","name":"Name 2","itcode":"IT code 12","items":"attitude"},         
+		{"tower":"001","name":"Name 2","itcode":"IT code 12","items":"composite"}               
+	]                                                          
+}                                                           
